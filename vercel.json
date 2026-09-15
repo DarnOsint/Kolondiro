@@ -1,0 +1,38 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/api/cron/weekly-summary",
+      "destination": "/api/cron/daily-report"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/daily-report",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/stock-check",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/accountant-summary",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/chiller-carryover",
+      "schedule": "5 7 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-summary",
+      "schedule": "0 7 * * 1"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+KOLONDIRO — PRINT SERVER INSTALLATION
+============================================
+
+REQUIREMENTS:
+- Node.js installed on the Leabon PC
+  Download from: https://nodejs.org (LTS version)
+
+INSTALLATION STEPS:
+
+1. Copy this entire folder to: C:\KolondiroPrint\
+
+2. Open Command Prompt as Administrator and run:
+   cd C:\KolondiroPrint
+   node server.js
+   
+   You should see the startup banner. Leave this window open.
+
+3. Test it by opening Chrome and going to:
+   http://localhost:6543/health
+   You should see: {"status":"ok","printer":"192.168.0.10:9100"}
+
+AUTO-START ON BOOT:
+1. Press Win+R, type: shell:startup
+2. Create a shortcut to start.bat in that folder
+   OR for silent start (no window):
+   Right-click → New Shortcut
+   Target: wscript.exe "C:\KolondiroPrint\start-silent.vbs" "C:\KolondiroPrint\start.bat"
+
+PRINTER SETTINGS:
+- IP: 192.168.0.10
+- Port: 9100
+- PC IP should be: 192.168.0.50 (same subnet)

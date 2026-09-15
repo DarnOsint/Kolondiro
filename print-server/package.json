@@ -1,0 +1,14 @@
+{
+  "name": "kolondiro-print-server",
+  "version": "1.0.0",
+  "description": "Kolondiro local thermal print server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "pkg": {
+    "assets": [],
+    "targets": ["node18-win-x64"],
+    "outputPath": "dist"
+  }
+}
