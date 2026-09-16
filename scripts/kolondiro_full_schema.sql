@@ -152,6 +152,7 @@ CREATE TABLE IF NOT EXISTS orders (
   notes          text,
   covers         integer,
   payment_method text,
+  payment_status text,
   customer_name  text,
   customer_phone text,
   created_at     timestamptz NOT NULL DEFAULT now(),
@@ -167,22 +168,26 @@ CREATE INDEX IF NOT EXISTS idx_orders_covers     ON orders(covers) WHERE covers 
 
 -- 1.11 order_items ───────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS order_items (
-  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id         uuid REFERENCES orders(id) ON DELETE CASCADE,
-  menu_item_id     uuid REFERENCES menu_items(id) ON DELETE SET NULL,
-  quantity         integer NOT NULL DEFAULT 1,
-  unit_price       numeric(12,2) NOT NULL DEFAULT 0,
-  total_price      numeric(12,2) NOT NULL DEFAULT 0,
-  status           text NOT NULL DEFAULT 'pending',
-  destination      text NOT NULL DEFAULT 'kitchen',
-  modifier_notes   text,
-  extra_charge     numeric(12,2) NOT NULL DEFAULT 0,
-  return_requested boolean NOT NULL DEFAULT false,
-  return_accepted  boolean NOT NULL DEFAULT false,
-  return_reason    text,
-  void_qty         integer NOT NULL DEFAULT 0,
-  is_hire_fee      boolean NOT NULL DEFAULT false,
-  created_at       timestamptz NOT NULL DEFAULT now()
+  id                   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id             uuid REFERENCES orders(id) ON DELETE CASCADE,
+  menu_item_id         uuid REFERENCES menu_items(id) ON DELETE SET NULL,
+  quantity             integer NOT NULL DEFAULT 1,
+  unit_price           numeric(12,2) NOT NULL DEFAULT 0,
+  total_price          numeric(12,2) NOT NULL DEFAULT 0,
+  total_amount         numeric(12,2),
+  status               text NOT NULL DEFAULT 'pending',
+  destination          text NOT NULL DEFAULT 'kitchen',
+  modifier_notes       text,
+  extra_charge         numeric(12,2) NOT NULL DEFAULT 0,
+  return_requested     boolean NOT NULL DEFAULT false,
+  return_requested_at  timestamptz,
+  return_accepted      boolean NOT NULL DEFAULT false,
+  return_accepted_at   timestamptz,
+  return_reason        text,
+  void_qty             integer NOT NULL DEFAULT 0,
+  is_hire_fee          boolean NOT NULL DEFAULT false,
+  created_at           timestamptz NOT NULL DEFAULT now(),
+  updated_at           timestamptz
 );
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX IF NOT EXISTS idx_order_items_status   ON order_items(status);
@@ -216,6 +221,12 @@ CREATE TABLE IF NOT EXISTS tips (
   amount_received  numeric(12,2) NOT NULL DEFAULT 0,
   tip_amount       numeric(12,2) NOT NULL DEFAULT 0,
   payment_method   text,
+  shift_date       date,
+  status           text NOT NULL DEFAULT 'pending',
+  disbursed_at     timestamptz,
+  disbursed_by     uuid,
+  disbursed_by_name text,
+  notes            text,
   created_at       timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_tips_waitron ON tips(waitron_id, created_at DESC);
@@ -310,6 +321,7 @@ CREATE TABLE IF NOT EXISTS restock_log (
   inventory_id       uuid REFERENCES inventory(id) ON DELETE SET NULL,
   item_name          text,
   quantity_added     numeric(12,2) NOT NULL DEFAULT 0,
+  change_amount      numeric(12,2),
   previous_stock     numeric(12,2) NOT NULL DEFAULT 0,
   new_stock          numeric(12,2) NOT NULL DEFAULT 0,
   cost_price_per_unit numeric(12,2) NOT NULL DEFAULT 0,
@@ -320,10 +332,12 @@ CREATE TABLE IF NOT EXISTS restock_log (
   payment_method     text,
   delivery_person    text,
   condition          text,
+  reason             text,
   notes              text,
   restocked_by       uuid,
   restocked_by_name  text,
   restocked_at       timestamptz NOT NULL DEFAULT now(),
+  recorded_by        uuid,
   created_at         timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_restock_log_inventory ON restock_log(inventory_id, created_at DESC);
@@ -380,6 +394,16 @@ CREATE TABLE IF NOT EXISTS returns_log (
   handled_by      uuid,
   handled_by_name text,
   resolved_at     timestamptz,
+  shift_date      date,
+  reviewed        boolean DEFAULT false,
+  reviewed_by     uuid,
+  reviewed_by_name text,
+  reviewed_at     timestamptz,
+  notes           text,
+  barman_id       uuid,
+  barman_name     text,
+  kitchen_name    text,
+  griller_name    text,
   created_at      timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_returns_log_order_item ON returns_log(order_item_id);
@@ -402,6 +426,7 @@ CREATE TABLE IF NOT EXISTS debtors (
   is_active      boolean NOT NULL DEFAULT true,
   recorded_by    uuid,
   recorded_by_name text,
+  order_id       uuid,
   created_at     timestamptz NOT NULL DEFAULT now(),
   updated_at     timestamptz DEFAULT now()
 );
@@ -470,6 +495,8 @@ CREATE TABLE IF NOT EXISTS payouts (
   reason         text,
   category       text,
   staff_id       uuid,
+  paid_to        text,
+  recorded_by    uuid,
   created_at     timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_payouts_till ON payouts(till_session_id);
@@ -477,13 +504,18 @@ CREATE INDEX IF NOT EXISTS idx_payouts_created ON payouts(created_at DESC);
 
 -- 2.14 attendance ────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS attendance (
-  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  staff_id     uuid NOT NULL,
-  date         date NOT NULL DEFAULT current_date,
-  clock_in     timestamptz DEFAULT now(),
-  clock_out    timestamptz,
-  confirmed_at timestamptz,
-  created_at   timestamptz DEFAULT now(),
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  staff_id         uuid NOT NULL,
+  staff_name       text,
+  role             text,
+  recorded_by      uuid,
+  recorded_by_name text,
+  date             date NOT NULL DEFAULT current_date,
+  clock_in         timestamptz DEFAULT now(),
+  clock_out        timestamptz,
+  duration_minutes integer,
+  confirmed_at     timestamptz,
+  created_at       timestamptz DEFAULT now(),
   CONSTRAINT attendance_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES profiles(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_attendance_staff_date ON attendance(staff_id, date DESC);
@@ -511,6 +543,9 @@ CREATE TABLE IF NOT EXISTS period_closes (
   new_credit_issued  numeric(12,2) NOT NULL DEFAULT 0,
   credit_recovered   numeric(12,2) NOT NULL DEFAULT 0,
   notes              text,
+  closed_at          timestamptz,
+  closed_by          uuid,
+  closed_by_name     text,
   created_at         timestamptz NOT NULL DEFAULT now()
 );
 
@@ -617,6 +652,7 @@ CREATE TABLE IF NOT EXISTS bar_chiller_stock (
   closing_qty   numeric(10,2) NOT NULL DEFAULT 0,
   note          text,
   recorded_by   uuid REFERENCES profiles(id),
+  created_at    timestamptz DEFAULT now(),
   updated_at    timestamptz DEFAULT now(),
   UNIQUE (date, item_name)
 );
