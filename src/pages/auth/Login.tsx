@@ -510,7 +510,9 @@ export default function Login() {
 
           {mode === 'email' && (
             <>
-              <h2 className="text-xl font-bold text-[#2f6fd6] mb-1">Sign in</h2>
+              <h2 className="text-xl font-black text-[#2f6fd6] mb-1" style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}>
+                Sign in
+              </h2>
               <p className="text-[#2f6fd6]/80 text-sm mb-6">For managers, owners and accountants</p>
               {emailLocked ? (
                 <LockedOut mode="email" time={emailRem} />
@@ -563,7 +565,12 @@ export default function Login() {
 
           {mode === 'pin' && (
             <>
-              <h2 className="text-xl font-bold text-[#2f6fd6] mb-1">Enter PIN</h2>
+              <h2
+                className="text-xl font-black text-[#2f6fd6] mb-1"
+                style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+              >
+                Enter PIN
+              </h2>
               <p className="text-[#2f6fd6]/80 text-sm mb-6">
                 For waitrons, kitchen, bar and grill staff
               </p>
@@ -601,7 +608,8 @@ export default function Login() {
                                   : undefined
                             }
                             disabled={loading || digit === ''}
-                            className={`h-16 rounded-2xl text-xl font-bold transition-all duration-150 ${
+                            style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+                            className={`h-16 rounded-2xl text-xl font-black transition-all duration-150 ${
                               digit === ''
                                 ? 'opacity-0 pointer-events-none'
                                 : digit === 'del'
@@ -634,8 +642,11 @@ export default function Login() {
             </>
           )}
         </div>
-        <p className="text-center text-[#2f6fd6]/70 text-sm mt-6">
-          Cyberville RestaurantOS v1.0 — Kolondiro
+        <p
+          className="text-center text-[#2f6fd6]/70 text-sm mt-6"
+          style={{ fontFamily: "'Arial Black', Arial, sans-serif", letterSpacing: '0.05em' }}
+        >
+          Cyberville Dining OS — Kolondiro
         </p>
       </div>
     </div>
