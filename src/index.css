@@ -1,5 +1,23 @@
 @import 'tailwindcss';
 
+/* ─── Theme: Black & Cream ────────────────────────────────────────────────
+   The app runs a black/near-black theme. The amber/gold accent scale is
+   remapped to warm cream so every existing amber-* utility resolves to the
+   black-and-cream brand. */
+@theme {
+  --color-amber-50:  #fdfcf9;
+  --color-amber-100: #faf6ee;
+  --color-amber-200: #f5eedd;
+  --color-amber-300: #f0e6cb;
+  --color-amber-400: #ebddb9;
+  --color-amber-500: #e5d4a6;
+  --color-amber-600: #cab88c;
+  --color-amber-700: #a99467;
+  --color-amber-800: #8b7549;
+  --color-amber-900: #6e5c39;
+  --color-amber-950: #4a3f28;
+}
+
 html,
 body {
   background-color: #030712;

@@ -75,7 +75,7 @@ async function fetchAll(start: Date, end: Date) {
 
     // attendance — fk alias confirmed in codebase
     sb.from('attendance')
-      .select('clock_in,clock_out,pos_machine,date,profiles!attendance_staff_id_fkey(full_name,role)')
+      .select('clock_in,clock_out,date,profiles!attendance_staff_id_fkey(full_name,role)')
       .eq('date',dateStr),
 
     // debt_payments — no debtors join (FK only, not a select join in codebase)
@@ -172,7 +172,7 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
     const diff = t.closing_float!=null&&t.expected_cash!=null ? t.closing_float-t.expected_cash : null
     return tr([
       t.opened_at?toWAT(t.opened_at):'—',
-      t.closed_at?toWAT(t.closed_at):'<span style="color:#f59e0b">Open</span>',
+      t.closed_at?toWAT(t.closed_at):'<span style="color:#e5d4a6">Open</span>',
       fmt(t.opening_float||0), fmt(t.closing_float||0),
       diff===null?'—':diff>=0?`<span style="color:#16a34a">+${fmt(diff)}</span>`:`<span style="color:#dc2626">${fmt(diff)}</span>`,
       (t.profiles as any)?.full_name||'—'],
@@ -187,8 +187,7 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
       `<span style="text-transform:capitalize;color:#64748b">${p?.role||'—'}</span>`,
       a.clock_in?toWAT(a.clock_in):'—',
       a.clock_out?toWAT(a.clock_out):'<span style="color:#ef4444">On shift</span>',
-      mins!==null?(mins>=60?`${Math.floor(mins/60)}h ${mins%60}m`:`${mins}m`):'—',
-      a.pos_machine||'—'],
+      mins!==null?(mins>=60?`${Math.floor(mins/60)}h ${mins%60}m`:`${mins}m`):'—'],
     i%2===0?'#f8fafc':'white')
   }).join('')
 
@@ -203,14 +202,14 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
 <body style="margin:0;padding:16px;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif">
 <div style="max-width:680px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
   <div style="background:#0f172a;padding:26px 30px">
-    <div style="font-size:21px;font-weight:900;color:#f59e0b">Kolondiro</div>
+    <div style="font-size:21px;font-weight:900;color:#e5d4a6">Kolondiro</div>
     <div style="font-size:13px;color:#94a3b8;margin-top:4px">Daily Trading Summary · ${dateStr}</div>
   </div>
   <div style="padding:26px 30px">
 
-    ${sec('At a Glance','#f59e0b',`
+    ${sec('At a Glance','#e5d4a6',`
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-        ${kpi('Total Revenue',fmt(total),n+' orders','#f59e0b')}
+        ${kpi('Total Revenue',fmt(total),n+' orders','#e5d4a6')}
         ${kpi('Net Revenue',fmt(net),'after payouts','#16a34a')}
         ${kpi('Avg Order',fmt(avg))}
         ${kpi('Peak Hour',peakStr,'','#6366f1')}
@@ -234,16 +233,16 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
     ${tillRows?sec('Till Sessions','#0369a1',tbl(['Opened','Closed','Float','Closing','Variance','Staff'],tillRows)):''}
     ${payRows?sec('Cash Payouts','#dc2626',tbl(['Reason','Category','Amount','By'],payRows)):''}
     ${voidRows?sec('Voids','#ef4444',tbl(['Item','Qty','Value Lost','Approved By'],voidRows)):''}
-    ${attRows?sec('Staff Attendance','#0284c7',tbl(['Name','Role','Clock In','Clock Out','Hours','POS'],attRows)):''}
+    ${attRows?sec('Staff Attendance','#0284c7',tbl(['Name','Role','Clock In','Clock Out','Hours'],attRows)):''}
 
-    ${sec('Stock Status','#f59e0b',d.lowStock.length===0
+    ${sec('Stock Status','#e5d4a6',d.lowStock.length===0
       ?`<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:11px 14px;font-size:13px;color:#15803d">✅ All inventory above minimum thresholds.</div>`
       :`<p style="font-size:13px;color:#92400e;background:#fef3c7;padding:8px 12px;border-radius:6px;margin:0 0 8px">⚠️ ${d.lowStock.length} item(s) below minimum — restock before opening.</p>${tbl(['Item','Current','Minimum'],lowRows)}`
     )}
 
     <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8">
       Auto-generated at 4:30am WAT by RestaurantOS.
-      Full detail at <a href="https://kolondiro.vercel.app" style="color:#f59e0b;text-decoration:none">kolondiro.vercel.app</a>.
+      Full detail at <a href="https://kolondiro.vercel.app" style="color:#e5d4a6;text-decoration:none">kolondiro.vercel.app</a>.
     </div>
   </div>
 </div>

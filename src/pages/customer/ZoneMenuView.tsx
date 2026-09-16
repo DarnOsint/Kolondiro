@@ -7,7 +7,6 @@ type MenuItem = {
   id: string
   name: string
   price: number
-  rave_price?: number | null
   menu_categories?: { name?: string | null; destination?: string | null } | null
 }
 
@@ -138,23 +137,21 @@ export default function ZoneMenuView() {
       const resolved = await resolveZone()
       if (!resolved) throw new Error('zone_not_found')
 
-      const [menuRes, zonePriceRes, raveModeRes] = await Promise.all([
+      const [menuRes, zonePriceRes] = await Promise.all([
         supabase
           .from('menu_items')
-          .select('id, name, price, rave_price, menu_categories(name, destination)')
+          .select('id, name, price, menu_categories(name, destination)')
           .order('name'),
         supabase
           .from('menu_item_zone_prices')
           .select('menu_item_id, category_id, price')
           .eq('category_id', resolved.id),
-        supabase.from('settings').select('value').eq('id', 'rave_mode').single(),
       ])
 
       if (menuRes.error) throw menuRes.error
       if (!resolved) throw new Error('zone_not_found')
       setZone(resolved)
 
-      const raveActive = raveModeRes.data?.value === 'true'
       const baseMenu = (menuRes.data || []) as MenuItem[]
       const priceRows = (zonePriceRes.data || []) as unknown as ZonePriceRow[]
       const zonePriceByItem = new Map<string, number>()
@@ -166,14 +163,11 @@ export default function ZoneMenuView() {
 
       setMenu(
         baseMenu.map((item) => {
-          let price = Number.isFinite(zonePriceByItem.get(item.id))
+          const price = Number.isFinite(zonePriceByItem.get(item.id))
             ? (zonePriceByItem.get(item.id) as number)
             : Number.isFinite(Number(item.price))
               ? Number(item.price)
               : 0
-          if (raveActive && item.rave_price != null) {
-            price = item.rave_price
-          }
           return { ...item, price }
         })
       )

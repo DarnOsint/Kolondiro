@@ -20,8 +20,6 @@ import {
 } from 'lucide-react'
 import type { MenuItem, ItemDestination } from '../../types'
 import { useToast } from '../../context/ToastContext'
-import { printToStation, printHtmlToStation, getStationPrinterUrl } from '../../lib/networkPrinter'
-import { buildOrderTicket, buildOrderTicketHTML, type TicketItem } from '../../lib/orderTicket'
 
 interface OrderItemLocal {
   id: string
@@ -95,7 +93,6 @@ export default function CashSaleModal({ type, menuItems, staffId, onSuccess, onC
   const [activeTab, setActiveTab] = useState<'menu' | 'order'>('menu')
   const [packSizes, setPackSizes] = useState<{ id: string; name: string; price: number }[]>([])
   const [packQuantities, setPackQuantities] = useState<Record<string, number>>({})
-  const [printCopiesConfig, setPrintCopiesConfig] = useState<Record<string, number>>({})
   const [waitingForBar, setWaitingForBar] = useState(false)
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null)
 
@@ -120,26 +117,6 @@ export default function CashSaleModal({ type, menuItems, staffId, onSuccess, onC
         }
       })
   }, [isTakeaway])
-
-  // Load station print copy counts (kitchen/griller) so cash/takeaway sales respect back office
-  useEffect(() => {
-    supabase
-      .from('settings')
-      .select('id, value')
-      .in('id', ['print_copies'])
-      .then(({ data }) => {
-        if (!data) return
-        for (const row of data) {
-          if (row.id === 'print_copies' && row.value) {
-            try {
-              setPrintCopiesConfig(JSON.parse(row.value))
-            } catch {
-              /* ignore invalid */
-            }
-          }
-        }
-      })
-  }, [])
 
   const categories = [
     'All',
@@ -396,44 +373,6 @@ export default function CashSaleModal({ type, menuItems, staffId, onSuccess, onC
       for (const item of itemRows) {
         const { error } = await offlineInsert('order_items', item)
         if (error) throw error
-      }
-      // Auto-print station tickets — kitchen/griller
-      const stations: ItemDestination[] = ['kitchen', 'griller', 'mixologist', 'games']
-      for (const station of stations) {
-        if (!getStationPrinterUrl(station)) continue
-        const stationItems: TicketItem[] = orderItems
-          .filter(
-            (i) =>
-              (normalizeDestination as any)(
-                i.menu_categories?.destination,
-                (i as any).menu_items?.name,
-                i.menu_categories?.name
-              ) === station
-          )
-          .map((i) => ({
-            quantity: i.quantity,
-            name: i.name,
-            modifier_notes: null,
-            unit_price: i.price,
-            total_price: i.total,
-          }))
-        if (stationItems.length === 0) continue
-        const ticketData = {
-          station,
-          tableName: type === 'takeaway' ? `Takeaway — ${customerName || ''}` : 'Counter',
-          orderRef: (order as { id: string }).id.slice(0, 8).toUpperCase(),
-          staffName: profile?.full_name || '',
-          items: stationItems,
-          createdAt: new Date().toISOString(),
-        }
-        const escPosTicket = buildOrderTicket(ticketData)
-        const htmlTicket = buildOrderTicketHTML(ticketData)
-        const configuredRaw = printCopiesConfig[station]
-        const configured = Number(configuredRaw)
-        const copies = Number.isFinite(configured) && configured > 0 ? Math.trunc(configured) : 2
-        printToStation(station, escPosTicket, copies).catch(() => {
-          printHtmlToStation(station, htmlTicket, copies).catch(() => {})
-        })
       }
 
       if (hasBarItems) {

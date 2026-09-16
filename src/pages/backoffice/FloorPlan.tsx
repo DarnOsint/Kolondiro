@@ -570,8 +570,8 @@ export default function FloorPlan({ onBack }: Props) {
               height: layout.h * zoom,
               borderRadius: layout.shape === 'circle' ? '50%' : 12 * zoom,
               background: isOccupied ? c.stroke : c.fill.replace('0.08', '0.25'),
-              border: `${2 * zoom}px solid ${isSelected ? '#f59e0b' : c.stroke}`,
-              boxShadow: isSelected ? '0 0 0 3px rgba(245,158,11,0.3)' : 'none',
+              border: `${2 * zoom}px solid ${isSelected ? '#e5d4a6' : c.stroke}`,
+              boxShadow: isSelected ? '0 0 0 3px rgba(229,212,166,0.3)' : 'none',
               cursor:
                 dragTargetRef.current?.type === 'table' && dragTargetRef.current.id === table.id
                   ? 'grabbing'
@@ -621,7 +621,7 @@ export default function FloorPlan({ onBack }: Props) {
                       bottom: -4 * zoom,
                       width: 12 * zoom,
                       height: 12 * zoom,
-                      background: '#f59e0b',
+                      background: '#e5d4a6',
                       borderRadius: layout.shape === 'circle' ? '50%' : 2 * zoom,
                       cursor: 'nwse-resize',
                       border: `${1.5 * zoom}px solid #000`,

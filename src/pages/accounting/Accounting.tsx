@@ -12,7 +12,6 @@ import {
   BookOpen,
   Shield,
   TrendingUp,
-  Monitor,
   Heart,
   RotateCcw,
   Beer,
@@ -35,7 +34,6 @@ import PayoutsTab from './PayoutsTab'
 import TrendsTab from './TrendsTab'
 import LedgerTab from './LedgerTab'
 import AuditTab from './AuditTab'
-import POSReconciliationTab from './POSReconciliationTab'
 import TipsTab from './TipsTab'
 import ReturnsTab from './ReturnsTab'
 import MainStoreTab from './MainStoreTab'
@@ -48,7 +46,6 @@ import type {
   TrendPoint,
   PayoutRow,
   TillSession,
-  TimesheetEntry,
   AuditEntry,
 } from './types'
 import type { Order } from '../../types'
@@ -70,7 +67,6 @@ const TABS = [
   { id: 'debtors', label: 'Outstanding', icon: AlertTriangle },
   { id: 'ledger', label: 'Ledger', icon: BookOpen },
   { id: 'audit', label: 'Audit', icon: Shield },
-  { id: 'pos', label: 'POS Recon', icon: Monitor },
   { id: 'waitron_orders', label: 'Waitron Orders', icon: ClipboardList },
   { id: 'bar_stock', label: 'Bar Stock', icon: Beer },
   { id: 'kitchen_stock', label: 'Kitchen Stock', icon: ChefHat },
@@ -135,7 +131,6 @@ export default function Accounting() {
   >([])
   const [trendData, setTrendData] = useState<TrendPoint[]>([])
   const [tillSessions, setTillSessions] = useState<TillSession[]>([])
-  const [timesheet, setTimesheet] = useState<TimesheetEntry[]>([])
   const [auditLog, setAuditLog] = useState<AuditEntry[]>([])
   const [payouts, setPayouts] = useState<PayoutRow[]>([])
 
@@ -194,7 +189,7 @@ export default function Accounting() {
     setLoading(true)
     const { start, end } = getDateBounds()
 
-    const [ordersRes, tillRes, payoutsRes, trendRes, timesheetRes, auditRes] = await Promise.all([
+    const [ordersRes, tillRes, payoutsRes, trendRes, auditRes] = await Promise.all([
       // IMPORTANT:
       // - Paid sales must be filtered by `closed_at` so end-of-day reports tally with actual sales time.
       // - Open orders (not yet paid) can be filtered by `created_at` for visibility during the session.
@@ -229,14 +224,6 @@ export default function Accounting() {
         .eq('status', 'paid')
         .gte('created_at', new Date(Date.now() - 30 * 864e5).toISOString())
         .order('created_at', { ascending: true }),
-      supabase
-        .from('attendance')
-        .select(
-          'id, staff_id, staff_name, role, date, clock_in, clock_out, duration_minutes, pos_machine'
-        )
-        .gte('clock_in', start)
-        .lte('clock_in', end)
-        .order('clock_in', { ascending: false }),
       supabase
         .from('audit_log')
         .select(
@@ -372,7 +359,6 @@ export default function Accounting() {
     setTrendData(Object.values(dayMap))
 
     setTillSessions((tillRes.data || []) as unknown as TillSession[])
-    setTimesheet((timesheetRes.data || []) as TimesheetEntry[])
     setAuditLog((auditRes.data || []) as AuditEntry[])
     setPayouts((payoutsRes.data || []) as PayoutRow[])
 
@@ -582,13 +568,6 @@ export default function Accounting() {
 
         {activeTab === 'ledger' && <LedgerTab dateRange={dateRange} />}
         {activeTab === 'audit' && <AuditTab auditLog={auditLog} dateRange={dateRange} />}
-        {activeTab === 'pos' && (
-          <POSReconciliationTab
-            timesheet={timesheet}
-            orders={orders}
-            dateLabel={dateRange === 'Custom' ? `${customStart} – ${customEnd}` : dateRange}
-          />
-        )}
         {activeTab === 'tips' &&
           (() => {
             const { start, end } = getDateBounds()

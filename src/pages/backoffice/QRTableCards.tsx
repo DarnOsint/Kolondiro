@@ -289,7 +289,7 @@ export default function QRTableCards() {
                 <div style={{ background: '#1a1a2e', padding: '12px 16px' }}>
                   <p
                     style={{
-                      color: '#f59e0b',
+                      color: '#e5d4a6',
                       fontSize: '10px',
                       fontWeight: 600,
                       letterSpacing: '2px',

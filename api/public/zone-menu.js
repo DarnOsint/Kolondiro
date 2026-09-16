@@ -67,19 +67,17 @@ export default async function handler(req, res) {
 
     if (!zone) return res.status(404).json({ error: 'Zone not found' })
 
-    const [menuRes, zonePriceRes, raveModeRes] = await Promise.all([
+    const [menuRes, zonePriceRes] = await Promise.all([
       sb
         .from('menu_items')
-        .select('id, name, price, rave_price, description, image_url, menu_categories(name, destination)')
+        .select('id, name, price, description, image_url, menu_categories(name, destination)')
         .order('name'),
       sb.from('menu_item_zone_prices').select('menu_item_id, category_id, price').eq('category_id', zone.id),
-      sb.from('settings').select('value').eq('id', 'rave_mode').single(),
     ])
 
     if (menuRes.error) throw menuRes.error
     if (zonePriceRes.error) throw zonePriceRes.error
 
-    const raveActive = raveModeRes.data?.value === 'true'
     const baseMenu = menuRes.data || []
     const priceRows = zonePriceRes.data || []
     const zonePriceByItem = new Map()
@@ -88,10 +86,7 @@ export default async function handler(req, res) {
     }
 
     const menu = baseMenu.map((item) => {
-      let price = zonePriceByItem.has(item.id) ? zonePriceByItem.get(item.id) : item.price
-      if (raveActive && item.rave_price != null) {
-        price = item.rave_price
-      }
+      const price = zonePriceByItem.has(item.id) ? zonePriceByItem.get(item.id) : item.price
       return {
         ...item,
         price,

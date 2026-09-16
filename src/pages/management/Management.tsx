@@ -23,7 +23,6 @@ import {
   Trophy,
   Snowflake,
   ThumbsUp,
-  Music,
 } from 'lucide-react'
 import ShiftManager from './ShiftManager'
 import TableAssignment from './TableAssignment'
@@ -137,8 +136,6 @@ export default function Management() {
     staffOnShift: 0,
     todayRevenue: 0,
   })
-  const [raveMode, setRaveMode] = useState(false)
-  const [togglingRave, setTogglingRave] = useState(false)
 
   const statsRefreshTimer = useRef<number | null>(null)
   const statsRefreshInFlight = useRef(false)
@@ -225,43 +222,6 @@ export default function Management() {
       supabase.removeChannel(ch)
     }
   }, [scheduleFetchStats])
-
-  useEffect(() => {
-    supabase
-      .from('settings')
-      .select('value')
-      .eq('id', 'rave_mode')
-      .single()
-      .then(({ data }) => {
-        if (data?.value === 'true') setRaveMode(true)
-      })
-    const ch = supabase
-      .channel('mgmt-rave-mode')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'settings', filter: 'id=eq.rave_mode' },
-        (payload) => {
-          const newVal = payload.new as { value?: string }
-          setRaveMode(newVal?.value === 'true')
-        }
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(ch)
-    }
-  }, [])
-
-  const toggleRaveMode = async () => {
-    setTogglingRave(true)
-    const newVal = raveMode ? 'false' : 'true'
-    const { error } = await supabase.from('settings').upsert({
-      id: 'rave_mode',
-      value: newVal,
-      updated_at: new Date().toISOString(),
-    })
-    if (!error) setRaveMode(!raveMode)
-    setTogglingRave(false)
-  }
 
   useEffect(() => {
     const load = async () => {
@@ -392,27 +352,6 @@ export default function Management() {
           </div>
         </div>
       )}
-
-      {/* Rave Mode Toggle */}
-      <div className="bg-gray-900 border-b border-gray-800 px-4 py-2 flex items-center gap-3">
-        <button
-          onClick={toggleRaveMode}
-          disabled={togglingRave}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all ${
-            raveMode
-              ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/30 animate-pulse'
-              : 'bg-gray-800 text-gray-400 hover:text-white border border-gray-700'
-          }`}
-        >
-          <Music size={18} className={raveMode ? 'animate-spin' : ''} />
-          {raveMode ? 'Rave Mode: ON' : 'Rave Mode: OFF'}
-        </button>
-        {raveMode && (
-          <span className="text-pink-400 text-xs font-medium">
-            Rave pricing active on POS and customer menu
-          </span>
-        )}
-      </div>
 
       {/* Tab bar */}
       <div className="flex border-b border-gray-800 bg-gray-900 px-4 overflow-x-auto items-center">

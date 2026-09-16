@@ -31,7 +31,7 @@ import {
 } from 'lucide-react'
 import { HelpTooltip } from '../../components/HelpTooltip'
 
-const AMBER = '#f59e0b',
+const AMBER = '#e5d4a6',
   GREEN = '#10b981',
   RED = '#ef4444',
   BLUE = '#3b82f6',
@@ -688,7 +688,7 @@ Categories: ${d.categorySplit
                   <Bar
                     yAxisId="left"
                     dataKey="orders"
-                    fill="#f59e0b"
+                    fill="#e5d4a6"
                     radius={[3, 3, 0, 0]}
                     name="orders"
                   />

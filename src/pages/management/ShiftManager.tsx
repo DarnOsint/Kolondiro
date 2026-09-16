@@ -3,7 +3,7 @@ import { todayWAT, WAT, watDayRange } from '../../lib/wat'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import { audit } from '../../lib/audit'
-import { UserCheck, UserX, Clock, X, Calendar, Timer, FileText, Monitor } from 'lucide-react'
+import { UserCheck, UserX, Clock, X, Calendar, Timer, FileText } from 'lucide-react'
 import ShiftSummary from './ShiftSummary'
 import { useToast } from '../../context/ToastContext'
 
@@ -22,7 +22,6 @@ interface Shift {
   clock_out?: string | null
   duration_minutes?: number | null
   date?: string
-  pos_machine?: string | null
   missing_attendance?: boolean
 }
 
@@ -37,28 +36,11 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
   const [staff, setStaff] = useState<StaffMember[]>([])
   const [activeShifts, setActiveShifts] = useState<Shift[]>([])
   const [search, setSearch] = useState('')
-  const [posMachines, setPosMachines] = useState<string[]>([])
-  const [selectedPos, setSelectedPos] = useState<Record<string, string>>({}) // staffId → pos machine name
   const [todayLog, setTodayLog] = useState<Shift[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'active' | 'all' | 'log'>('active')
   const [logDate, setLogDate] = useState(todayWAT())
   const [summaryShift, setSummaryShift] = useState<Shift | null>(null)
-
-  const fetchPosMachines = async () => {
-    const { data } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('id', 'pos_machines')
-      .single()
-    if (data?.value) {
-      try {
-        setPosMachines(JSON.parse(data.value) as string[])
-      } catch {
-        /* ignore */
-      }
-    }
-  }
 
   const fetchStaff = async () => {
     const { data } = await supabase
@@ -95,12 +77,7 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
 
     // Some deployments may have column-level privileges on attendance (RLS/GRANT).
     // Try richer payload first, then fall back to minimal columns if blocked.
-    const full = await makeQuery('id, staff_id, staff_name, role, clock_in, pos_machine')
-    const res = full.error ? await makeQuery('id, staff_id, staff_name, role, clock_in') : full
-
-    if (full.error) {
-      console.warn('ShiftManager: falling back to minimal attendance columns', full.error.message)
-    }
+    const res = await makeQuery('id, staff_id, staff_name, role, clock_in')
 
     if (res.data) {
       // Deduplicate by staff_id — keep the most recent row per staff
@@ -129,34 +106,19 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
       effective = prev.toLocaleDateString('en-CA')
     }
     const { start, end } = watDayRange(effective)
-    const full = await supabase
+    const { data: res, error } = await supabase
       .from('attendance')
-      .select('id, staff_id, staff_name, role, clock_in, clock_out, pos_machine')
+      .select('id, staff_id, staff_name, role, clock_in, clock_out')
       .gte('clock_in', start.toISOString())
       .lt('clock_in', end.toISOString())
       .order('clock_in', { ascending: false })
 
-    const res = full.error
-      ? await supabase
-          .from('attendance')
-          .select('id, staff_id, staff_name, role, clock_in, clock_out')
-          .gte('clock_in', start.toISOString())
-          .lt('clock_in', end.toISOString())
-          .order('clock_in', { ascending: false })
-      : full
-
-    if (full.error) {
-      console.warn(
-        'ShiftManager log: falling back to minimal attendance columns',
-        full.error.message
-      )
-    }
-    if (res.error) {
-      toast.error('Error', 'Could not load shift log: ' + res.error.message)
+    if (error) {
+      toast.error('Error', 'Could not load shift log: ' + error.message)
       return
     }
 
-    const baseLog = (res.data || []) as Shift[]
+    const baseLog = (res || []) as Shift[]
     const seen = new Set(baseLog.map((x) => x.staff_id).filter(Boolean))
 
     // Also include staff who made sales in this window even if attendance row is missing.
@@ -185,7 +147,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
         clock_in: start.toISOString(),
         clock_out: end.toISOString(),
         duration_minutes: null,
-        pos_machine: null,
         missing_attendance: true,
       })
     }
@@ -198,7 +159,7 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
-    await Promise.all([fetchStaff(), fetchActiveShifts(), fetchTodayLog(), fetchPosMachines()])
+    await Promise.all([fetchStaff(), fetchActiveShifts(), fetchTodayLog()])
     setLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -221,7 +182,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
       toast.warning('Already Clocked In', member.full_name + ' is already clocked in')
       return
     }
-    const posMachine = selectedPos[member.id] || null
     const { error } = await supabase.from('attendance').insert({
       staff_id: member.id,
       staff_name: member.full_name,
@@ -230,17 +190,11 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
       date: todayWAT(),
       recorded_by: profile?.id,
       recorded_by_name: profile?.full_name,
-      pos_machine: posMachine,
     })
     if (error) {
       toast.error('Error', (error as { message?: string })?.message || 'Unknown error')
       return
     }
-    setSelectedPos((prev) => {
-      const n = { ...prev }
-      delete n[member.id]
-      return n
-    })
     void audit({
       action: 'CLOCK_IN',
       entity: 'attendance',
@@ -398,12 +352,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-gray-400 text-xs capitalize">{shift.role}</p>
-                      {shift.pos_machine && (
-                        <span className="flex items-center gap-1 text-cyan-400 text-xs">
-                          <Monitor size={10} />
-                          {shift.pos_machine}
-                        </span>
-                      )}
                     </div>
                     <p className="text-xs mt-0.5 flex items-center gap-1 text-green-400">
                       <Timer size={10} />
@@ -453,25 +401,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
                   </span>
                 ) : (
                   <div className="flex flex-col items-end gap-1.5">
-                    {posMachines.length > 0 && (
-                      <div className="flex items-center gap-1.5">
-                        <Monitor size={11} className="text-cyan-400" />
-                        <select
-                          value={selectedPos[member.id] || ''}
-                          onChange={(e) =>
-                            setSelectedPos((prev) => ({ ...prev, [member.id]: e.target.value }))
-                          }
-                          className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-cyan-500"
-                        >
-                          <option value="">No POS</option>
-                          {posMachines.map((m) => (
-                            <option key={m} value={m}>
-                              {m}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
                     <button
                       onClick={() => clockIn(member)}
                       className="flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded-lg px-3 py-1.5 text-sm transition-colors"
@@ -541,12 +470,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
                     {entry.missing_attendance && (
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                         Sales found · no clock-in record
-                      </span>
-                    )}
-                    {entry.pos_machine && (
-                      <span className="flex items-center gap-1 text-cyan-400 text-xs">
-                        <Monitor size={10} />
-                        {entry.pos_machine}
                       </span>
                     )}
                   </div>

@@ -1,15 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
-import {
-  setPrintServerUrl,
-  setStationPrinterUrl,
-  printToStation,
-  printHtmlToStation,
-  getStationPrinterUrl,
-  printViaNetwork,
-  isNetworkPrinterAvailable,
-} from '../../lib/networkPrinter'
-import { buildOrderTicket, buildOrderTicketHTML, type TicketItem } from '../../lib/orderTicket'
 import type { ItemDestination } from '../../types'
 import { HelpTooltip } from '../../components/HelpTooltip'
 import { audit } from '../../lib/audit'
@@ -30,7 +20,6 @@ import {
   X,
   Check,
   Search,
-  Music,
 } from 'lucide-react'
 import TableGrid from './TableGrid'
 import CoversModal from './CoversModal'
@@ -268,7 +257,6 @@ export default function POS() {
   const [tables, setTables] = useState<Table[]>([])
   const [menuItems, setMenuItems] = useState<MenuItemWithZone[]>([])
   const [zonePrices, setZonePrices] = useState<ZonePrice[]>([])
-  const [raveMode, setRaveMode] = useState(false)
   const [selectedTable, setSelectedTable] = useState<Table | null>(null)
   const [pendingTable, setPendingTable] = useState<Table | null>(null)
   const [pendingCovers, setPendingCovers] = useState<number | null>(null)
@@ -289,8 +277,6 @@ export default function POS() {
   const [assignedZoneNames, setAssignedZoneNames] = useState<string[] | null>(null)
   const [defaultZone, setDefaultZone] = useState<string>('All')
   const [posTab, setPosTab] = useState<'tables' | 'history' | 'shift'>('tables')
-  const [stationModes, setStationModes] = useState<Record<string, string>>({})
-  const [printCopiesConfig, setPrintCopiesConfig] = useState<Record<string, number>>({})
   const [joinMode, setJoinMode] = useState(false)
   const [joinSelection, setJoinSelection] = useState<Table[]>([])
   // Active joins: maps primary table ID → array of secondary table IDs
@@ -307,64 +293,8 @@ export default function POS() {
 
   // Load printer URLs from settings — supports both legacy individual settings
   // and the new network_printers JSON config
+  // Load active table joins
   useEffect(() => {
-    supabase
-      .from('settings')
-      .select('id, value')
-      .in('id', [
-        'print_server_url',
-        'kitchen_printer_url',
-        'griller_printer_url',
-        'network_printers',
-        'station_modes',
-        'print_copies',
-      ])
-      .then(({ data }) => {
-        if (!data) return
-        for (const row of data) {
-          if (row.id === 'print_server_url' && row.value) setPrintServerUrl(row.value)
-          if (row.id === 'kitchen_printer_url' && row.value)
-            setStationPrinterUrl('kitchen', row.value)
-          if (row.id === 'griller_printer_url' && row.value)
-            setStationPrinterUrl('griller', row.value)
-          if (row.id === 'station_modes' && row.value) {
-            try {
-              setStationModes(JSON.parse(row.value))
-            } catch {
-              /* */
-            }
-          }
-          if (row.id === 'print_copies' && row.value) {
-            try {
-              setPrintCopiesConfig(JSON.parse(row.value))
-            } catch {
-              /* */
-            }
-          }
-          // Load from network_printers config (overrides individual settings)
-          if (row.id === 'network_printers' && row.value) {
-            try {
-              const printers = JSON.parse(row.value) as Array<{
-                label: string
-                ip: string
-                port: number
-                enabled: boolean
-              }>
-              for (const p of printers) {
-                if (!p.enabled) continue
-                const url = `http://${p.ip}:${p.port === 9100 ? 6543 : p.port}`
-                if (p.label === 'receipt') setPrintServerUrl(url)
-                if (p.label === 'kitchen') setStationPrinterUrl('kitchen', url)
-                if (p.label === 'griller') setStationPrinterUrl('griller', url)
-                if (p.label === 'bar') setStationPrinterUrl('bar', url)
-              }
-            } catch {
-              /* invalid JSON */
-            }
-          }
-        }
-      })
-    // Load active table joins
     supabase
       .from('settings')
       .select('value')
@@ -454,27 +384,11 @@ export default function POS() {
     fetchTables()
     fetchMenu()
     fetchZonePrices()
-    supabase
-      .from('settings')
-      .select('value')
-      .eq('id', 'rave_mode')
-      .single()
-      .then(({ data }) => {
-        if (data?.value === 'true') setRaveMode(true)
-      })
     const channel = supabase
       .channel('tables-channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tables' }, () => {
         fetchTables()
       })
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'settings', filter: 'id=eq.rave_mode' },
-        (payload) => {
-          const newVal = payload.new as { value?: string }
-          setRaveMode(newVal?.value === 'true')
-        }
-      )
       .subscribe()
     return () => {
       supabase.removeChannel(channel)
@@ -883,7 +797,7 @@ export default function POS() {
       supabase
         .from('menu_items')
         .select(
-          'id, name, price, rave_price, category_id, description, image_url, is_available, menu_categories(name, destination)'
+          'id, name, price, category_id, description, image_url, is_available, menu_categories(name, destination)'
         )
         .order('name'),
       supabase
@@ -1008,10 +922,7 @@ export default function POS() {
       const zonePrice = zonePrices.find(
         (zp) => zp.menu_item_id === item.id && zp.category_id === categoryId
       )
-      let price = zonePrice ? zonePrice.price : item.price
-      if (raveMode && item.rave_price != null) {
-        price = item.rave_price
-      }
+      const price = zonePrice ? zonePrice.price : item.price
       return { ...item, price, hasZonePrice: !!zonePrice }
     })
   }
@@ -1073,78 +984,6 @@ export default function POS() {
 
   const handleCoversCancel = () => {
     setPendingTable(null)
-  }
-
-  /** Send order tickets to configured station printers (kitchen/griller/bar) */
-  const printStationTickets = async (
-    items: Array<{
-      quantity: number
-      name: string
-      modifier_notes?: string | null
-      destination: ItemDestination
-      unit_price?: number
-      total_price?: number
-      extra_charge?: number
-    }>,
-    tableName: string,
-    orderRef: string,
-    staffName: string,
-    createdAt: string
-  ) => {
-    const stations: ItemDestination[] = ['kitchen', 'griller', 'bar', 'mixologist', 'games']
-    for (const station of stations) {
-      const mode = stationModes[station] || 'display'
-      // For bar: skip printing if display-only
-      // For kitchen/griller: ALWAYS print if a printer is configured (they need physical tickets)
-      if (station === 'bar' && mode === 'display') continue
-      const stationUrl = getStationPrinterUrl(station)
-      // If no dedicated station printer, fall back to main print server
-      if (!stationUrl) {
-        const available = await isNetworkPrinterAvailable()
-        if (!available) continue
-      }
-
-      const stationItems: TicketItem[] = items
-        .filter((i) => normalizeDestination(i.destination) === station)
-        .map((i) => ({
-          quantity: i.quantity,
-          name: i.name,
-          modifier_notes: i.modifier_notes,
-          unit_price: i.unit_price ?? null,
-          total_price: (i.total_price ?? 0) + (i.extra_charge ?? 0),
-        }))
-      if (stationItems.length === 0) continue
-
-      const ticketData = {
-        station,
-        tableName,
-        orderRef,
-        staffName,
-        items: stationItems,
-        createdAt,
-      }
-      const escPosTicket = buildOrderTicket(ticketData)
-      const htmlTicket = buildOrderTicketHTML(ticketData)
-
-      // Print the configured number of copies — kitchen/griller default to 2
-      const defaultCopies = station === 'kitchen' || station === 'griller' ? 2 : 1
-      const configuredRaw = printCopiesConfig[station]
-      const configured = Number(configuredRaw)
-      const copies =
-        Number.isFinite(configured) && configured > 0 ? Math.trunc(configured) : defaultCopies
-      // Try ESC/POS first, fall back to HTML if it fails
-      try {
-        if (stationUrl) {
-          await printToStation(station, escPosTicket, copies)
-        } else {
-          await printViaNetwork(escPosTicket)
-        }
-      } catch {
-        if (stationUrl) {
-          printHtmlToStation(station, htmlTicket, copies).catch(() => {})
-        }
-      }
-    }
   }
 
   const orderPanelAddItemRef = useRef<((item: MenuItem) => void) | null>(null)
@@ -1236,25 +1075,6 @@ export default function POS() {
         )
         if (hasMixo) void notifyMixologists(table.name)
         await logBarIssues(items, newItems, table, activeOrder.id)
-        printStationTickets(
-          items.map((i) => ({
-            quantity: i.quantity,
-            name: i.name,
-            modifier_notes: i.modifier_notes || null,
-            unit_price: i.price,
-            total_price: i.total,
-            extra_charge: i.extra_charge || 0,
-            destination: normalizeDestination(
-              i.destination || i.menu_categories?.destination,
-              i.name,
-              i.menu_categories?.name
-            ),
-          })),
-          table.name,
-          activeOrder.id.slice(0, 8).toUpperCase(),
-          profile?.full_name || '',
-          new Date().toISOString()
-        )
         await audit({
           action: 'ORDER_UPDATED',
           entity: 'order',
@@ -1388,25 +1208,6 @@ export default function POS() {
         void offlineUpdateNoReturn('tables', table.id, { status: 'occupied' } as any)
       }
       await logBarIssues(items, orderItemRows.slice(baseItems.length), table, orderId)
-      printStationTickets(
-        items.map((i) => ({
-          quantity: i.quantity,
-          name: i.name,
-          modifier_notes: i.modifier_notes || null,
-          unit_price: i.price,
-          total_price: i.total,
-          extra_charge: i.extra_charge || 0,
-          destination: normalizeDestination(
-            i.destination || i.menu_categories?.destination,
-            i.name,
-            i.menu_categories?.name
-          ),
-        })),
-        table.name,
-        (newOrder as Order).id.slice(0, 8).toUpperCase(),
-        profile?.full_name || '',
-        new Date().toISOString()
-      )
       await audit({
         action: 'ORDER_CREATED',
         entity: 'order',
@@ -1497,11 +1298,6 @@ export default function POS() {
               <p className="text-gray-400 text-xs">Point of Sale</p>
             </div>
             <span className="sm:hidden text-white font-bold text-sm">POS</span>
-            {raveMode && (
-              <span className="flex items-center gap-1 bg-pink-600 text-white text-xs font-bold px-2.5 py-1 rounded-xl animate-pulse">
-                <Music size={12} /> RAVE
-              </span>
-            )}
           </div>
           <div className="flex items-center gap-1.5">
             <button

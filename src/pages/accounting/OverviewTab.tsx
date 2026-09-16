@@ -857,7 +857,7 @@ export default function OverviewTab({
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="#f59e0b"
+                stroke="#e5d4a6"
                 strokeWidth={2}
                 dot={false}
               />

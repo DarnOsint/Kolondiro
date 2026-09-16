@@ -82,7 +82,7 @@ export default function StaffTab({ waitronStats }: Props) {
                 }}
                 formatter={(v: number) => [`SSP${v.toLocaleString()}`, 'Revenue']}
               />
-              <Bar dataKey="revenue" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="revenue" fill="#e5d4a6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

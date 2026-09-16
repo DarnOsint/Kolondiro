@@ -217,23 +217,23 @@ export default function TableGrid({
                   height: layout.h * zoneScale,
                   borderRadius: layout.shape === 'circle' ? '50%' : 10 * zoneScale,
                   background: isJoinSelected
-                    ? 'rgba(245,158,11,0.35)'
+                    ? 'rgba(229,212,166,0.35)'
                     : isOccupied
                       ? occupiedFill
                       : tc.fill.replace('0.08', '0.2'),
                   border: `${2 * zoneScale}px solid ${
                     isJoinSelected
-                      ? '#f59e0b'
+                      ? '#e5d4a6'
                       : isJoinedSecondary
-                        ? '#f59e0b80'
+                        ? '#e5d4a680'
                         : isSelected
-                          ? '#f59e0b'
+                          ? '#e5d4a6'
                           : tc.stroke
                   }`,
                   boxShadow: isJoinSelected
-                    ? `0 0 0 ${3 * zoneScale}px rgba(245,158,11,0.5)`
+                    ? `0 0 0 ${3 * zoneScale}px rgba(229,212,166,0.5)`
                     : isSelected
-                      ? `0 0 0 ${3 * zoneScale}px rgba(245,158,11,0.4)`
+                      ? `0 0 0 ${3 * zoneScale}px rgba(229,212,166,0.4)`
                       : 'none',
                   zIndex: 1,
                   display: 'flex',
@@ -299,7 +299,7 @@ export default function TableGrid({
                       position: 'absolute',
                       bottom: 3 * zoneScale,
                       right: 3 * zoneScale,
-                      color: '#f59e0b',
+                      color: '#e5d4a6',
                     }}
                   />
                 )}

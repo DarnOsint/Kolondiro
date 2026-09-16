@@ -14,7 +14,6 @@ interface MenuItem {
   id: string
   name: string
   price: number
-  rave_price?: number | null
   description?: string
   image_url?: string | null
   is_available: boolean
@@ -25,7 +24,6 @@ interface ItemForm {
   name: string
   category_id: string
   price: string
-  rave_price: string
   description: string
   image_url: string
   is_available: boolean
@@ -57,7 +55,6 @@ export default function MenuManagement({ onBack }: Props) {
     name: '',
     category_id: '',
     price: '',
-    rave_price: '',
     description: '',
     image_url: '',
     is_available: true,
@@ -84,7 +81,6 @@ export default function MenuManagement({ onBack }: Props) {
       name: '',
       category_id: categories[0]?.id || '',
       price: '',
-      rave_price: '',
       description: '',
       image_url: '',
       is_available: true,
@@ -97,7 +93,6 @@ export default function MenuManagement({ onBack }: Props) {
       name: item.name || '',
       category_id: item.category_id || '',
       price: item.price != null ? String(item.price) : '',
-      rave_price: item.rave_price != null ? String(item.rave_price) : '',
       description: item.description || '',
       image_url: item.image_url || '',
       is_available: item.is_available,
@@ -153,12 +148,10 @@ export default function MenuManagement({ onBack }: Props) {
     if (!nameVal || !itemForm.category_id || priceVal === '')
       return toast.warning('Required', 'Name, category and price are required')
     setSaving(true)
-    const ravePriceVal = itemForm.rave_price.trim()
     const payload = {
       name: itemForm.name,
       category_id: itemForm.category_id,
       price: parseFloat(itemForm.price),
-      rave_price: ravePriceVal ? parseFloat(ravePriceVal) : null,
       description: itemForm.description,
       image_url: itemForm.image_url || null,
       is_available: itemForm.is_available,
@@ -408,11 +401,6 @@ export default function MenuManagement({ onBack }: Props) {
                       <p className="text-amber-400 font-bold text-sm">
                         SSP{item.price.toLocaleString()}
                       </p>
-                      {item.rave_price != null && (
-                        <p className="text-pink-400 font-bold text-xs">
-                          Rave: SSP{item.rave_price.toLocaleString()}
-                        </p>
-                      )}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
@@ -522,21 +510,6 @@ export default function MenuManagement({ onBack }: Props) {
                     className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500"
                     placeholder="0"
                   />
-                </div>
-                <div>
-                  <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Rave Price (SSP)
-                  </label>
-                  <input
-                    type="number"
-                    value={itemForm.rave_price}
-                    onChange={(e) => setItemForm({ ...itemForm, rave_price: e.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500"
-                    placeholder="Leave empty for no rave pricing"
-                  />
-                  <p className="text-gray-500 text-xs mt-1">
-                    When Rave Mode is active, this price replaces the base price
-                  </p>
                 </div>
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">

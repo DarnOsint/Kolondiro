@@ -140,7 +140,7 @@ export default async function handler(req, res) {
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f4f4f5; color: #111827; }
     .wrapper { max-width: 640px; margin: 24px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
     .header { background: #0f172a; padding: 32px 32px 24px; }
-    .header h1 { color: #f59e0b; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+    .header h1 { color: #e5d4a6; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
     .header p { color: #9ca3af; font-size: 13px; margin-top: 4px; }
     .header .statement-label { color: #ffffff; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .body { padding: 28px 32px; }
@@ -160,7 +160,7 @@ export default async function handler(req, res) {
     .ageing-cell.has-balance { background: #fef9f0; }
     .ageing-cell.has-balance .age-amount { color: #d97706; }
     .credit-bar-wrap { background: #f3f4f6; border-radius: 99px; height: 8px; margin-bottom: 6px; overflow: hidden; }
-    .credit-bar { height: 100%; border-radius: 99px; background: ${isOverLimit ? '#ef4444' : debtor.current_balance / debtor.credit_limit > 0.8 ? '#f59e0b' : '#10b981'}; width: ${Math.min(100, (debtor.current_balance / debtor.credit_limit) * 100).toFixed(1)}%; }
+    .credit-bar { height: 100%; border-radius: 99px; background: ${isOverLimit ? '#ef4444' : debtor.current_balance / debtor.credit_limit > 0.8 ? '#e5d4a6' : '#10b981'}; width: ${Math.min(100, (debtor.current_balance / debtor.credit_limit) * 100).toFixed(1)}%; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 24px; }
     th { text-align: left; background: #0f172a; color: #ffffff; padding: 8px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
     td { padding: 9px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
@@ -171,7 +171,7 @@ export default async function handler(req, res) {
     .payment-row td { background: #f0fdf4 !important; }
     .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 20px 32px; }
     .footer p { font-size: 11px; color: #9ca3af; line-height: 1.6; }
-    .footer a { color: #f59e0b; text-decoration: none; }
+    .footer a { color: #e5d4a6; text-decoration: none; }
     .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
     .tag-outstanding { background: #fef3c7; color: #92400e; }
     .tag-paid { background: #d1fae5; color: #065f46; }

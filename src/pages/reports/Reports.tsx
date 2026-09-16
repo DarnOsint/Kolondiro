@@ -51,7 +51,7 @@ const MONTHS = [
   'December',
 ]
 const COLORS = [
-  '#f59e0b',
+  '#e5d4a6',
   '#3b82f6',
   '#10b981',
   '#8b5cf6',
@@ -106,9 +106,9 @@ interface VoidEntry {
 interface AttendanceEntry {
   staff_name?: string
   role?: string
-  duration_minutes?: number
-  pos_machine?: string | null
+duration_minutes?: number
 }
+
 interface PaidOrder {
   id: string
   total_amount?: number
@@ -1016,7 +1016,7 @@ export default function Reports() {
                       }}
                       formatter={(v: number) => ['SSP' + v.toLocaleString(), 'Revenue']}
                     />
-                    <Bar dataKey="revenue" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="revenue" fill="#e5d4a6" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1562,7 +1562,7 @@ export default function Reports() {
                         (report.attendance || []).map((a, i) => (
                           <div key={i} className="flex justify-between my-1 text-xs">
                             <span>
-                              {a.staff_name} ({a.role}){a.pos_machine ? ` — ${a.pos_machine}` : ''}
+                              {a.staff_name} ({a.role})
                             </span>
                             <span>
                               {a.duration_minutes

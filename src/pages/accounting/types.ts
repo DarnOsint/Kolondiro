@@ -66,7 +66,6 @@ export interface TimesheetEntry {
   clock_in: string
   clock_out: string | null
   duration_minutes: number | null
-  pos_machine?: string | null
 }
 
 export interface AuditEntry {

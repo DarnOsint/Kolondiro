@@ -72,7 +72,6 @@ export interface MenuItem {
   id: string
   name: string
   price: number
-  rave_price?: number | null
   is_available: boolean
   category_id: string
   menu_categories?: MenuCategory

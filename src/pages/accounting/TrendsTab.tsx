@@ -42,9 +42,9 @@ export default function TrendsTab({ trendData }: Props) {
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="#f59e0b"
+                stroke="#e5d4a6"
                 strokeWidth={2.5}
-                dot={{ fill: '#f59e0b', r: 3 }}
+                dot={{ fill: '#e5d4a6', r: 3 }}
               />
             </LineChart>
           </ResponsiveContainer>

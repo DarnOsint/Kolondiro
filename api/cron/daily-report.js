@@ -354,11 +354,11 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid,
 <div style="max-width:640px;margin:0 auto;">
 
   <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:14px;padding:28px;margin-bottom:16px;">
-    <div style="color:#f59e0b;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">🍺 Kolondiro</div>
+    <div style="color:#e5d4a6;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">🍺 Kolondiro</div>
     <div style="color:white;font-size:22px;font-weight:800;">Daily Z-Report</div>
     <div style="color:#94a3b8;font-size:13px;margin-top:4px;">${label}</div>
-    <div style="margin-top:20px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:16px 20px;display:inline-block;">
-      <div style="color:#fbbf24;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Grand Total Revenue</div>
+    <div style="margin-top:20px;background:rgba(229,212,166,0.15);border:1px solid rgba(229,212,166,0.3);border-radius:10px;padding:16px 20px;display:inline-block;">
+      <div style="color:#ebddb9;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Grand Total Revenue</div>
       <div style="color:white;font-size:32px;font-weight:900;letter-spacing:-1px;margin-top:4px;">${fmt(grandTotal)}</div>
       <div style="color:#94a3b8;font-size:11px;margin-top:2px;">${paidOrders.length} paid orders · avg ${fmt(avgOrder)}</div>
     </div>
@@ -380,7 +380,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid,
     [{ label: 'Zone' }, { label: 'Orders' }, { label: 'Revenue', right: true }, { label: '%', right: true }],
     Object.entries(zoneMap).sort((a, b) => b[1].revenue - a[1].revenue).map(([z, d]) => [z, d.count, fmt(d.revenue), pct(d.revenue, totalRevenue)]),
     'No zone data.'
-  ), '#f59e0b')}
+  ), '#e5d4a6')}
 
   ${section('Top 10 Selling Items', '🏆', buildTable(
     [{ label: '#' }, { label: 'Item' }, { label: 'Category' }, { label: 'Qty', right: true }, { label: 'Revenue', right: true }],
@@ -396,7 +396,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid,
       <span style="color:#6b7280;font-size:11px;margin-left:8px;">(Cash − payouts)</span>
     </div>
     ${unclosedTill > 0 ? `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 16px;margin-top:8px;"><span style="color:#ea580c;font-weight:700;font-size:12px;">⚠️ ${unclosedTill} till session(s) not closed at end of shift.</span></div>` : ''}
-  `, '#f59e0b')}
+  `, '#e5d4a6')}
 
   ${allReturns.length > 0
     ? section('Returned Items', '🔄', `
@@ -442,7 +442,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid,
           ${lowStock.slice(0,10).map(i => `<div style="color:#374151;font-size:12px;padding:2px 0;">• ${i.item_name} — ${i.current_stock} left (min: ${i.minimum_stock})</div>`).join('')}
           ${lowStock.length > 10 ? `<div style="color:#9ca3af;font-size:11px;margin-top:4px;">...and ${lowStock.length - 10} more</div>` : ''}
         </div>` : ''}
-      `, '#f59e0b')
+      `, '#e5d4a6')
     : section('Main Store Stock', '✅', `<p style="color:#059669;font-size:13px;font-weight:600;margin:4px 0;">All main store inventory items are sufficiently stocked.</p>`, '#059669')
   }
 
@@ -453,7 +453,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid,
   <div style="text-align:center;padding:20px 0 10px;color:#94a3b8;font-size:11px;line-height:1.7;">
     <div style="font-weight:700;color:#64748b;margin-bottom:4px;">RestaurantOS · Kolondiro</div>
     <div>Trading period: 8:00 AM – 8:00 AM WAT · ${short}</div>
-    <div>Generated at 8:00 AM WAT · <a href="https://kolondiro.vercel.app" style="color:#f59e0b;text-decoration:none;">kolondiro.vercel.app</a></div>
+    <div>Generated at 8:00 AM WAT · <a href="https://kolondiro.vercel.app" style="color:#e5d4a6;text-decoration:none;">kolondiro.vercel.app</a></div>
   </div>
 
 </div></body></html>`
@@ -467,11 +467,11 @@ function buildWeeklyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid
 <div style="max-width:640px;margin:0 auto;">
 
   <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:14px;padding:28px;margin-bottom:16px;">
-    <div style="color:#f59e0b;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">🍺 Kolondiro</div>
+    <div style="color:#e5d4a6;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">🍺 Kolondiro</div>
     <div style="color:white;font-size:22px;font-weight:800;">Weekly Summary</div>
     <div style="color:#94a3b8;font-size:13px;margin-top:4px;">${label}</div>
-    <div style="margin-top:20px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:16px 20px;display:inline-block;">
-      <div style="color:#fbbf24;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Weekly Grand Total Revenue</div>
+    <div style="margin-top:20px;background:rgba(229,212,166,0.15);border:1px solid rgba(229,212,166,0.3);border-radius:10px;padding:16px 20px;display:inline-block;">
+      <div style="color:#ebddb9;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Weekly Grand Total Revenue</div>
       <div style="color:white;font-size:32px;font-weight:900;letter-spacing:-1px;margin-top:4px;">${fmt(grandTotal)}</div>
       <div style="color:#94a3b8;font-size:11px;margin-top:2px;">${paidCount} paid orders · avg ${fmt(avgOrder)}</div>
     </div>
@@ -510,7 +510,7 @@ function buildWeeklyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid
   <div style="text-align:center;padding:20px 0 10px;color:#94a3b8;font-size:11px;line-height:1.7;">
     <div style="font-weight:700;color:#64748b;margin-bottom:4px;">RestaurantOS · Kolondiro</div>
     <div>Weekly period: ${label}</div>
-    <div>Generated at 8:00 AM WAT · <a href="https://kolondiro.vercel.app" style="color:#f59e0b;text-decoration:none;">kolondiro.vercel.app</a></div>
+    <div>Generated at 8:00 AM WAT · <a href="https://kolondiro.vercel.app" style="color:#e5d4a6;text-decoration:none;">kolondiro.vercel.app</a></div>
   </div>
 
 </div></body></html>`

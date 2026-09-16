@@ -407,37 +407,24 @@ export default function Login() {
     if (np.length === 4) handlePinLogin(np)
   }
 
-  const _Locked = ({ time }: { time: number }) => (
-    <div className="text-center py-8">
-      <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
-        <span className="text-2xl">🔒</span>
-      </div>
-      <p className="text-red-400 font-semibold mb-1">
-        {mode === 'email' ? 'Account' : 'PIN Entry'} Locked
-      </p>
-      <p className="text-gray-500 text-sm">
-        Try again in <span className="text-white font-mono">{fmtTime(time)}</span>
-      </p>
-    </div>
-  )
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-gray-900 to-gray-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#05070f] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-amber-500 mb-4">
-            <span className="text-3xl">🍺</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-[#35c8f5] to-[#2f6fd6] mb-4">
+            <span className="text-3xl font-bold text-[#05070f] font-mono tracking-tighter">&lt;/&gt;</span>
           </div>
-          <h1 className="text-3xl font-bold text-amber-400">Kolondiro</h1>
-          <p className="text-gray-300 mt-1">Restaurant Operating System</p>
+          <h1 className="text-3xl font-bold text-[#35c8f5]">Cyberville</h1>
+          <p className="text-gray-400 mt-1 text-sm">Software Development Company</p>
+          <p className="text-[#94a3b8] mt-2 text-xs tracking-wide uppercase">Juba, South Sudan</p>
         </div>
 
         {sessionExpired && (
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl px-4 py-3 mb-6 flex items-center gap-3">
-            <span className="text-amber-400 text-lg">⏱</span>
+          <div className="bg-[#35c8f5]/10 border border-[#35c8f5]/30 rounded-2xl px-4 py-3 mb-6 flex items-center gap-3">
+            <span className="text-[#35c8f5] text-lg">⏱</span>
             <div>
-              <p className="text-amber-400 text-sm font-medium">Session expired</p>
-              <p className="text-amber-400/70 text-xs">
+              <p className="text-[#35c8f5] text-sm font-medium">Session expired</p>
+              <p className="text-[#35c8f5]/70 text-xs">
                 You were signed out after 60 minutes of inactivity.
               </p>
             </div>
@@ -453,7 +440,7 @@ export default function Login() {
                 setError(null)
                 setPin('')
               }}
-              className="text-amber-500 hover:text-amber-400 underline"
+              className="text-[#35c8f5] hover:text-[#22b7ef] underline"
             >
               Sign in with email
             </button>
@@ -465,14 +452,14 @@ export default function Login() {
                 setMode('pin')
                 setError(null)
               }}
-              className="text-amber-500 hover:text-amber-400 underline"
+              className="text-[#35c8f5] hover:text-[#22b7ef] underline"
             >
               ← Use PIN instead
             </button>
           </p>
         )}
 
-        <div className="bg-gray-800/90 backdrop-blur rounded-2xl p-8 shadow-2xl border border-amber-500/20">
+        <div className="bg-[#0c1322] backdrop-blur rounded-2xl p-8 shadow-2xl border border-[#94a3b8]/14">
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg p-3 mb-6 text-sm">
               {error}
@@ -495,7 +482,7 @@ export default function Login() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@kolondiro.com"
                       required
-                      className="w-full bg-gray-700 border border-gray-500 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-[#101a30] border border-[#94a3b8]/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#35c8f5]"
                     />
                   </div>
                   <div>
@@ -507,7 +494,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full bg-gray-700 border border-gray-500 text-white rounded-xl px-4 py-3 pr-11 focus:outline-none focus:border-amber-500"
+                        className="w-full bg-[#101a30] border border-[#94a3b8]/20 text-white rounded-xl px-4 py-3 pr-11 focus:outline-none focus:border-[#35c8f5]"
                       />
                       <button
                         type="button"
@@ -521,7 +508,7 @@ export default function Login() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-amber-500 hover:bg-amber-400 disabled:bg-amber-500/50 text-black font-semibold rounded-xl px-4 py-3 transition-colors"
+                    className="w-full bg-gradient-to-r from-[#35c8f5] to-[#2f6fd6] hover:from-[#22b7ef] hover:to-[#2a60c2] disabled:opacity-50 text-[#05070f] font-semibold rounded-xl px-4 py-3 transition-colors"
                   >
                     {loading ? 'Signing in…' : 'Sign In'}
                   </button>
@@ -544,9 +531,9 @@ export default function Login() {
                     {[0, 1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${pin.length > i ? 'border-amber-500 bg-amber-500/10' : 'border-gray-500 bg-gray-700'}`}
+                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${pin.length > i ? 'border-[#35c8f5] bg-[#35c8f5]/10' : 'border-[#94a3b8]/30 bg-[#101a30]'}`}
                       >
-                        {pin.length > i && <div className="w-4 h-4 rounded-full bg-amber-500" />}
+                        {pin.length > i && <div className="w-4 h-4 rounded-full bg-[#35c8f5]" />}
                       </div>
                     ))}
                   </div>
@@ -568,8 +555,8 @@ export default function Login() {
                               digit === ''
                                 ? 'opacity-0 pointer-events-none'
                                 : digit === 'del'
-                                  ? 'bg-gray-700 border border-gray-500 text-gray-300 hover:bg-gray-600 hover:text-white active:scale-95'
-                                  : 'bg-gray-700 border border-gray-500 text-white font-bold hover:bg-amber-500/20 hover:border-amber-500 active:scale-95'
+                                  ? 'bg-[#101a30] border border-[#94a3b8]/20 text-gray-300 hover:bg-[#0c1322] hover:text-white active:scale-95'
+                                  : 'bg-[#101a30] border border-[#94a3b8]/20 text-white font-bold hover:bg-[#35c8f5]/20 hover:border-[#35c8f5] active:scale-95'
                             }`}
                           >
                             {digit === 'del' ? <Delete size={20} className="mx-auto" /> : digit}
@@ -579,7 +566,7 @@ export default function Login() {
                     ))}
                   </div>
                   {loading && (
-                    <div className="text-center mt-6 text-amber-500 text-sm">Verifying PIN...</div>
+                    <div className="text-center mt-6 text-[#35c8f5] text-sm">Verifying PIN...</div>
                   )}
                   <button
                     onClick={() => {
@@ -596,7 +583,7 @@ export default function Login() {
           )}
         </div>
         <p className="text-center text-gray-600 text-sm mt-6">
-          RestaurantOS v1.0 — Kolondiro
+          Cyberville RestaurantOS v1.0 — Kolondiro
         </p>
       </div>
     </div>

@@ -297,7 +297,7 @@ export default async function handler(req, res) {
       <div style="color:#9ca3af;font-size:12px;margin-top:4px;">The accountant has not entered the daily reconciliation data. Please complete this in the Accounting → Overview tab.</div>
     </div>
   `}
-  `, reconSaved ? '#f59e0b' : '#ea580c')}
+  `, reconSaved ? '#e5d4a6' : '#ea580c')}
 
   ${section('Attendance', '📋', `
     ${kpiRow([kpiBox('Staff Clocked In', clockedIn)])}

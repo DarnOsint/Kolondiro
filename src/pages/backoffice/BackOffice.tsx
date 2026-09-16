@@ -10,30 +10,22 @@ import {
   QrCode,
   Lock,
   ChefHat,
-  Monitor,
-  Printer,
   Map,
   ShoppingBag,
   Beer,
-  Network,
-  Music,
 } from 'lucide-react'
 import { HelpTooltip } from '../../components/HelpTooltip'
 import StaffManagement from './StaffManagement'
 import MenuManagement from './MenuManagement'
 import ZonePricing from './ZonePricing'
-import RavePricing from './RavePricing'
-import POSMachines from './POSMachines'
 import TableConfig from './TableConfig'
 import Inventory from './Inventory'
 import Suppliers from './Suppliers'
 import ChangePassword from './ChangePassword'
 import KitchenStock from './KitchenStock'
-import PrinterConfig from './PrinterConfig'
 import FloorPlan from './FloorPlan'
 import TakeawayPacks from './TakeawayPacks'
 import BarChillerStock from './BarChillerStock'
-import NetworkPrinters from './NetworkPrinters'
 import { useNavigate } from 'react-router-dom'
 import type { Role } from '../../types'
 
@@ -79,14 +71,6 @@ export default function BackOffice() {
       desc: 'Set drink prices per zone',
       icon: MapPin,
       color: 'bg-purple-500',
-      roles: ['owner', 'manager'],
-    },
-    {
-      id: 'ravepricing',
-      label: 'Rave Pricing',
-      desc: 'Set prices that activate when Rave Mode is on',
-      icon: Music,
-      color: 'bg-pink-600',
       roles: ['owner', 'manager'],
     },
     {
@@ -154,30 +138,6 @@ export default function BackOffice() {
       roles: ['owner', 'manager'],
     },
     {
-      id: 'posmachines',
-      label: 'POS Machines',
-      desc: 'Name and manage your POS terminals for shift reconciliation',
-      icon: Monitor,
-      color: 'bg-cyan-500',
-      roles: ['owner', 'manager'],
-    },
-    {
-      id: 'networkprinters',
-      label: 'Network Printers',
-      desc: 'Configure all thermal printers on the network by IP and function',
-      icon: Network,
-      color: 'bg-indigo-600',
-      roles: ['owner', 'manager'],
-    },
-    {
-      id: 'printerconfig',
-      label: 'Print Server',
-      desc: 'Legacy print server URL configuration',
-      icon: Printer,
-      color: 'bg-indigo-500',
-      roles: ['owner', 'manager'],
-    },
-    {
       id: 'changepassword',
       label: 'Change Password',
       desc: 'Update your account login password',
@@ -209,7 +169,6 @@ export default function BackOffice() {
   if (activeSection === 'staff') return <StaffManagement onBack={() => setActiveSection(null)} />
   if (activeSection === 'menu') return <MenuManagement onBack={() => setActiveSection(null)} />
   if (activeSection === 'zonepricing') return <ZonePricing onBack={() => setActiveSection(null)} />
-  if (activeSection === 'ravepricing') return <RavePricing onBack={() => setActiveSection(null)} />
   if (activeSection === 'tables') return <TableConfig onBack={() => setActiveSection(null)} />
   if (activeSection === 'floorplan') return <FloorPlan onBack={() => setActiveSection(null)} />
   if (activeSection === 'qrcards') {
@@ -218,17 +177,12 @@ export default function BackOffice() {
   }
   if (activeSection === 'changepassword')
     return <ChangePassword onBack={() => setActiveSection(null)} />
-  if (activeSection === 'posmachines') return <POSMachines onBack={() => setActiveSection(null)} />
   if (activeSection === 'kitchenstock')
     return <KitchenStock onBack={() => setActiveSection(null)} />
   if (activeSection === 'inventory') return <Inventory onBack={() => setActiveSection(null)} />
   if (activeSection === 'suppliers') return <Suppliers onBack={() => setActiveSection(null)} />
   if (activeSection === 'barchiller')
     return <BarChillerStock onBack={() => setActiveSection(null)} />
-  if (activeSection === 'networkprinters')
-    return <NetworkPrinters onBack={() => setActiveSection(null)} />
-  if (activeSection === 'printerconfig')
-    return <PrinterConfig onBack={() => setActiveSection(null)} />
   if (activeSection === 'takeawaypacks')
     return <TakeawayPacks onBack={() => setActiveSection(null)} />
 
@@ -272,12 +226,6 @@ export default function BackOffice() {
                 title: 'Floor Plan',
                 description:
                   'Visual table layout editor. Drag tables to position them exactly as they are on site. Click a table to select it, then resize by dragging the corner handle or toggle between square and round shapes. Filter by zone to focus on specific areas. The layout is saved and can be used as a reference for staff.',
-              },
-              {
-                id: 'bo-pos',
-                title: 'POS Machines',
-                description:
-                  'Name and manage your physical POS terminals (e.g. POS-1, Counter, Bar Terminal). Once named, the manager can assign a specific machine to each waitron at clock-in. Every sale is then traceable to a terminal for end-of-shift reconciliation.',
               },
               {
                 id: 'bo-inventory',

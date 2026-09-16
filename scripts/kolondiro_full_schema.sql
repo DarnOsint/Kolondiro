@@ -85,7 +85,6 @@ CREATE TABLE IF NOT EXISTS menu_items (
   id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name           text NOT NULL,
   price          numeric(12,2) NOT NULL DEFAULT 0,
-  rave_price     numeric(12,2),
   category_id    uuid REFERENCES menu_categories(id) ON DELETE SET NULL,
   description    text,
   image_url      text,
@@ -483,13 +482,11 @@ CREATE TABLE IF NOT EXISTS attendance (
   date         date NOT NULL DEFAULT current_date,
   clock_in     timestamptz DEFAULT now(),
   clock_out    timestamptz,
-  pos_machine  text,
   confirmed_at timestamptz,
   created_at   timestamptz DEFAULT now(),
   CONSTRAINT attendance_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES profiles(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_attendance_staff_date ON attendance(staff_id, date DESC);
-CREATE INDEX IF NOT EXISTS idx_attendance_pos_machine ON attendance(pos_machine) WHERE pos_machine IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_attendance_open ON attendance(staff_id) WHERE clock_out IS NULL;
 
 -- 2.15 period_closes ─────────────────────────────────────────────────────────
@@ -1128,9 +1125,4 @@ END $$;
 -- ============================================================================
 -- 11. DEFAULT SETTINGS SEED
 -- ============================================================================
-INSERT INTO settings (id, value, updated_at) VALUES ('pos_machines', '[]', now())
-  ON CONFLICT (id) DO NOTHING;
-INSERT INTO settings (id, value, updated_at) VALUES ('rave_mode', 'false', now())
-  ON CONFLICT (id) DO NOTHING;
-
 SELECT 'kolondiro_full_schema applied' AS status, now() AS at;
