@@ -423,21 +423,21 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#eef5ff] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#fcfaf5] flex items-center justify-center p-4 relative overflow-hidden">
       {/* ── animated aurora mesh ── */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-1/4 -left-1/4 w-[75rem] h-[75rem] rounded-full opacity-70 bg-[conic-gradient(from_0deg,#35c8f5,#2f6fd6,#818cf8,#22d3ee,#35c8f5)] blur-[110px] animate-[spin_45s_linear_infinite]" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-[75rem] h-[75rem] rounded-full opacity-60 bg-[conic-gradient(from_180deg,#22d3ee,#2f6fd6,#a78bfa,#35c8f5,#22d3ee)] blur-[110px] animate-[spin-rev_55s_linear_infinite]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full opacity-40 bg-gradient-to-br from-[#c7d8ff] to-[#d3f7ff] blur-[90px] animate-[float-3_14s_ease-in-out_infinite]" />
+        <div className="absolute -top-1/4 -left-1/4 w-[75rem] h-[75rem] rounded-full opacity-60 bg-[conic-gradient(from_0deg,#f5efe6,#efe6d8,#fdf6ec,#f5efe6)] blur-[110px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute -bottom-1/4 -right-1/4 w-[75rem] h-[75rem] rounded-full opacity-50 bg-[conic-gradient(from_180deg,#f7f1e9,#eee4d4,#fffaf2,#f7f1e9)] blur-[110px] animate-[spin-rev_55s_linear_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full opacity-40 bg-gradient-to-br from-[#fffdf8] to-[#f3ecdf] blur-[90px] animate-[float-3_14s_ease-in-out_infinite]" />
       </div>
       {/* ── fine dot grid ── */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(47,111,214,0.10)_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(120,100,60,0.08)_1px,transparent_1px)] [background-size:24px_24px]" />
       {/* ── rising glowing particles ── */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
         {PARTICLES.map((p, i) => (
           <div
             key={i}
-            className="absolute bottom-0 rounded-full bg-[#35c8f5] shadow-[0_0_10px_rgba(53,200,245,0.9)]"
+            className="absolute bottom-0 rounded-full bg-[#e8dfcf] shadow-[0_0_10px_rgba(200,180,140,0.8)]"
             style={{
               left: p.left,
               width: p.size,
@@ -449,7 +449,7 @@ export default function Login() {
       </div>
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white/70 to-blue-50/70 backdrop-blur-sm ring-1 ring-white/70 shadow-lg shadow-blue-900/5">
+          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white to-[#f7f2e9]/70 backdrop-blur-sm ring-1 ring-white/80 shadow-lg shadow-black/5">
             <img
               src="/cyberville-logo.jpeg"
               alt="Cyberville"
@@ -498,7 +498,7 @@ export default function Login() {
           </p>
         )}
 
-        <div className="relative bg-white/80 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl shadow-blue-900/10 ring-1 ring-white/70">
+        <div className="relative bg-white rounded-[2rem] p-8 shadow-2xl shadow-black/10 ring-1 ring-black/5">
           {/* top gradient accent strip */}
           <div className="absolute -top-px left-10 right-10 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[#a855f7] to-transparent pointer-events-none" />
           <div className="absolute -top-px left-1/2 -translate-x-1/2 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] blur-[1px] pointer-events-none" />
