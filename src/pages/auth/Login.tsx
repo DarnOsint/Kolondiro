@@ -11,6 +11,21 @@ const EMAIL_LOCK_MS = 15 * 60 * 1000
 const PIN_MAX = 5
 const PIN_LOCK_MS = 5 * 60 * 1000
 
+const PARTICLES = [
+  { left: '6%', delay: '0s', dur: '9s', size: 5 },
+  { left: '14%', delay: '2.3s', dur: '12s', size: 3 },
+  { left: '22%', delay: '4.1s', dur: '10s', size: 4 },
+  { left: '31%', delay: '1.2s', dur: '13s', size: 3 },
+  { left: '40%', delay: '5.5s', dur: '9s', size: 5 },
+  { left: '49%', delay: '3.4s', dur: '11s', size: 3 },
+  { left: '58%', delay: '0.7s', dur: '14s', size: 4 },
+  { left: '67%', delay: '6.2s', dur: '10s', size: 3 },
+  { left: '76%', delay: '2.9s', dur: '12s', size: 5 },
+  { left: '85%', delay: '4.8s', dur: '9s', size: 3 },
+  { left: '93%', delay: '1.8s', dur: '13s', size: 4 },
+  { left: '34%', delay: '7.1s', dur: '11s', size: 3 },
+]
+
 interface RateState {
   attempts: number
   max: number
@@ -408,29 +423,47 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#eaf3ff] via-white to-[#e4f8ff] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* dot-grid circuit pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(47,111,214,0.10)_1px,transparent_1px)] [background-size:26px_26px] pointer-events-none" />
-      {/* floating color blobs */}
-      <div className="absolute -top-24 -left-24 w-[30rem] h-[30rem] rounded-full bg-gradient-to-br from-[#35c8f5]/30 to-[#2f6fd6]/15 blur-3xl pointer-events-none animate-[float-1_16s_ease-in-out_infinite]" />
-      <div className="absolute -bottom-28 -right-24 w-[34rem] h-[34rem] rounded-full bg-gradient-to-tr from-[#2f6fd6]/25 to-[#35c8f5]/20 blur-3xl pointer-events-none animate-[float-2_18s_ease-in-out_infinite]" />
-      <div className="absolute top-1/3 left-1/2 w-72 h-72 rounded-full bg-gradient-to-br from-indigo-300/25 to-transparent blur-3xl pointer-events-none animate-[float-3_20s_ease-in-out_infinite]" />
-      {/* accent pulse dots */}
-      <div className="absolute top-24 right-[15%] w-2.5 h-2.5 rounded-full bg-[#35c8f5]/60 animate-pulse" />
-      <div className="absolute bottom-28 left-[10%] w-3 h-3 rounded-full bg-[#2f6fd6]/50 animate-pulse [animation-delay:1.5s]" />
-      <div className="absolute top-[12%] left-[22%] w-2 h-2 rounded-full bg-[#2f6fd6]/40 animate-pulse [animation-delay:0.6s]" />
-      <div className="absolute bottom-[18%] right-[24%] w-2 h-2 rounded-full bg-[#35c8f5]/50 animate-pulse [animation-delay:2.2s]" />
+    <div className="min-h-screen bg-[#eef5ff] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* ── animated aurora mesh ── */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-1/4 -left-1/4 w-[75rem] h-[75rem] rounded-full opacity-70 bg-[conic-gradient(from_0deg,#35c8f5,#2f6fd6,#818cf8,#22d3ee,#35c8f5)] blur-[110px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute -bottom-1/4 -right-1/4 w-[75rem] h-[75rem] rounded-full opacity-60 bg-[conic-gradient(from_180deg,#22d3ee,#2f6fd6,#a78bfa,#35c8f5,#22d3ee)] blur-[110px] animate-[spin-rev_55s_linear_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full opacity-40 bg-gradient-to-br from-[#c7d8ff] to-[#d3f7ff] blur-[90px] animate-[float-3_14s_ease-in-out_infinite]" />
+      </div>
+      {/* ── fine dot grid ── */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(47,111,214,0.10)_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* ── rising glowing particles ── */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        {PARTICLES.map((p, i) => (
+          <div
+            key={i}
+            className="absolute bottom-0 rounded-full bg-[#35c8f5] shadow-[0_0_10px_rgba(53,200,245,0.9)]"
+            style={{
+              left: p.left,
+              width: p.size,
+              height: p.size,
+              animation: `rise ${p.dur} linear ${p.delay} infinite`,
+            }}
+          />
+        ))}
+      </div>
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="mb-6">
+          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white/70 to-blue-50/70 backdrop-blur-sm ring-1 ring-white/70 shadow-lg shadow-blue-900/5 mb-6">
             <img
               src="/cyberville-logo.jpeg"
               alt="Cyberville"
-              className="h-32 w-32 object-contain mx-auto pointer-events-none select-none"
+              className="h-24 w-24 object-contain pointer-events-none select-none"
             />
           </div>
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Cyberville</h1>
-          <p className="text-gray-500 mt-2 text-sm">Software Development Company</p>
+          <h1 className="text-5xl font-extrabold tracking-tight">
+            <span className="bg-gradient-to-r from-[#2f6fd6] via-[#2563eb] to-[#0ea5e9] bg-clip-text text-transparent">
+              Cyberville
+            </span>
+          </h1>
+          <p className="text-gray-500 mt-3 text-sm font-medium tracking-wide">
+            Software Development Company
+          </p>
         </div>
 
         {sessionExpired && (
@@ -473,7 +506,10 @@ export default function Login() {
           </p>
         )}
 
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+        <div className="relative bg-white/80 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl shadow-blue-900/10 ring-1 ring-white/70">
+          {/* top gradient accent strip */}
+          <div className="absolute -top-px left-10 right-10 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[#35c8f5] to-transparent pointer-events-none" />
+          <div className="absolute -top-px left-1/2 -translate-x-1/2 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#2f6fd6] to-[#0ea5e9] blur-[1px] pointer-events-none" />
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 mb-6 text-sm">
               {error}

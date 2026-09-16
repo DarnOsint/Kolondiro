@@ -36,6 +36,29 @@ body {
 }
 
 /* ─── Login page background floats ──────────────────────────────────────── */
+@keyframes spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
 @keyframes float-1 {
   0%,
   100% {
