@@ -322,38 +322,6 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
   const total = subtotal
   const change = paymentMethod === 'cash' && cashTendered ? parseFloat(cashTendered) - total : 0
 
-  // Only bar items block payment — kitchen/griller have no dedicated tab so waitron can pay freely
-  const unreadyItems = (order?.order_items || []).filter((i) => {
-    const catDest =
-      (
-        i as unknown as {
-          menu_items?: { menu_categories?: { destination?: string; name?: string } }
-        }
-      ).menu_items?.menu_categories?.destination || ''
-    const catName =
-      (i as unknown as { menu_items?: { menu_categories?: { name?: string } } }).menu_items
-        ?.menu_categories?.name || ''
-    const normDest = normalizeDestination(
-      i.destination || catDest || 'bar',
-      i.menu_items?.name,
-      catName
-    )
-    // shisha, games, kitchen, and grill should not block payment
-    if (
-      normDest === 'shisha' ||
-      normDest === 'games' ||
-      normDest === 'kitchen' ||
-      normDest === 'griller'
-    )
-      return false
-    // Bar and mixologist items must be accepted before payment.
-    // - Bar: accepted when marked ready.
-    // - Mixologist: accepted when moved from pending → preparing.
-    if (i.return_requested || i.return_accepted) return false
-    return i.status === 'pending'
-  })
-  const hasUnreadyItems = unreadyItems.length > 0
-
   const requestReturn = async (itemId: string) => {
     const item = (order?.order_items || []).find((i) => i.id === itemId)
     if (!item) return
@@ -558,7 +526,6 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
 
   const canProcess = () => {
     if (processing) return false
-    if (hasUnreadyItems && paymentMethod !== 'run_tab') return false
     if (paymentMethod === 'cash') return parseFloat(cashTendered) >= total
     if (paymentMethod === 'cash+transfer' || paymentMethod === 'cash+card') {
       const c = parseFloat(cashSplit || '0')
@@ -1847,31 +1814,6 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                   <span className="text-red-400 font-bold">-N{returnedTotal.toLocaleString()}</span>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Unready items warning — blocks payment */}
-          {hasUnreadyItems && paymentMethod !== 'run_tab' && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-              <p className="text-red-400 font-semibold text-sm mb-2">⚠️ Items not yet ready</p>
-              <p className="text-gray-400 text-xs mb-2">
-                These items have not been marked ready/delivered by the station. Payment is blocked
-                until all items are prepared and served:
-              </p>
-              <div className="space-y-1">
-                {unreadyItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                    <p className="text-red-300 text-xs font-medium">
-                      {item.quantity}x{' '}
-                      {item.menu_items?.name ||
-                        (item as unknown as { modifier_notes?: string }).modifier_notes ||
-                        'Item'}
-                      <span className="text-gray-500 ml-1 capitalize">({item.destination})</span>
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
 
