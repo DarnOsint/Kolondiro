@@ -81,7 +81,6 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
         'social_media_manager',
         'games_master',
         'shisha_attendant',
-        'apartment_manager',
       ])
       .order('full_name')
     if (data) setStaff(data)
@@ -340,7 +339,7 @@ export default function ShiftManager({ onClose, onRefreshStats }: Props) {
   }
   const formatTime = (ts?: string | null) =>
     ts
-      ? new Date(ts).toLocaleTimeString('en-NG', {
+      ? new Date(ts).toLocaleTimeString('en-SS', {
           timeZone: 'Africa/Lagos',
           hour: '2-digit',
           minute: '2-digit',

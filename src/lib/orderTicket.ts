@@ -29,9 +29,9 @@ type TicketTextOptions = {
  * Works on every thermal printer connected via TCP:9100.
  */
 export function buildOrderTicket(data: OrderTicketData): Uint8Array {
-  // Most thermal printers (raw TCP) don't render the Naira (₦) glyph.
+  // Most thermal printers (raw TCP) don't render the SSP glyph.
   // Use ASCII-safe currency to avoid printing "?".
-  const text = buildOrderTicketText(data, { currencySymbol: 'NGN ' })
+  const text = buildOrderTicketText(data, { currencySymbol: 'SSP ' })
   // Add a few newlines at the end so the paper feeds past the cutter
   return new TextEncoder().encode(text + '\n\n\n\n\n')
 }
@@ -44,7 +44,7 @@ export function buildOrderTicketText(data: OrderTicketData, opts: TicketTextOpti
   const W = 32 // 58mm printers = ~32 chars, 80mm = ~42 chars. Use 32 for safety.
   const divider = '-'.repeat(W)
   const doubleDivider = '='.repeat(W)
-  const currencySymbol = opts.currencySymbol ?? '₦'
+  const currencySymbol = opts.currencySymbol ?? 'SSP'
 
   const centre = (s: string) => {
     const pad = Math.max(0, Math.floor((W - s.length) / 2))
@@ -58,12 +58,12 @@ export function buildOrderTicketText(data: OrderTicketData, opts: TicketTextOpti
   }
 
   const printed = new Date(createdAt)
-  const fmtDate = printed.toLocaleDateString('en-NG', {
+  const fmtDate = printed.toLocaleDateString('en-SS', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   })
-  const fmtTime = printed.toLocaleTimeString('en-NG', {
+  const fmtTime = printed.toLocaleTimeString('en-SS', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: true,
@@ -71,7 +71,7 @@ export function buildOrderTicketText(data: OrderTicketData, opts: TicketTextOpti
 
   const fmtMoney = (amount: number) => {
     const value = Number.isFinite(amount) ? amount : 0
-    return `${currencySymbol}${Math.round(value).toLocaleString('en-NG')}`
+    return `${currencySymbol}${Math.round(value).toLocaleString('en-SS')}`
   }
 
   const itemLines = items
@@ -126,7 +126,7 @@ export function buildOrderTicketText(data: OrderTicketData, opts: TicketTextOpti
  */
 export function buildOrderTicketHTML(data: OrderTicketData): string {
   // HTML print (browser) can render the Naira glyph correctly on most devices.
-  const text = buildOrderTicketText(data, { currencySymbol: '₦' })
+  const text = buildOrderTicketText(data, { currencySymbol: 'SSP' })
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${data.station.toUpperCase()} Order</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }

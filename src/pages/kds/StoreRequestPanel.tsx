@@ -225,7 +225,7 @@ export default function StoreRequestPanel() {
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(reqDate + 'T12:00:00').toLocaleDateString('en-NG', {
+    const fmtDate = new Date(reqDate + 'T12:00:00').toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -242,7 +242,7 @@ export default function StoreRequestPanel() {
       row('Items:', String(count)),
       row(
         'Print time:',
-        new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' })
+        new Date().toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit' })
       ),
       div,
       ...readyRequests.map((r, i) =>
@@ -519,7 +519,7 @@ export default function StoreRequestPanel() {
               {req.status === 'approved' && req.collected_at && (
                 <p className="text-blue-400/70 text-xs mt-1">
                   Collected by {req.collected_by_name || 'Barman'} ·{' '}
-                  {new Date(req.collected_at).toLocaleTimeString('en-NG', {
+                  {new Date(req.collected_at).toLocaleTimeString('en-SS', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true,

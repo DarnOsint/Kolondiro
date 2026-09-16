@@ -572,7 +572,7 @@ export default function OrderPanel({
               ).table_categories?.hire_fee
               return hireFee ? (
                 <p className="text-amber-400 text-xs font-semibold mt-0.5">
-                  🏷 Hire fee: ₦{hireFee.toLocaleString()} — add to bill manually
+                  🏷 Hire fee: SSP{hireFee.toLocaleString()} — add to bill manually
                 </p>
               ) : null
             })()}
@@ -635,7 +635,7 @@ export default function OrderPanel({
                       {item.quantity}×
                     </span>
                     <span className="flex-1 text-gray-400 text-sm truncate">{item.name}</span>
-                    <span className="text-gray-500 text-xs shrink-0">₦{item.total.toFixed(0)}</span>
+                    <span className="text-gray-500 text-xs shrink-0">SSP{item.total.toFixed(0)}</span>
                     <button
                       onClick={() => {
                         if (dbId && !servedItems[dbId]) markServed(item)
@@ -699,7 +699,7 @@ export default function OrderPanel({
                       )}
                     </button>
                   </div>
-                  <span className="text-amber-400 text-sm shrink-0">₦{item.total.toFixed(0)}</span>
+                  <span className="text-amber-400 text-sm shrink-0">SSP{item.total.toFixed(0)}</span>
                   <button
                     onClick={() => deleteItem(item)}
                     className="text-red-400 hover:text-red-300 shrink-0"
@@ -730,7 +730,7 @@ export default function OrderPanel({
                     >
                       <p className="text-white text-sm font-medium">{item.name}</p>
                       <p className="text-amber-400 text-sm font-bold mt-1">
-                        ₦{item.price.toFixed(2)}
+                        SSP{item.price.toFixed(2)}
                       </p>
                     </button>
                   )
@@ -758,7 +758,7 @@ export default function OrderPanel({
             >
               <ShoppingBag size={12} /> {showPacks ? 'Hide' : 'Add'} Takeaway Packs
               {packFee > 0 && (
-                <span className="text-amber-400/60 ml-1">(₦{packFee.toLocaleString()})</span>
+                <span className="text-amber-400/60 ml-1">(SSP{packFee.toLocaleString()})</span>
               )}
             </button>
             {showPacks && (
@@ -798,7 +798,7 @@ export default function OrderPanel({
                         {pack.name}
                       </span>
                       <span className={`text-xs ${qty > 0 ? 'text-amber-400' : 'text-gray-600'}`}>
-                        ₦{pack.price.toLocaleString()}
+                        SSP{pack.price.toLocaleString()}
                       </span>
                     </div>
                   )
@@ -811,7 +811,7 @@ export default function OrderPanel({
         <div className="p-3 border-t border-gray-800 bg-gray-900 shrink-0">
           <div className="flex justify-between items-center mb-2">
             <span className="text-gray-400">Total</span>
-            <span className="text-white font-bold text-lg">₦{total.toFixed(2)}</span>
+            <span className="text-white font-bold text-lg">SSP{total.toFixed(2)}</span>
           </div>
           <button
             onClick={handlePlaceOrder}
@@ -850,7 +850,7 @@ export default function OrderPanel({
             </div>
             <div>
               <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                Extra Charge (₦)
+                Extra Charge (SSP)
               </label>
               <input
                 type="number"

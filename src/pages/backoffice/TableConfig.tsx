@@ -385,7 +385,7 @@ export default function TableConfig({ onBack }: Props) {
                 <p className="text-gray-500 text-xs">👥 {table.capacity} seats</p>
                 {table.table_categories?.hire_fee ? (
                   <p className="text-amber-400 text-xs font-semibold">
-                    Hire: ₦{table.table_categories.hire_fee.toLocaleString()}
+                    Hire: SSP{table.table_categories.hire_fee.toLocaleString()}
                   </p>
                 ) : null}
               </div>
@@ -419,7 +419,7 @@ export default function TableConfig({ onBack }: Props) {
                 min="0"
                 value={newZoneHireFee}
                 onChange={(e) => setNewZoneHireFee(e.target.value)}
-                placeholder="Hire fee (₦) — leave blank if none"
+                placeholder="Hire fee (SSP) — leave blank if none"
                 className={inp}
               />
               <div className="flex gap-2">
@@ -450,7 +450,7 @@ export default function TableConfig({ onBack }: Props) {
                       <p className="text-white font-semibold text-sm">{zone.name}</p>
                       <p className="text-gray-500 text-xs">
                         {count} table{count !== 1 ? 's' : ''}
-                        {zone.hire_fee ? ` · Hire: ₦${zone.hire_fee.toLocaleString()}` : ''}
+                        {zone.hire_fee ? ` · Hire: SSP${zone.hire_fee.toLocaleString()}` : ''}
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
@@ -572,7 +572,7 @@ export default function TableConfig({ onBack }: Props) {
               </div>
               <div>
                 <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                  Hire Fee (₦) — leave blank if none
+                  Hire Fee (SSP) — leave blank if none
                 </label>
                 <input
                   type="number"

@@ -29,9 +29,9 @@ export default function ReceiptModal({
   const [activeTab, setActiveTab] = useState<'customer' | 'waiter'>('customer')
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' })
+    new Date(date).toLocaleDateString('en-SS', { day: '2-digit', month: 'short', year: 'numeric' })
   const formatTime = (date: string) =>
-    new Date(date).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })
+    new Date(date).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })
 
   const paymentLabel: Record<string, string> = {
     cash: 'Cash',
@@ -479,10 +479,10 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     </span>
                     <span style={{ width: '24px', textAlign: 'center' }}>{item.quantity}</span>
                     <span style={{ width: '48px', textAlign: 'right' }}>
-                      ₦{item.unit_price?.toLocaleString()}
+                      SSP{item.unit_price?.toLocaleString()}
                     </span>
                     <span style={{ width: '64px', textAlign: 'right' }}>
-                      ₦{(item as unknown as { total_price?: number }).total_price?.toLocaleString()}
+                      SSP{(item as unknown as { total_price?: number }).total_price?.toLocaleString()}
                     </span>
                   </div>
                 ))}
@@ -504,11 +504,11 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                           item.id}{' '}
                         [RETURNED]
                       </span>
-                      <span style={{ width: '64px', textAlign: 'right' }}>₦0</span>
+                      <span style={{ width: '64px', textAlign: 'right' }}>SSP0</span>
                     </div>
                   ))}
                 <div style={{ borderTop: '2px solid #000', margin: '6px 0' }} />
-                {[['Subtotal', `₦${subtotal.toLocaleString()}`]].map(([l, v]) => (
+                {[['Subtotal', `SSP${subtotal.toLocaleString()}`]].map(([l, v]) => (
                   <div
                     key={l}
                     style={{
@@ -534,7 +534,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                 >
                   <span>TOTAL</span>
                   <span>
-                    ₦
+                    SSP
                     {total.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -554,7 +554,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     >
                       <span>Amount Received</span>
                       <span>
-                        ₦
+                        SSP
                         {amountReceived > 0
                           ? amountReceived.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
@@ -578,7 +578,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     >
                       <span>💚 Tip (Thank you!)</span>
                       <span>
-                        ₦
+                        SSP
                         {tipAmount.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -727,7 +727,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     </div>
                   ))}
                 <div style={{ borderTop: '2px solid #000', margin: '6px 0' }} />
-                {[['Subtotal', `₦${subtotal.toLocaleString()}`]].map(([l, v]) => (
+                {[['Subtotal', `SSP${subtotal.toLocaleString()}`]].map(([l, v]) => (
                   <div
                     key={l}
                     style={{
@@ -752,7 +752,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                 >
                   <span>TOTAL CHARGED</span>
                   <span>
-                    ₦
+                    SSP
                     {total.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -772,7 +772,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     >
                       <span>Amount Received</span>
                       <span>
-                        ₦
+                        SSP
                         {(amountReceived > 0 ? amountReceived : total + tipAmount).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 2, maximumFractionDigits: 2 }
@@ -790,7 +790,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     >
                       <span>TIP RECEIVED</span>
                       <span>
-                        ₦
+                        SSP
                         {tipAmount.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,

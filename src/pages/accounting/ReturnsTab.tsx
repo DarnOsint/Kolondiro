@@ -108,9 +108,9 @@ export default function ReturnsTab({ dateRange }: Props) {
       return ' '.repeat(pad) + s
     }
     const fmtDate = (d: string) =>
-      new Date(d).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' })
+      new Date(d).toLocaleDateString('en-SS', { day: '2-digit', month: 'short', year: 'numeric' })
     const fmtTime = (d: string) =>
-      new Date(d).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })
+      new Date(d).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })
 
     const lines = [
       '',
@@ -305,7 +305,7 @@ export default function ReturnsTab({ dateRange }: Props) {
                 <span>
                   Time:{' '}
                   <span className="text-gray-300">
-                    {new Date(entry.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(entry.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,
@@ -322,7 +322,7 @@ export default function ReturnsTab({ dateRange }: Props) {
                 <p className="text-xs text-green-500">
                   ✓ Reviewed by {entry.reviewed_by_name} at{' '}
                   {entry.reviewed_at
-                    ? new Date(entry.reviewed_at).toLocaleTimeString('en-NG', {
+                    ? new Date(entry.reviewed_at).toLocaleTimeString('en-SS', {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true,

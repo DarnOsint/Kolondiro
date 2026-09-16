@@ -172,7 +172,7 @@ export default function TillManagement({ onClose }: Props) {
       newValue: { opening_float: float },
       performer: profile as any,
     })
-    toast.success('Till Opened', `Opening float ₦${float.toLocaleString()} recorded`)
+    toast.success('Till Opened', `Opening float SSP${float.toLocaleString()} recorded`)
     fetchSessions()
   }
 
@@ -207,7 +207,7 @@ export default function TillManagement({ onClose }: Props) {
     if (parseFloat(payoutForm.amount) > remaining) {
       toast.error(
         'Limit Exceeded',
-        `This would exceed today's ₦${PETTY_CASH_LIMIT.toLocaleString()} daily limit. ₦${remaining.toLocaleString()} remaining.`
+        `This would exceed today's SSP${PETTY_CASH_LIMIT.toLocaleString()} daily limit. SSP${remaining.toLocaleString()} remaining.`
       )
       return
     }
@@ -280,21 +280,21 @@ export default function TillManagement({ onClose }: Props) {
             {[
               {
                 label: "Today's Revenue",
-                value: `₦${todayStats.totalRevenue.toLocaleString()}`,
+                value: `SSP${todayStats.totalRevenue.toLocaleString()}`,
                 icon: TrendingUp,
                 color: 'text-green-400',
                 bg: 'bg-green-400/10',
               },
               {
                 label: 'Total Payouts',
-                value: `₦${todayStats.totalPayouts.toLocaleString()}`,
+                value: `SSP${todayStats.totalPayouts.toLocaleString()}`,
                 icon: TrendingDown,
                 color: 'text-red-400',
                 bg: 'bg-red-400/10',
               },
               {
                 label: 'Cash Revenue',
-                value: `₦${todayStats.cashRevenue.toLocaleString()}`,
+                value: `SSP${todayStats.cashRevenue.toLocaleString()}`,
                 icon: DollarSign,
                 color: 'text-amber-400',
                 bg: 'bg-amber-400/10',
@@ -319,7 +319,7 @@ export default function TillManagement({ onClose }: Props) {
           <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
             <p className="text-amber-400 text-sm font-medium">Net Cash Position</p>
             <p className="text-white text-2xl font-bold mt-1">
-              ₦{(todayStats.cashRevenue - todayStats.totalPayouts).toLocaleString()}
+              SSP{(todayStats.cashRevenue - todayStats.totalPayouts).toLocaleString()}
             </p>
             <p className="text-gray-400 text-xs mt-1">Cash Revenue minus Payouts</p>
           </div>
@@ -345,7 +345,7 @@ export default function TillManagement({ onClose }: Props) {
                       </p>
                       <p className="text-gray-400 text-xs flex items-center gap-1">
                         <Clock size={10} /> Since{' '}
-                        {new Date(session.opened_at).toLocaleTimeString('en-NG', {
+                        {new Date(session.opened_at).toLocaleTimeString('en-SS', {
                           timeZone: 'Africa/Lagos',
                           hour: '2-digit',
                           minute: '2-digit',
@@ -383,7 +383,7 @@ export default function TillManagement({ onClose }: Props) {
                 <input
                   type="number"
                   min={0}
-                  placeholder="Opening float (₦)"
+                  placeholder="Opening float (SSP)"
                   value={openingFloat}
                   onChange={(e) => setOpeningFloat(e.target.value)}
                   className="flex-1 bg-gray-800 border border-gray-700 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500"
@@ -426,7 +426,7 @@ export default function TillManagement({ onClose }: Props) {
                 <div className="flex gap-4 mt-2 text-xs text-gray-500">
                   <span>
                     In:{' '}
-                    {new Date(session.opened_at).toLocaleTimeString('en-NG', {
+                    {new Date(session.opened_at).toLocaleTimeString('en-SS', {
                       timeZone: 'Africa/Lagos',
                       hour: '2-digit',
                       minute: '2-digit',
@@ -436,7 +436,7 @@ export default function TillManagement({ onClose }: Props) {
                   {session.closed_at && (
                     <span>
                       Out:{' '}
-                      {new Date(session.closed_at).toLocaleTimeString('en-NG', {
+                      {new Date(session.closed_at).toLocaleTimeString('en-SS', {
                         timeZone: 'Africa/Lagos',
                         hour: '2-digit',
                         minute: '2-digit',
@@ -470,7 +470,7 @@ export default function TillManagement({ onClose }: Props) {
                   <p
                     className={`text-sm font-bold ${remaining < 10000 ? 'text-red-400' : 'text-amber-400'}`}
                   >
-                    ₦{dailyTotal.toLocaleString()} / ₦{PETTY_CASH_LIMIT.toLocaleString()}
+                    SSP{dailyTotal.toLocaleString()} / SSP{PETTY_CASH_LIMIT.toLocaleString()}
                   </p>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
@@ -480,7 +480,7 @@ export default function TillManagement({ onClose }: Props) {
                   />
                 </div>
                 <p className="text-gray-500 text-xs">
-                  ₦{remaining.toLocaleString()} remaining today
+                  SSP{remaining.toLocaleString()} remaining today
                 </p>
               </div>
               {byCategory.length > 0 && (
@@ -491,7 +491,7 @@ export default function TillManagement({ onClose }: Props) {
                       <div key={cat.value} className="flex justify-between items-center">
                         <span className="text-gray-300 text-sm">{cat.label}</span>
                         <span className="text-red-400 text-sm font-medium">
-                          ₦{cat.total.toLocaleString()}
+                          SSP{cat.total.toLocaleString()}
                         </span>
                       </div>
                     ))}
@@ -516,7 +516,7 @@ export default function TillManagement({ onClose }: Props) {
                     </select>
                   </div>
                   <div>
-                    <label className="text-gray-400 text-xs mb-1 block">Amount (₦)</label>
+                    <label className="text-gray-400 text-xs mb-1 block">Amount (SSP)</label>
                     <input
                       type="number"
                       placeholder="0.00"
@@ -567,7 +567,7 @@ export default function TillManagement({ onClose }: Props) {
                           </div>
                           <p className="text-gray-400 text-xs">{payout.profiles?.full_name}</p>
                           <p className="text-gray-500 text-xs">
-                            {new Date(payout.created_at).toLocaleTimeString('en-NG', {
+                            {new Date(payout.created_at).toLocaleTimeString('en-SS', {
                               timeZone: 'Africa/Lagos',
                               hour: '2-digit',
                               minute: '2-digit',
@@ -576,7 +576,7 @@ export default function TillManagement({ onClose }: Props) {
                           </p>
                         </div>
                         <p className="text-red-400 font-bold">
-                          -₦{payout.amount?.toLocaleString()}
+                          -SSP{payout.amount?.toLocaleString()}
                         </p>
                       </div>
                     </div>

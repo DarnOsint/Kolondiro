@@ -274,12 +274,12 @@ export default function DailySummaryTab({
           : destination === 'griller'
             ? 'GRILL'
             : 'MIXOLOGIST'
-    const fmtDate = new Date(date).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(date).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
-    const fmtTime = new Date().toLocaleTimeString('en-NG', {
+    const fmtTime = new Date().toLocaleTimeString('en-SS', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
@@ -399,7 +399,7 @@ export default function DailySummaryTab({
             Total {label}{' '}
             {date === todayStr()
               ? 'today'
-              : `on ${new Date(date).toLocaleDateString('en-NG', { day: '2-digit', month: 'short' })}`}
+              : `on ${new Date(date).toLocaleDateString('en-SS', { day: '2-digit', month: 'short' })}`}
           </p>
           <p className={`text-2xl font-bold ${color}`}>{totalItems}</p>
           {destination === 'mixologist' && includePending && (

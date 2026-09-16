@@ -221,7 +221,7 @@ export default function Analytics() {
   const [aiError, setAiError] = useState(false)
   const [aiErrorMsg, setAiErrorMsg] = useState('')
   const [data, setData] = useState<AnalyticsData | null>(null)
-  const fmt = (n: number) => '₦' + (n || 0).toLocaleString()
+  const fmt = (n: number) => 'SSP' + (n || 0).toLocaleString()
 
   const processData = useCallback(
     (
@@ -253,9 +253,9 @@ export default function Analytics() {
       const hourMapRaw: Record<string, number> = {}
       paid.forEach((o) => {
         const d = new Date(o.created_at as string)
-        const day = d.toLocaleDateString('en-NG', { timeZone: 'Africa/Lagos', weekday: 'short' })
+        const day = d.toLocaleDateString('en-SS', { timeZone: 'Africa/Lagos', weekday: 'short' })
         const hour = parseInt(
-          d.toLocaleTimeString('en-NG', {
+          d.toLocaleTimeString('en-SS', {
             timeZone: 'Africa/Lagos',
             hour: 'numeric',
             hour12: false,
@@ -276,7 +276,7 @@ export default function Analytics() {
       const hourlyMap: Record<number, { hour: number; orders: number; revenue: number }> = {}
       paid.forEach((o) => {
         const h = parseInt(
-          new Date(o.created_at as string).toLocaleTimeString('en-NG', {
+          new Date(o.created_at as string).toLocaleTimeString('en-SS', {
             timeZone: 'Africa/Lagos',
             hour: 'numeric',
             hour12: false,
@@ -343,7 +343,7 @@ export default function Analytics() {
 
       const dayMap: Record<string, ChartPoint> = {}
       paid.forEach((o) => {
-        const day = new Date(o.created_at as string).toLocaleDateString('en-NG', {
+        const day = new Date(o.created_at as string).toLocaleDateString('en-SS', {
           timeZone: 'Africa/Lagos',
           month: 'short',
           day: 'numeric',
@@ -629,10 +629,10 @@ Categories: ${d.categorySplit
                   <XAxis dataKey="day" tick={{ fill: '#6b7280', fontSize: 11 }} />
                   <YAxis
                     tick={{ fill: '#6b7280', fontSize: 11 }}
-                    tickFormatter={(v: number) => '₦' + (v / 1000).toFixed(0) + 'k'}
+                    tickFormatter={(v: number) => 'SSP' + (v / 1000).toFixed(0) + 'k'}
                   />
                   <Tooltip
-                    formatter={(v: number) => ['₦' + v.toLocaleString(), 'Revenue']}
+                    formatter={(v: number) => ['SSP' + v.toLocaleString(), 'Revenue']}
                     contentStyle={{
                       background: '#111827',
                       border: '1px solid #374151',
@@ -681,7 +681,7 @@ Categories: ${d.categorySplit
                     }}
                     labelStyle={{ color: '#f9fafb', fontSize: 12 }}
                     formatter={(value: number, name: string) => [
-                      name === 'revenue' ? `₦${value.toLocaleString()}` : value,
+                      name === 'revenue' ? `SSP${value.toLocaleString()}` : value,
                       name === 'revenue' ? 'Revenue' : 'Orders',
                     ]}
                   />
@@ -861,7 +861,7 @@ Categories: ${d.categorySplit
                     <XAxis
                       type="number"
                       tick={{ fill: '#6b7280', fontSize: 10 }}
-                      tickFormatter={(v: number) => '₦' + (v / 1000).toFixed(0) + 'k'}
+                      tickFormatter={(v: number) => 'SSP' + (v / 1000).toFixed(0) + 'k'}
                     />
                     <YAxis
                       type="category"

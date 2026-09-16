@@ -233,7 +233,7 @@ export default function WaitronOrdersTab() {
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(date).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(date).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -474,13 +474,13 @@ export default function WaitronOrdersTab() {
                 <p className="text-white text-sm font-semibold">{s.staff_name}</p>
                 <p className="text-gray-500 text-xs capitalize">{s.role}</p>
                 <p className="text-gray-600 text-[10px]">
-                  {new Date(s.clock_in).toLocaleTimeString('en-NG', {
+                  {new Date(s.clock_in).toLocaleTimeString('en-SS', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true,
                   })}
                   {s.clock_out
-                    ? ` — ${new Date(s.clock_out).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })}`
+                    ? ` — ${new Date(s.clock_out).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })}`
                     : ' (active)'}
                 </p>
               </button>
@@ -501,9 +501,9 @@ export default function WaitronOrdersTab() {
                   <div>
                     <p className="text-white font-bold">{selectedShift?.staff_name}</p>
                     <p className="text-gray-400 text-xs">
-                      {orders.length} orders · ₦{totalSales.toLocaleString()} · {totalItems} items
+                      {orders.length} orders · SSP{totalSales.toLocaleString()} · {totalItems} items
                       {orders.length > 0
-                        ? ` (paid ₦${paidSales.toLocaleString()} · open ₦${openSales.toLocaleString()})`
+                        ? ` (paid SSP${paidSales.toLocaleString()} · open SSP${openSales.toLocaleString()})`
                         : ''}
                     </p>
                   </div>
@@ -565,10 +565,10 @@ export default function WaitronOrdersTab() {
                             </div>
                             <div className="text-right">
                               <p className="text-amber-400 font-bold text-sm">
-                                ₦{getNetOrderAmount(o).toLocaleString()}
+                                SSP{getNetOrderAmount(o).toLocaleString()}
                               </p>
                               <p className="text-gray-500 text-[10px]">
-                                {new Date(o.closed_at || o.created_at).toLocaleTimeString('en-NG', {
+                                {new Date(o.closed_at || o.created_at).toLocaleTimeString('en-SS', {
                                   hour: '2-digit',
                                   minute: '2-digit',
                                   hour12: true,
@@ -589,7 +589,7 @@ export default function WaitronOrdersTab() {
                                       {item.menu_items?.name || item.modifier_notes || 'Item'}
                                     </td>
                                     <td className="text-gray-400 py-0.5 text-right pl-2">
-                                      ₦{(item.total_price || 0).toLocaleString()}
+                                      SSP{(item.total_price || 0).toLocaleString()}
                                     </td>
                                   </tr>
                                 ))}

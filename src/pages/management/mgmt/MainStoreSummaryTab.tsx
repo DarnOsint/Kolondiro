@@ -210,7 +210,7 @@ export default function MainStoreSummaryTab({ filterLow = false, onClearFilterLo
     const lines = [
       ['Time', 'Item', 'Qty', 'Unit', 'Requested By', 'Status', 'Approved By', 'Reject Reason'],
       ...requests.map((r) => [
-        new Date(r.created_at).toLocaleString('en-NG', { timeZone: 'Africa/Lagos' }),
+        new Date(r.created_at).toLocaleString('en-SS', { timeZone: 'Africa/Lagos' }),
         r.item_name,
         String(r.quantity),
         r.unit,
@@ -296,7 +296,7 @@ export default function MainStoreSummaryTab({ filterLow = false, onClearFilterLo
               },
               {
                 label: 'Stock Value',
-                value: `₦${totalValue.toLocaleString()}`,
+                value: `SSP${totalValue.toLocaleString()}`,
                 color: 'text-purple-400',
               },
             ].map((k) => (
@@ -536,7 +536,7 @@ export default function MainStoreSummaryTab({ filterLow = false, onClearFilterLo
                   {requests.map((r) => (
                     <tr key={r.id} className="border-t border-gray-800 hover:bg-gray-800/50">
                       <td className="text-gray-400 px-3 py-2">
-                        {new Date(r.created_at).toLocaleTimeString('en-NG', {
+                        {new Date(r.created_at).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           timeZone: 'Africa/Lagos',

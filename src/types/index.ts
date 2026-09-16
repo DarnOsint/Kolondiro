@@ -14,7 +14,6 @@ export type Role =
   | 'games_master'
   | 'shisha_attendant'
   | 'supervisor'
-  | 'apartment_manager'
   | 'floor_staff'
   | 'social_media_manager'
   | 'dj'
@@ -33,7 +32,6 @@ export type PaymentMethod =
 export type ItemDestination = 'kitchen' | 'bar' | 'griller' | 'shisha' | 'games' | 'mixologist'
 export type ItemStatus = 'pending' | 'preparing' | 'ready' | 'delivered'
 export type TableStatus = 'available' | 'occupied' | 'reserved'
-export type RoomStatus = 'available' | 'occupied' | 'cleaning' | 'maintenance'
 
 // ─── Database row types ────────────────────────────────────────────────────
 
@@ -161,37 +159,6 @@ export interface InventoryItem {
   is_active: boolean
 }
 
-export interface Room {
-  id: string
-  name: string
-  room_type: string
-  floor: number
-  capacity?: number
-  rate_per_night: number
-  status: RoomStatus
-  amenities?: string
-  notes?: string
-}
-
-export interface RoomStay {
-  id: string
-  room_id: string
-  guest_name: string
-  guest_phone: string
-  guest_email?: string
-  id_type: string
-  id_number: string
-  num_guests: number
-  check_in_at: string
-  check_out_at: string
-  nights: number
-  payment_method: string
-  payment_reference?: string
-  total_amount: number
-  status: 'active' | 'checked_out' | 'overstay'
-  notes?: string
-}
-
 export interface AuditEntry {
   id: string
   action: string
@@ -212,51 +179,7 @@ export interface Setting {
   updated_at: string
 }
 
-// ─── CV / CCTV types ────────────────────────────────────────────────────────
-
-export interface CvAlert {
-  id: string
-  camera_id: string
-  alert_type: string
-  severity: 'low' | 'medium' | 'high' | 'critical'
-  description?: string
-  resolved: boolean
-  created_at: string
-}
-
-export interface CvPeopleCount {
-  id: string
-  occupancy: number
-  created_at: string
-}
-
-export interface CvZoneHeatmap {
-  id: string
-  zone_label: string
-  person_count: number
-  avg_dwell_seconds: number
-  created_at: string
-}
-
-export interface CvTillEvent {
-  id: string
-  alert_type: string
-  created_at: string
-}
-
-export interface CvShelfEvent {
-  id: string
-  alert_level: 'normal' | 'low' | 'critical'
-  created_at: string
-}
-
 // ─── Hook return types ────────────────────────────────────────────────────
-
-export interface GeofenceResult {
-  status: 'checking' | 'inside' | 'outside' | 'error' | 'unsupported'
-  distance: number | null
-  location: { lat: number; lng: number } | null
-}
 
 export interface SyncStatus {
   status: 'online' | 'offline' | 'syncing' | 'partial'

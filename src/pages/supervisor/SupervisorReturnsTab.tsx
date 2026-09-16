@@ -187,7 +187,7 @@ export default function SupervisorReturnsTab() {
                   </span>
                   <span>·</span>
                   <span>
-                    {new Date(r.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(r.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,

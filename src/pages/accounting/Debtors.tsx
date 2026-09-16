@@ -94,7 +94,6 @@ const statusConfig = {
 }
 const debtTypeLabels: Record<string, string> = {
   table_order: 'Table Order',
-  room_stay: 'Room Stay',
   bar_tab: 'Bar Tab',
 }
 
@@ -148,7 +147,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
       ? 'This Month'
       : outstandingMonth === 'previous'
         ? 'Previous Month'
-        : new Date(customYear, customMonth).toLocaleDateString('en-NG', {
+        : new Date(customYear, customMonth).toLocaleDateString('en-SS', {
             month: 'long',
             year: 'numeric',
           })
@@ -432,7 +431,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
         <div className="flex items-center justify-between">
           <p className="text-gray-400 text-sm flex items-center gap-2 flex-wrap">
             <span>{monthLabel}:</span>
-            <span className="text-red-400 font-bold">₦{totalOutstanding.toLocaleString()}</span>
+            <span className="text-red-400 font-bold">SSP{totalOutstanding.toLocaleString()}</span>
             <span className="text-gray-600">({filtered.length} entries)</span>
           </p>
           {embedded && canEdit && (
@@ -547,7 +546,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
                           className={`text-xs mt-1 flex items-center gap-1 ${overdue ? 'text-red-400' : 'text-gray-500'}`}
                         >
                           <Calendar size={10} /> Due:{' '}
-                          {new Date(debtor.due_date).toLocaleDateString('en-NG', {
+                          {new Date(debtor.due_date).toLocaleDateString('en-SS', {
                             timeZone: 'Africa/Lagos',
                             day: '2-digit',
                             month: 'short',
@@ -558,17 +557,17 @@ export default function Debtors({ onBack, embedded = false }: Props) {
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-red-400 font-bold">
-                        ₦{(debtor.current_balance || 0).toLocaleString()}
+                        SSP{(debtor.current_balance || 0).toLocaleString()}
                       </p>
                       <p className="text-gray-500 text-xs">
-                        of ₦{(debtor.credit_limit || 0).toLocaleString()}
+                        of SSP{(debtor.credit_limit || 0).toLocaleString()}
                       </p>
                     </div>
                   </div>
                   {debtor.credit_limit > 0 && (
                     <div className="mt-3">
                       <div className="flex justify-between text-xs text-gray-500 mb-1">
-                        <span>Paid: ₦{(debtor.amount_paid || 0).toLocaleString()}</span>
+                        <span>Paid: SSP{(debtor.amount_paid || 0).toLocaleString()}</span>
                         <span>{pct}%</span>
                       </div>
                       <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
@@ -583,7 +582,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
                     <p className="text-gray-600 text-xs">
                       Recorded by {debtor.recorded_by_name || 'system'} ·{' '}
                       {debtor.created_at
-                        ? new Date(debtor.created_at).toLocaleDateString('en-NG', {
+                        ? new Date(debtor.created_at).toLocaleDateString('en-SS', {
                             timeZone: 'Africa/Lagos',
                             day: '2-digit',
                             month: 'short',
@@ -666,14 +665,14 @@ export default function Debtors({ onBack, embedded = false }: Props) {
                             >
                               <div>
                                 <p className="text-white text-sm font-medium">
-                                  ₦{pmt.amount.toLocaleString()}
+                                  SSP{pmt.amount.toLocaleString()}
                                 </p>
                                 <p className="text-gray-500 text-xs capitalize">
                                   {pmt.payment_method?.replace('_', ' ')} · {pmt.recorded_by_name}
                                 </p>
                               </div>
                               <p className="text-gray-500 text-xs">
-                                {new Date(pmt.created_at).toLocaleDateString('en-NG', {
+                                {new Date(pmt.created_at).toLocaleDateString('en-SS', {
                                   timeZone: 'Africa/Lagos',
                                   day: '2-digit',
                                   month: 'short',
@@ -746,7 +745,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
               </div>
               <div>
                 <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                  Amount Owed (₦) *
+                  Amount Owed (SSP) *
                 </label>
                 <input
                   type="number"
@@ -799,7 +798,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
               <div>
                 <h3 className="text-white font-bold">Record Payment</h3>
                 <p className="text-gray-400 text-xs mt-0.5">
-                  {showPaymentModal.name} · Balance: ₦{' '}
+                  {showPaymentModal.name} · Balance: SSP{' '}
                   {(showPaymentModal.current_balance || 0).toLocaleString()}
                 </p>
               </div>
@@ -813,7 +812,7 @@ export default function Debtors({ onBack, embedded = false }: Props) {
             <div className="p-5 space-y-4">
               <div>
                 <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                  Amount (₦) *
+                  Amount (SSP) *
                 </label>
                 <input
                   type="number"

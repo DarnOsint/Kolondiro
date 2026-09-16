@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { TrendingUp, ShoppingBag, LayoutDashboard, BedDouble, Users, Package } from 'lucide-react'
+import { TrendingUp, ShoppingBag, LayoutDashboard, Users, Package } from 'lucide-react'
 import type { Stats } from './types'
 
 interface Props {
@@ -12,7 +12,7 @@ export default function StatCards({ stats, onLowStockClick }: Props) {
   const cards = [
     {
       label: "Today's Revenue",
-      value: `₦${stats.revenue.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`,
+      value: `SSP${stats.revenue.toLocaleString('en-SS', { minimumFractionDigits: 2 })}`,
       icon: TrendingUp,
       color: 'text-green-400',
       bg: 'bg-green-400/10',
@@ -33,14 +33,6 @@ export default function StatCards({ stats, onLowStockClick }: Props) {
       color: 'text-blue-400',
       bg: 'bg-blue-400/10',
       onClick: () => navigate('/management?tab=orders'),
-    },
-    {
-      label: 'Occupied Rooms',
-      value: `${stats.occupiedRooms}/${stats.totalRooms}`,
-      icon: BedDouble,
-      color: 'text-purple-400',
-      bg: 'bg-purple-400/10',
-      onClick: () => navigate('/rooms'),
     },
     {
       label: 'Staff On Duty',

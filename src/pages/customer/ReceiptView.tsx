@@ -189,7 +189,7 @@ export default function ReceiptView() {
           </div>
           <div className="text-right">
             <p className="text-gray-500 text-xs">
-              {new Date(order.created_at).toLocaleDateString('en-NG', {
+              {new Date(order.created_at).toLocaleDateString('en-SS', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
@@ -245,7 +245,7 @@ export default function ReceiptView() {
                   <div className="text-right shrink-0">
                     <p className="text-gray-500 text-xs">x{item.quantity}</p>
                     <p className="text-white text-sm font-bold">
-                      ₦{(unitPrice * item.quantity).toLocaleString()}
+                      SSP{(unitPrice * item.quantity).toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -256,7 +256,7 @@ export default function ReceiptView() {
             <div className="flex items-center justify-between pt-1">
               <span className="text-white font-bold">Total</span>
               <span className="text-amber-400 font-bold text-xl">
-                ₦{order.total_amount?.toLocaleString()}
+                SSP{order.total_amount?.toLocaleString()}
               </span>
             </div>
           </div>

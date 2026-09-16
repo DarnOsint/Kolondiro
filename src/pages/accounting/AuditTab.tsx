@@ -23,8 +23,8 @@ export default function AuditTab({ auditLog, dateRange }: Props) {
   const exportPDF = () => {
     const doc = createPDF('Audit Log', dateRange)
     const body = auditLog.map((e) => [
-      new Date(e.created_at).toLocaleDateString('en-NG'),
-      new Date(e.created_at).toLocaleTimeString('en-NG', {
+      new Date(e.created_at).toLocaleDateString('en-SS'),
+      new Date(e.created_at).toLocaleTimeString('en-SS', {
         timeZone: 'Africa/Lagos',
         hour: '2-digit',
         minute: '2-digit',
@@ -89,7 +89,7 @@ export default function AuditTab({ auditLog, dateRange }: Props) {
               </div>
               <div className="text-right flex-shrink-0">
                 <p className="text-gray-400 text-xs">
-                  {new Date(entry.created_at).toLocaleDateString('en-NG')}
+                  {new Date(entry.created_at).toLocaleDateString('en-SS')}
                 </p>
                 <p className="text-gray-500 text-xs">
                   {new Date(entry.created_at).toLocaleTimeString([], {
@@ -121,7 +121,7 @@ export default function AuditTab({ auditLog, dateRange }: Props) {
                   { label: 'Role', value: selected.performed_by_role || '—' },
                   {
                     label: 'Date',
-                    value: new Date(selected.created_at).toLocaleDateString('en-NG'),
+                    value: new Date(selected.created_at).toLocaleDateString('en-SS'),
                   },
                   {
                     label: 'Time',

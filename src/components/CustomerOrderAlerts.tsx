@@ -132,7 +132,7 @@ function CustomerOrderCard({
           <ShoppingCart size={15} className="text-amber-400" />
           <span className="text-white font-bold text-sm">{order.table_name}</span>
           <span className="text-amber-400 text-xs">
-            {order.items?.length} item{order.items?.length !== 1 ? 's' : ''} · ₦
+            {order.items?.length} item{order.items?.length !== 1 ? 's' : ''} · SSP
             {order.total_amount?.toLocaleString()}
           </span>
         </div>
@@ -155,7 +155,7 @@ function CustomerOrderCard({
                 <span className="text-gray-300">
                   {item.quantity}x {item.name}
                 </span>
-                <span className="text-gray-500">₦{item.total?.toLocaleString()}</span>
+                <span className="text-gray-500">SSP{item.total?.toLocaleString()}</span>
               </div>
             ))}
           </div>

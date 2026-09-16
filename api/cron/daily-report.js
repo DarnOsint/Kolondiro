@@ -21,7 +21,7 @@ const supabase = createClient(
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 function fmt(n) {
-  return `₦${Number(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  return `SSP${Number(n || 0).toLocaleString('en-SS', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 function pct(num, den) {
@@ -71,7 +71,7 @@ function getSessionWAT() {
   if (watNow.getHours() < 8) end.setDate(end.getDate() - 1)
   const start = new Date(end)
   start.setDate(start.getDate() - 1)
-  const label = start.toLocaleDateString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
+  const label = start.toLocaleDateString('en-SS', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
   const y = start.getFullYear()
   const m = String(start.getMonth() + 1).padStart(2, '0')
   const d = String(start.getDate()).padStart(2, '0')
@@ -86,8 +86,8 @@ function getWeekWindowWAT() {
   end.setHours(8, 0, 0, 0)
   const start = new Date(end)
   start.setDate(start.getDate() - 7)
-  const labelStart = start.toLocaleDateString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
-  const labelEnd = end.toLocaleDateString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
+  const labelStart = start.toLocaleDateString('en-SS', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
+  const labelEnd = end.toLocaleDateString('en-SS', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Africa/Lagos' })
   const y = start.getFullYear()
   const m = String(start.getMonth() + 1).padStart(2, '0')
   const d = String(start.getDate()).padStart(2, '0')
@@ -193,7 +193,6 @@ async function sendDailyReport(res) {
     { data: attendance },
     { data: debtors },
     { data: inventory },
-    { data: roomStays },
     { data: reservations },
   ] = await Promise.all([
     supabase.from('orders').select('*, profiles(full_name), tables(name, table_categories(name)), covers, order_items(total_price, return_requested, return_accepted, status)').gte('created_at', start).lte('created_at', end),
@@ -204,7 +203,6 @@ async function sendDailyReport(res) {
     supabase.from('attendance').select('*').eq('date', dateStr),
     supabase.from('debtors').select('*').gt('balance', 0),
     supabase.from('inventory').select('*').eq('is_active', true),
-    supabase.from('room_stays').select('*').gte('created_at', start).lte('created_at', end),
     supabase.from('reservations').select('*').gte('created_at', start).lte('created_at', end),
   ])
 
@@ -247,11 +245,8 @@ async function sendDailyReport(res) {
   const outOfStock  = (inventory || []).filter(i => (i.current_stock || 0) <= 0)
   const lowStock    = (inventory || []).filter(i => (i.current_stock || 0) > 0 && (i.current_stock || 0) <= (i.minimum_stock || 0))
 
-  const roomRevenue = (roomStays || []).reduce((s, r) => s + (r.total_amount || 0), 0)
-  const checkIns    = (roomStays || []).filter(r => r.status === 'checked_in').length
-  const checkOuts   = (roomStays || []).filter(r => r.status === 'checked_out').length
   const nookRevenue = (reservations || []).filter(r => r.zone === 'The Nook' || r.area === 'nook').reduce((s, r) => s + (r.hire_fee || 0), 0)
-  const grandTotal  = totalRev + roomRevenue
+  const grandTotal  = totalRev
 
   const zoneMap = {}
   for (const o of paid) {
@@ -263,7 +258,7 @@ async function sendDailyReport(res) {
 
   const methodGroups = computeMethodGroups(paid)
 
-  const html = buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookRevenue, paid, openOrders, avgOrder, totalReturnVal, acceptedReturns, pendingReturns, methodGroups, methodLabels, zoneMap, topItems, totalFloat, cashRev, totalPayouts, expectedCash, unclosedTill, returnsLog, clockedIn, openShifts, topWaitrons, totalDebt, newDebtors, newDebtAmt, overdue, outOfStock, lowStock, roomStays, checkIns, checkOuts, reservations })
+  const html = buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid, openOrders, avgOrder, totalReturnVal, acceptedReturns, pendingReturns, methodGroups, methodLabels, zoneMap, topItems, totalFloat, cashRev, totalPayouts, expectedCash, unclosedTill, returnsLog, clockedIn, openShifts, topWaitrons, totalDebt, newDebtors, newDebtAmt, overdue, outOfStock, lowStock, reservations })
 
   const { data: emailData, error: emailError } = await resend.emails.send({
     from: 'RestaurantOS <reports@kolondiro.vercel.app>',
@@ -282,7 +277,7 @@ async function sendDailyReport(res) {
 async function sendWeeklyReport(res) {
   const { start, end, label, short } = getWeekWindowWAT()
 
-  const [orders, orderItems, returnsLog, payouts, attendance, debtors, inventory, roomStays, reservations] = await Promise.all([
+  const [orders, orderItems, returnsLog, payouts, attendance, debtors, inventory, reservations] = await Promise.all([
     supabase.from('orders').select('*, profiles(full_name), tables(name, table_categories(name)), covers, order_items(total_price, return_requested, return_accepted, status)').gte('created_at', start).lte('created_at', end),
     supabase.from('order_items').select('*, menu_items(name, menu_categories(name))').gte('created_at', start).lte('created_at', end).neq('status', 'cancelled'),
     supabase.from('returns_log').select('*').gte('requested_at', start).lte('requested_at', end),
@@ -290,7 +285,6 @@ async function sendWeeklyReport(res) {
     supabase.from('attendance').select('*'),
     supabase.from('debtors').select('*').gt('balance', 0),
     supabase.from('inventory').select('*').eq('is_active', true),
-    supabase.from('room_stays').select('*').gte('created_at', start).lte('created_at', end),
     supabase.from('reservations').select('*').gte('created_at', start).lte('created_at', end),
   ])
 
@@ -315,9 +309,8 @@ async function sendWeeklyReport(res) {
     return (Date.now() - ref.getTime()) / 86400000 > 30
   })
 
-  const roomRevenue = (roomStays?.data || []).reduce((s, r) => s + (r.total_amount || 0), 0)
   const nookRevenue = (reservations?.data || []).filter(r => r.zone === 'The Nook' || r.area === 'nook').reduce((s, r) => s + (r.hire_fee || 0), 0)
-  const grandTotal  = totalRev + roomRevenue
+  const grandTotal  = totalRev
   const paidCount   = paid.length
 
   const outOfStockHtml = outOfStockItems.length > 0
@@ -332,7 +325,7 @@ async function sendWeeklyReport(res) {
     ? lowStockGridHtml(lowStockItems)
     : `<p style="color:#059669;font-size:13px;font-weight:600;margin:4px 0;">All items are sufficiently stocked.</p>`
 
-  const html = buildWeeklyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookRevenue, paidCount, avgOrder, outOfStockHtml, lowStockHtml, lowStockItems, outOfStockItems, methodGroups, topItems, totalReturnVal, totalDebt, overdue, roomStays, reservations })
+  const html = buildWeeklyHtml({ label, short, grandTotal, totalRev, nookRevenue, paidCount, avgOrder, outOfStockHtml, lowStockHtml, lowStockItems, outOfStockItems, methodGroups, topItems, totalReturnVal, totalDebt, overdue, reservations })
 
   const { data: emailData, error: emailError } = await resend.emails.send({
     from: 'RestaurantOS <reports@kolondiro.vercel.app>',
@@ -348,10 +341,9 @@ async function sendWeeklyReport(res) {
   return res.status(200).json({ sent: true, emailId: emailData?.id, week: short, grandTotal, paidOrders: paidCount, lowStockItems: lowStockItems.length, outOfStockItems: outOfStockItems.length })
 }
 
-function buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookRevenue, paid, openOrders, avgOrder, totalReturnVal, acceptedReturns, pendingReturns, methodGroups, methodLabels, zoneMap, topItems, totalFloat, cashRev, totalPayouts, expectedCash, unclosedTill, returnsLog, clockedIn, openShifts, topWaitrons, totalDebt, newDebtors, newDebtAmt, overdue, outOfStock, lowStock, roomStays, checkIns, checkOuts, reservations }) {
+function buildDailyHtml({ label, short, grandTotal, totalRev, nookRevenue, paid, openOrders, avgOrder, totalReturnVal, acceptedReturns, pendingReturns, methodGroups, methodLabels, zoneMap, topItems, totalFloat, cashRev, totalPayouts, expectedCash, unclosedTill, returnsLog, clockedIn, openShifts, topWaitrons, totalDebt, newDebtors, newDebtAmt, overdue, outOfStock, lowStock, reservations }) {
   const allReturns = returnsLog?.data || returnsLog || []
   const nookBookings = (reservations?.data || reservations || []).filter(r => r.zone === 'The Nook' || r.area === 'nook')
-  const hasRooms = (roomStays?.data || roomStays || []).length > 0
   const hasReservations = (reservations?.data || reservations || []).length > 0
   const totalRevenue = totalRev
   const paidOrders = paid
@@ -373,7 +365,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookR
   </div>
 
   ${section('Revenue Summary', '💰', `
-    ${kpiRow([kpiBox('F&B Revenue', fmt(totalRevenue), '#059669'), kpiBox('Room Revenue', fmt(roomRevenue), '#2563eb'), kpiBox('Nook Hire', fmt(nookRevenue), '#7c3aed')])}
+    ${kpiRow([kpiBox('F&B Revenue', fmt(totalRevenue), '#059669'), kpiBox('Nook Hire', fmt(nookRevenue), '#7c3aed')])}
     <div style="height:10px;"></div>
     ${kpiRow([kpiBox('Paid Orders', paidOrders.length), kpiBox('Returned', acceptedReturns.length, acceptedReturns.length > 0 ? '#dc2626' : '#111827', acceptedReturns.length > 0 ? fmt(totalReturnVal) : ''), kpiBox('Still Open', openOrders.length, openOrders.length > 0 ? '#ea580c' : '#111827')])}
   `, '#059669')}
@@ -412,7 +404,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookR
         ${acceptedReturns.length > 0 ? `<div style="margin-top:12px;">${buildTable(
           [{ label: 'Time' }, { label: 'Waitron' }, { label: 'Item' }, { label: 'Qty' }, { label: 'Amount', right: true }, { label: 'Reason' }],
           acceptedReturns.slice(0,10).map(r => [
-            new Date(r.requested_at).toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit', timeZone:'Africa/Lagos' }),
+            new Date(r.requested_at).toLocaleTimeString('en-SS', { hour:'2-digit', minute:'2-digit', timeZone:'Africa/Lagos' }),
             r.waitron_name || '—', r.item_name || '—', r.quantity || 1, fmt(r.item_total), r.return_reason || '—'
           ])
         )}</div>` : ''}
@@ -454,10 +446,6 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookR
     : section('Main Store Stock', '✅', `<p style="color:#059669;font-size:13px;font-weight:600;margin:4px 0;">All main store inventory items are sufficiently stocked.</p>`, '#059669')
   }
 
-  ${hasRooms ? section('Rooms & Accommodation', '🛏️', `
-    ${kpiRow([kpiBox('Check-Ins', checkIns, '#2563eb'), kpiBox('Check-Outs', checkOuts, '#7c3aed'), kpiBox('Room Revenue', fmt(roomRevenue), '#059669')])}
-  `, '#2563eb') : ''}
-
   ${hasReservations ? section('Reservations & The Nook', '📅', `
     ${kpiRow([kpiBox('Reservations', (reservations?.data || reservations || []).length), kpiBox('Nook Bookings', nookBookings.length, '#7c3aed'), kpiBox('Nook Hire Revenue', fmt(nookRevenue), '#059669')])}
   `, '#7c3aed') : ''}
@@ -471,8 +459,7 @@ function buildDailyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookR
 </div></body></html>`
 }
 
-function buildWeeklyHtml({ label, short, grandTotal, totalRev, roomRevenue, nookRevenue, paidCount, avgOrder, outOfStockHtml, lowStockHtml, lowStockItems, outOfStockItems, methodGroups, topItems, totalReturnVal, totalDebt, overdue, roomStays, reservations }) {
-  const hasRooms = (roomStays?.data || roomStays || []).length > 0
+function buildWeeklyHtml({ label, short, grandTotal, totalRev, nookRevenue, paidCount, avgOrder, outOfStockHtml, lowStockHtml, lowStockItems, outOfStockItems, methodGroups, topItems, totalReturnVal, totalDebt, overdue, reservations }) {
 
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -497,7 +484,7 @@ function buildWeeklyHtml({ label, short, grandTotal, totalRev, roomRevenue, nook
   `, '#ef4444')}
 
   ${section('Revenue Overview', '💰', `
-    ${kpiRow([kpiBox('Total Revenue', fmt(totalRev), '#059669'), kpiBox('Room Revenue', fmt(roomRevenue), '#2563eb'), kpiBox('Nook Hire', fmt(nookRevenue), '#7c3aed')])}
+    ${kpiRow([kpiBox('Total Revenue', fmt(totalRev), '#059669'), kpiBox('Nook Hire', fmt(nookRevenue), '#7c3aed')])}
     <div style="height:10px;"></div>
     ${kpiRow([kpiBox('Paid Orders', paidCount), kpiBox('Avg Per Order', fmt(avgOrder)), kpiBox('Returned Value', fmt(totalReturnVal), totalReturnVal > 0 ? '#dc2626' : '#059669')])}
   `, '#059669')}
@@ -519,10 +506,6 @@ function buildWeeklyHtml({ label, short, grandTotal, totalRev, roomRevenue, nook
       overdue.slice(0, 5).map(d => [d.name||'—', d.phone||'—', fmt(d.balance)])
     )}</div>` : ''}
   `, '#ef4444') : ''}
-
-  ${hasRooms ? section('Rooms & Accommodation', '🛏️', `
-    ${kpiRow([kpiBox('Total Stays', (roomStays?.data || roomStays || []).length), kpiBox('Room Revenue', fmt(roomRevenue), '#059669'), kpiBox('Nook Hire', fmt(nookRevenue), '#7c3aed')])}
-  `, '#2563eb') : ''}
 
   <div style="text-align:center;padding:20px 0 10px;color:#94a3b8;font-size:11px;line-height:1.7;">
     <div style="font-weight:700;color:#64748b;margin-bottom:4px;">RestaurantOS · Kolondiro</div>

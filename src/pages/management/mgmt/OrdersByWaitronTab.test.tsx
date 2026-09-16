@@ -48,13 +48,13 @@ describe('OrdersByWaitronTab', () => {
       expect(screen.queryByText(/Loading…/)).not.toBeInTheDocument()
     })
 
-    // Row should show only the non-return_accepted item totals: qty 3, total ₦300
+    // Row should show only the non-return_accepted item totals: qty 3, total SSP300
     expect(screen.getByText('Alex')).toBeInTheDocument()
     expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('₦300')).toBeInTheDocument()
+    expect(screen.getByText('SSP300')).toBeInTheDocument()
 
-    // Should NOT include the excluded item's amount (would have been 5 / ₦500)
+    // Should NOT include the excluded item's amount (would have been 5 / SSP500)
     expect(screen.queryByText('5')).not.toBeInTheDocument()
-    expect(screen.queryByText('₦500')).not.toBeInTheDocument()
+    expect(screen.queryByText('SSP500')).not.toBeInTheDocument()
   })
 })

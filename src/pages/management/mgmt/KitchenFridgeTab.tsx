@@ -164,7 +164,7 @@ export default function KitchenFridgeTab() {
 
     toast.success(
       'Recorded',
-      `${qty}x ${food.name} (₦${totalCost.toLocaleString()}) charged to ${waitron.name}`
+      `${qty}x ${food.name} (SSP${totalCost.toLocaleString()}) charged to ${waitron.name}`
     )
     setShowAdd(false)
     setForm({ item: '', waitron: '', qty: '1' })
@@ -199,7 +199,7 @@ export default function KitchenFridgeTab() {
       div,
       r(
         'Date:',
-        new Date(date).toLocaleDateString('en-NG', {
+        new Date(date).toLocaleDateString('en-SS', {
           day: '2-digit',
           month: 'short',
           year: 'numeric',
@@ -304,7 +304,7 @@ export default function KitchenFridgeTab() {
           <p className="text-gray-500 text-[9px] uppercase tracking-wider">Items</p>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
-          <p className="text-red-400 text-xl font-bold">₦{totalCost.toLocaleString()}</p>
+          <p className="text-red-400 text-xl font-bold">SSP{totalCost.toLocaleString()}</p>
           <p className="text-gray-500 text-[9px] uppercase tracking-wider">Total Cost</p>
         </div>
       </div>
@@ -322,7 +322,7 @@ export default function KitchenFridgeTab() {
               >
                 <span className="text-gray-300 text-sm">{name}</span>
                 <span className="text-red-400 text-sm font-bold">
-                  {v.count} items · ₦{v.cost.toLocaleString()}
+                  {v.count} items · SSP{v.cost.toLocaleString()}
                 </span>
               </div>
             ))}
@@ -354,7 +354,7 @@ export default function KitchenFridgeTab() {
                   Waitron: {e.waitron_name} · by {e.recorded_by_name}
                 </p>
                 <p className="text-gray-500 text-xs">
-                  {new Date(e.created_at).toLocaleTimeString('en-NG', {
+                  {new Date(e.created_at).toLocaleTimeString('en-SS', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true,
@@ -363,8 +363,8 @@ export default function KitchenFridgeTab() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-red-400 font-bold">₦{e.total_cost.toLocaleString()}</p>
-                <p className="text-gray-500 text-xs">₦{e.cost_price.toLocaleString()}/each</p>
+                <p className="text-red-400 font-bold">SSP{e.total_cost.toLocaleString()}</p>
+                <p className="text-gray-500 text-xs">SSP{e.cost_price.toLocaleString()}/each</p>
               </div>
             </div>
           ))}
@@ -393,7 +393,7 @@ export default function KitchenFridgeTab() {
                 <option value="">Select food item...</option>
                 {foodItems.map((f) => (
                   <option key={f.id} value={f.name}>
-                    {f.name} — ₦{f.price.toLocaleString()}
+                    {f.name} — SSP{f.price.toLocaleString()}
                   </option>
                 ))}
               </select>
@@ -420,7 +420,7 @@ export default function KitchenFridgeTab() {
               {form.item && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
                   <p className="text-red-400 font-bold">
-                    ₦
+                    SSP
                     {(
                       (foodItems.find((f) => f.name === form.item)?.price || 0) *
                       (parseInt(form.qty) || 1)

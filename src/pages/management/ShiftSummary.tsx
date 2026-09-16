@@ -3,10 +3,10 @@ import { supabase } from '../../lib/supabase'
 import { X, Printer, User, CheckCircle, Loader2 } from 'lucide-react'
 
 const fmt = (n: number | null | undefined) =>
-  `₦${Number(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
+  `SSP${Number(n || 0).toLocaleString('en-SS', { minimumFractionDigits: 2 })}`
 const fmtTime = (ts?: string | null) =>
   ts
-    ? new Date(ts).toLocaleTimeString('en-NG', {
+    ? new Date(ts).toLocaleTimeString('en-SS', {
         timeZone: 'Africa/Lagos',
         hour: '2-digit',
         minute: '2-digit',
@@ -15,7 +15,7 @@ const fmtTime = (ts?: string | null) =>
     : '—'
 const fmtDate = (ts?: string | null) =>
   ts
-    ? new Date(ts).toLocaleDateString('en-NG', {
+    ? new Date(ts).toLocaleDateString('en-SS', {
         timeZone: 'Africa/Lagos',
         weekday: 'short',
         day: 'numeric',
@@ -235,9 +235,9 @@ export default function ShiftSummary({ shift, onClose, onConfirmClockOut }: Prop
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
     const fmtT = (d: string) =>
-      new Date(d).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })
+      new Date(d).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })
     const fmtD = (d: string) =>
-      new Date(d).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' })
+      new Date(d).toLocaleDateString('en-SS', { day: '2-digit', month: 'short', year: 'numeric' })
     const h = Math.floor(data.durationMinutes / 60)
     const m = data.durationMinutes % 60
 
@@ -598,7 +598,7 @@ export default function ShiftSummary({ shift, onClose, onConfirmClockOut }: Prop
               </div>
             </div>
             <div className="hidden print:block footer">
-              <p>Kolondiro · Generated {new Date().toLocaleString('en-NG')}</p>
+              <p>Kolondiro · Generated {new Date().toLocaleString('en-SS')}</p>
             </div>
           </div>
 

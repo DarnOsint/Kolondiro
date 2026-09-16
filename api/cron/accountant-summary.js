@@ -17,7 +17,7 @@ const supabase = createClient(
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 function fmt(n) {
-  return `₦${Number(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  return `SSP${Number(n || 0).toLocaleString('en-SS', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 function pct(num, den) { return den ? `${Math.round((num / den) * 100)}%` : '0%' }
 
@@ -29,7 +29,7 @@ function getSessionWAT() {
   if (watNow.getHours() < 8) end.setDate(end.getDate() - 1)
   const start = new Date(end)
   start.setDate(start.getDate() - 1)
-  const label = start.toLocaleDateString('en-NG', {
+  const label = start.toLocaleDateString('en-SS', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Africa/Lagos',
   })
   const y = start.getFullYear()
@@ -220,7 +220,7 @@ export default async function handler(req, res) {
     ${(payouts || []).length > 0 ? `<div style="margin-top:12px;">${buildTable(
       [{ label: 'Time' }, { label: 'Staff' }, { label: 'Reason' }, { label: 'Amount', right: true }],
       (payouts || []).slice(0,10).map(p => [
-        new Date(p.created_at).toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit', timeZone:'Africa/Lagos' }),
+        new Date(p.created_at).toLocaleTimeString('en-SS', { hour:'2-digit', minute:'2-digit', timeZone:'Africa/Lagos' }),
         p.profiles?.full_name || '—', p.reason || '—', fmt(p.amount)
       ])
     )}</div>` : ''}
@@ -310,7 +310,7 @@ export default async function handler(req, res) {
   <div style="text-align:center;padding:20px 0 10px;color:#94a3b8;font-size:11px;line-height:1.7;">
     <div style="font-weight:700;color:#64748b;margin-bottom:4px;">RestaurantOS · Kolondiro</div>
     <div>Trading period: 8:00 AM – 8:00 AM WAT · ${short}</div>
-    <div>Generated at ${new Date().toLocaleString('en-NG', { timeZone: 'Africa/Lagos', hour:'2-digit', minute:'2-digit' })} WAT · <a href="https://kolondiro.vercel.app" style="color:#60a5fa;text-decoration:none;">kolondiro.vercel.app</a></div>
+    <div>Generated at ${new Date().toLocaleString('en-SS', { timeZone: 'Africa/Lagos', hour:'2-digit', minute:'2-digit' })} WAT · <a href="https://kolondiro.vercel.app" style="color:#60a5fa;text-decoration:none;">kolondiro.vercel.app</a></div>
   </div>
 
 </div>

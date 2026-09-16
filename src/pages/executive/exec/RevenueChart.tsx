@@ -27,7 +27,7 @@ export default function RevenueChart({ trendData }: Props) {
             const height = Math.max((d.revenue / maxRevenue) * 100, 2)
             return (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                <p className="text-gray-500 text-[10px]">₦{(d.revenue / 1000).toFixed(0)}k</p>
+                <p className="text-gray-500 text-[10px]">SSP{(d.revenue / 1000).toFixed(0)}k</p>
                 <div className="w-full flex flex-col justify-end" style={{ height: '80px' }}>
                   <div
                     className="w-full bg-amber-500 rounded-t-md transition-all"

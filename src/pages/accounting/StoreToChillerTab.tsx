@@ -184,7 +184,7 @@ export default function StoreToChillerTab() {
                       </p>
                     </div>
                     <p className="text-gray-500 text-[10px] shrink-0">
-                      {new Date(r.resolved_at || r.created_at).toLocaleString('en-NG', {
+                      {new Date(r.resolved_at || r.created_at).toLocaleString('en-SS', {
                         timeZone: 'Africa/Lagos',
                         day: '2-digit',
                         month: 'short',

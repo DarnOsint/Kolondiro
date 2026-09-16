@@ -288,7 +288,7 @@ export default function VoidsTab() {
                     {v.status}
                   </span>
                   <p className="text-gray-500 text-xs mt-1">
-                    {new Date(v.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(v.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,
@@ -316,7 +316,7 @@ export default function VoidsTab() {
                 <p className="text-gray-600 text-[10px] mt-1">
                   {v.status === 'approved' ? 'Approved' : 'Rejected'} by {v.resolved_by_name}
                   {v.resolved_at &&
-                    ` at ${new Date(v.resolved_at).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })}`}
+                    ` at ${new Date(v.resolved_at).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })}`}
                 </p>
               )}
             </div>

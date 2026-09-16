@@ -40,8 +40,6 @@ import PaymentModal from './PaymentModal'
 import CashSaleModal from './CashSaleModal'
 import CustomerOrderAlerts from '../../components/CustomerOrderAlerts'
 import WaiterCalls from '../management/WaiterCalls'
-import { useGeofence } from '../../hooks/useGeofence'
-import GeofenceBlock from '../../components/GeofenceBlock'
 import type { Table, MenuItem, Order, OrderItem, Profile } from '../../types'
 import { useToast } from '../../context/ToastContext'
 import { localBulkPut, localGetAll } from '../../lib/db'
@@ -250,7 +248,7 @@ function DesktopMenuBrowser({
                   <p className="text-white text-sm font-medium leading-tight truncate">
                     {item.name}
                   </p>
-                  <p className="text-amber-400 text-sm font-bold mt-1">₦{item.price.toFixed(2)}</p>
+                  <p className="text-amber-400 text-sm font-bold mt-1">SSP{item.price.toFixed(2)}</p>
                 </div>
               </button>
             )
@@ -265,7 +263,6 @@ export default function POS() {
   const { profile, signOut } = useAuth()
   const toast = useToast()
   usePushNotifications(profile?.id)
-  const { status: geoStatus, distance: geoDist, location: geoLocation } = useGeofence('main')
   const isWaitron = profile?.role === 'waitron'
 
   const [tables, setTables] = useState<Table[]>([])
@@ -1452,8 +1449,6 @@ export default function POS() {
     if (isWaitron && posTab !== 'tables') setPosTab('tables')
   }, [isWaitron, posTab])
 
-  if (geoStatus === 'outside')
-    return <GeofenceBlock status={geoStatus} distance={geoDist} location={geoLocation} />
 
   if (isClockedIn === false)
     return (
@@ -1767,7 +1762,7 @@ export default function POS() {
                     <h2 className="text-white text-lg font-bold">My Shift Summary</h2>
                     <p className="text-gray-500 text-xs">
                       {profile?.full_name} —{' '}
-                      {new Date().toLocaleDateString('en-NG', {
+                      {new Date().toLocaleDateString('en-SS', {
                         weekday: 'long',
                         day: 'numeric',
                         month: 'short',
@@ -1791,7 +1786,7 @@ export default function POS() {
                       const ctr = (s: string) =>
                         ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
                       const fmt = (n: number) => `N${n.toLocaleString()}`
-                      const fmtDate = new Date().toLocaleDateString('en-NG', {
+                      const fmtDate = new Date().toLocaleDateString('en-SS', {
                         day: '2-digit',
                         month: 'short',
                         year: 'numeric',
@@ -1808,7 +1803,7 @@ export default function POS() {
                           ? [
                               row(
                                 'Clock In:',
-                                new Date(shiftStats.clockIn).toLocaleTimeString('en-NG', {
+                                new Date(shiftStats.clockIn).toLocaleTimeString('en-SS', {
                                   hour: '2-digit',
                                   minute: '2-digit',
                                   hour12: true,
@@ -1818,7 +1813,7 @@ export default function POS() {
                           : []),
                         row(
                           'Printed:',
-                          new Date().toLocaleTimeString('en-NG', {
+                          new Date().toLocaleTimeString('en-SS', {
                             hour: '2-digit',
                             minute: '2-digit',
                             hour12: true,
@@ -1839,7 +1834,7 @@ export default function POS() {
                       ]
 
                       shiftStats.recentOrders.forEach((o, idx) => {
-                        const time = new Date(o.closed_at).toLocaleTimeString('en-NG', {
+                        const time = new Date(o.closed_at).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true,
@@ -1901,7 +1896,7 @@ export default function POS() {
                         </p>
                         <p className="text-white font-bold text-lg">
                           {shiftStats.clockIn
-                            ? new Date(shiftStats.clockIn).toLocaleTimeString('en-NG', {
+                            ? new Date(shiftStats.clockIn).toLocaleTimeString('en-SS', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: true,
@@ -1934,7 +1929,7 @@ export default function POS() {
                     Total Sales
                   </p>
                   <p className="text-amber-400 text-4xl font-bold tracking-tight">
-                    ₦
+                    SSP
                     {shiftStats.totalSales.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -2003,12 +1998,12 @@ export default function POS() {
                                 {order.tables?.name || 'Cash Sale'}
                               </p>
                               <p className="text-amber-400 font-bold text-sm">
-                                ₦{(order.netTotal || 0).toLocaleString()}
+                                SSP{(order.netTotal || 0).toLocaleString()}
                               </p>
                             </div>
                             <div className="flex items-center justify-between">
                               <p className="text-gray-500 text-xs">
-                                {new Date(order.closed_at).toLocaleTimeString('en-NG', {
+                                {new Date(order.closed_at).toLocaleTimeString('en-SS', {
                                   hour: '2-digit',
                                   minute: '2-digit',
                                   hour12: true,
@@ -2109,7 +2104,7 @@ export default function POS() {
                               <span className="text-gray-500 text-xs">
                                 {new Date(
                                   (order as unknown as { closed_at: string }).closed_at
-                                ).toLocaleTimeString('en-NG', {
+                                ).toLocaleTimeString('en-SS', {
                                   hour: '2-digit',
                                   minute: '2-digit',
                                   hour12: true,
@@ -2125,7 +2120,7 @@ export default function POS() {
                           </div>
                           <div className="text-right flex items-center gap-3">
                             <p className="text-amber-400 font-bold">
-                              ₦{displayTotal.toLocaleString()}
+                              SSP{displayTotal.toLocaleString()}
                             </p>
                             <button
                               onClick={() => setReprintOrder(order)}
@@ -2153,7 +2148,7 @@ export default function POS() {
                                         'Item'}
                                     </td>
                                     <td className="text-gray-400 py-0.5 text-right pl-2">
-                                      ₦{(item.total_price || 0).toLocaleString()}
+                                      SSP{(item.total_price || 0).toLocaleString()}
                                     </td>
                                   </tr>
                                 ))}

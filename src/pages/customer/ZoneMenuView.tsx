@@ -360,7 +360,7 @@ export default function ZoneMenuView() {
                         {item.name}
                       </span>
                       <span className="text-amber-400 font-bold text-sm shrink-0 tabular-nums">
-                        ₦{item.price.toLocaleString()}
+                        SSP{item.price.toLocaleString()}
                       </span>
                     </div>
                   ))}

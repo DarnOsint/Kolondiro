@@ -92,7 +92,7 @@ export default function WaiterCalls() {
               </div>
             </div>
             <p className="text-gray-500 text-xs shrink-0">
-              {new Date(call.called_at).toLocaleTimeString('en-NG', {
+              {new Date(call.called_at).toLocaleTimeString('en-SS', {
                 timeZone: 'Africa/Lagos',
                 hour: '2-digit',
                 minute: '2-digit',

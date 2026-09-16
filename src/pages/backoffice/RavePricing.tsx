@@ -183,10 +183,10 @@ export default function RavePricing({ onBack }: Props) {
                       Item
                     </th>
                     <th className="text-left text-gray-400 text-xs uppercase tracking-wide px-4 py-3 font-medium">
-                      Base ₦
+                      Base SSP
                     </th>
                     <th className="text-left text-pink-400 text-xs uppercase tracking-wide px-4 py-3 font-medium">
-                      Rave ₦
+                      Rave SSP
                     </th>
                   </tr>
                 </thead>
@@ -201,7 +201,7 @@ export default function RavePricing({ onBack }: Props) {
                         <p className="text-gray-500 text-xs">{item.menu_categories?.name}</p>
                       </td>
                       <td className="px-4 py-3 text-amber-400 text-sm font-bold">
-                        ₦{item.price.toLocaleString()}
+                        SSP{item.price.toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
                         <input

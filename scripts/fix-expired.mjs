@@ -78,7 +78,7 @@ for (const r of expired) {
         .eq('id', debtor.id)
     }
 
-    const date = new Date(r.resolved_at).toLocaleDateString('en-NG')
+    const date = new Date(r.resolved_at).toLocaleDateString('en-SS')
     console.log(`✅ ${date} | ${r.quantity}x ${r.item_name} | Order total recalculated to N${newTotal.toLocaleString()}`)
     fixedCount++
   } catch (e) {

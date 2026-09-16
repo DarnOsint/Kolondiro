@@ -361,7 +361,7 @@ export default function Accounting() {
         | null
         | undefined
     )?.forEach((o) => {
-      const day = new Date(o.created_at).toLocaleDateString('en-NG', {
+      const day = new Date(o.created_at).toLocaleDateString('en-SS', {
         month: 'short',
         day: 'numeric',
       })

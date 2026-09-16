@@ -88,7 +88,7 @@ export default function OrdersTab({ orders, orderFilter, onFilterChange }: Props
                       {order.id.slice(0, 8).toUpperCase()}
                     </td>
                     <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
-                      {new Date(order.created_at).toLocaleTimeString('en-NG', {
+                      {new Date(order.created_at).toLocaleTimeString('en-SS', {
                         hour: '2-digit',
                         minute: '2-digit',
                       })}
@@ -118,7 +118,7 @@ export default function OrdersTab({ orders, orderFilter, onFilterChange }: Props
                       </span>
                     </td>
                     <td className="px-4 py-3 text-amber-400 font-bold text-sm whitespace-nowrap">
-                      ₦{getNetOrderAmount(order).toLocaleString()}
+                      SSP{getNetOrderAmount(order).toLocaleString()}
                     </td>
                   </tr>
                 ))

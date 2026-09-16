@@ -190,8 +190,8 @@ export default function OpenOrdersTab() {
                     {req.table_name} — requested by {req.waitron_name}
                   </p>
                   <p className="text-gray-500 text-xs">
-                    ₦{req.item_total.toLocaleString()} ·{' '}
-                    {new Date(req.requested_at).toLocaleTimeString('en-NG', {
+                    SSP{req.item_total.toLocaleString()} ·{' '}
+                    {new Date(req.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,
@@ -260,10 +260,10 @@ export default function OpenOrdersTab() {
                   </div>
                   <div className="text-right flex flex-col items-end gap-1.5">
                     <p className="text-amber-400 font-bold">
-                      ₦{order.total_amount?.toLocaleString()}
+                      SSP{order.total_amount?.toLocaleString()}
                     </p>
                     <p className="text-gray-500 text-xs">
-                      {new Date(order.created_at).toLocaleTimeString('en-NG', {
+                      {new Date(order.created_at).toLocaleTimeString('en-SS', {
                         timeZone: 'Africa/Lagos',
                         hour: '2-digit',
                         minute: '2-digit',
@@ -320,7 +320,7 @@ export default function OpenOrdersTab() {
                         {item.quantity}x {item.menu_items?.name}
                       </span>
                       <span className="text-gray-400">
-                        ₦{(item.total_price as number)?.toLocaleString()}
+                        SSP{(item.total_price as number)?.toLocaleString()}
                       </span>
                     </div>
                   ))}

@@ -35,7 +35,6 @@ const DEFAULT_ROLES = [
   'dj',
   'hypeman',
   'supervisor',
-  'apartment_manager',
   'social_media_manager',
   'manager',
   'accountant',
@@ -76,7 +75,6 @@ const roleColors: Record<string, string> = {
   dj: 'bg-fuchsia-500/20 text-fuchsia-400',
   hypeman: 'bg-pink-500/20 text-pink-400',
   supervisor: 'bg-teal-500/20 text-teal-400',
-  apartment_manager: 'bg-violet-500/20 text-violet-400',
   social_media_manager: 'bg-sky-500/20 text-sky-400',
 }
 interface StaffForm {
@@ -585,7 +583,7 @@ export default function StaffManagement({ onBack }: Props) {
                         <Calendar size={11} />
                         <span>
                           Hired:{' '}
-                          {new Date(m.hire_date).toLocaleDateString('en-NG', {
+                          {new Date(m.hire_date).toLocaleDateString('en-SS', {
                             day: '2-digit',
                             month: 'short',
                             year: 'numeric',

@@ -337,7 +337,7 @@ export default function BarIssueLogTab() {
                                 <p className="text-gray-500 text-xs">
                                   {entry.table_name || 'No table'} · Order #
                                   {entry.order_id.slice(0, 8).toUpperCase()} ·{' '}
-                                  {new Date(entry.at).toLocaleTimeString('en-NG', {
+                                  {new Date(entry.at).toLocaleTimeString('en-SS', {
                                     timeZone: 'Africa/Lagos',
                                     hour: '2-digit',
                                     minute: '2-digit',
@@ -351,10 +351,10 @@ export default function BarIssueLogTab() {
                                     entry.kind === 'returned' ? 'text-red-400' : 'text-amber-400'
                                   }`}
                                 >
-                                  ₦{(entry.total_price || 0).toLocaleString()}
+                                  SSP{(entry.total_price || 0).toLocaleString()}
                                 </p>
                                 <p className="text-gray-500 text-[11px]">
-                                  ₦{(entry.unit_price || 0).toLocaleString()} each
+                                  SSP{(entry.unit_price || 0).toLocaleString()} each
                                 </p>
                               </div>
                             </div>

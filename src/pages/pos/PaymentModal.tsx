@@ -571,12 +571,12 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
 
   const printPreReceipt = async () => {
     const orderRef = `BSP-${String(order.id).slice(0, 8).toUpperCase()}`
-    const date = new Date().toLocaleDateString('en-NG', {
+    const date = new Date().toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
-    const time = new Date().toLocaleTimeString('en-NG', {
+    const time = new Date().toLocaleTimeString('en-SS', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
@@ -1188,7 +1188,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
             <div>
               <h3 className="text-white font-bold">Split Bill — {table?.name}</h3>
-              <p className="text-gray-400 text-xs">Total: ₦{total.toLocaleString()}</p>
+              <p className="text-gray-400 text-xs">Total: SSP{total.toLocaleString()}</p>
             </div>
             <button onClick={() => setSplitMode(false)} className="text-gray-400 hover:text-white">
               <X size={18} />
@@ -1233,7 +1233,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                           'Item'}
                       </p>
                       <p className="text-gray-500 text-xs">
-                        ₦{((item.total_price || 0) + (item.extra_charge || 0)).toLocaleString()}
+                        SSP{((item.total_price || 0) + (item.extra_charge || 0)).toLocaleString()}
                       </p>
                     </div>
                     {itemAssignments[item.id] !== undefined && (
@@ -1271,7 +1271,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                       <span className="text-white text-sm font-medium">Person {i + 1}</span>
                       <div className="text-right">
                         <p className="text-white font-bold">
-                          ₦{getPersonTotal(i).toLocaleString()}
+                          SSP{getPersonTotal(i).toLocaleString()}
                         </p>
                         {paid && <p className="text-green-400 text-xs">Paid · {paid.method}</p>}
                       </div>
@@ -1283,7 +1283,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
             {allAssigned && splitPayments.length < numPeople && (
               <div className="mt-4 bg-gray-900 border border-amber-500/30 rounded-xl p-4 space-y-3">
                 <p className="text-amber-400 text-sm font-bold">
-                  Collecting from Person {currentSplitPerson + 1} — ₦
+                  Collecting from Person {currentSplitPerson + 1} — SSP
                   {getPersonTotal(currentSplitPerson).toLocaleString()}
                 </p>
                 <div className="grid grid-cols-2 gap-2">
@@ -1339,7 +1339,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
             <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 mt-4">
               <p className="text-amber-400 text-xs mb-1">Change to return</p>
               <p className="text-white text-xl font-bold break-all break-all">
-                ₦{change.toLocaleString()}
+                SSP{change.toLocaleString()}
               </p>
             </div>
           )}
@@ -1448,14 +1448,14 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                   <span className="text-gray-300">
                     {item.quantity}x {item.menu_items?.name}
                   </span>
-                  <span className="text-gray-400">₦{item.total_price?.toLocaleString()}</span>
+                  <span className="text-gray-400">SSP{item.total_price?.toLocaleString()}</span>
                 </div>
               ))}
             </div>
             <div className="border-t border-gray-700 pt-3 flex justify-between items-center">
               <span className="text-white font-bold">Total</span>
               <span className="text-amber-400 font-bold text-xl break-all">
-                ₦{total.toLocaleString()}
+                SSP{total.toLocaleString()}
               </span>
             </div>
           </div>
@@ -1487,7 +1487,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
             <div className="space-y-3">
               <div>
                 <label className="text-gray-400 text-xs uppercase tracking-wide mb-2 block">
-                  Amount Tendered (₦)
+                  Amount Tendered (SSP)
                 </label>
                 <input
                   type="number"
@@ -1504,7 +1504,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                     onClick={() => setCashTendered(amount.toString())}
                     className="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs rounded-lg py-2 transition-colors"
                   >
-                    ₦{amount.toLocaleString()}
+                    SSP{amount.toLocaleString()}
                   </button>
                 ))}
               </div>
@@ -1512,7 +1512,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                 <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3">
                   <p className="text-green-400 text-xs">Change to return</p>
                   <p className="text-white text-xl font-bold break-all">
-                    ₦{change.toLocaleString()}
+                    SSP{change.toLocaleString()}
                   </p>
                 </div>
               )}
@@ -1520,7 +1520,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                 <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
                   <p className="text-red-400 text-xs">Short by</p>
                   <p className="text-white text-xl font-bold break-all">
-                    ₦{(total - parseFloat(cashTendered)).toLocaleString()}
+                    SSP{(total - parseFloat(cashTendered)).toLocaleString()}
                   </p>
                 </div>
               )}
@@ -1531,7 +1531,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide mb-2 block">
-                    Cash Received (₦)
+                    Cash Received (SSP)
                   </label>
                   <input
                     type="number"
@@ -1544,8 +1544,8 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide mb-2 block">
                     {paymentMethod === 'cash+transfer'
-                      ? 'Transfer Received (₦)'
-                      : 'POS Received (₦)'}
+                      ? 'Transfer Received (SSP)'
+                      : 'POS Received (SSP)'}
                   </label>
                   <input
                     type="number"
@@ -1559,12 +1559,12 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
               <div className="bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-gray-300">
                 <div className="flex justify-between">
                   <span>Total</span>
-                  <span className="text-white font-bold">₦{total.toLocaleString()}</span>
+                  <span className="text-white font-bold">SSP{total.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Entered</span>
                   <span className="text-amber-400 font-bold">
-                    ₦
+                    SSP
                     {(
                       parseFloat(cashSplit || '0') + parseFloat(secondarySplit || '0')
                     ).toLocaleString()}
@@ -1583,7 +1583,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
               <CreditCard size={28} className="text-blue-400 mx-auto mb-2" />
               <p className="text-blue-400 font-medium">Bank POS</p>
               <p className="text-gray-400 text-sm mt-1">
-                Process ₦{total.toLocaleString()} on the POS terminal, then confirm below.
+                Process SSP{total.toLocaleString()} on the POS terminal, then confirm below.
               </p>
             </div>
           )}
@@ -1620,7 +1620,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                   {selectedBank && (
                     <div className="bg-gray-800 rounded-xl p-3 space-y-1">
                       <p className="text-gray-400 text-xs">
-                        Transfer ₦{total.toLocaleString()} to:
+                        Transfer SSP{total.toLocaleString()} to:
                       </p>
                       <p className="text-white font-bold text-sm">{selectedBank.bank_name}</p>
                       <p className="text-amber-400 font-mono font-bold">
@@ -1884,7 +1884,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-gray-400 text-xs mb-1 block">Amount Received (₦)</label>
+                  <label className="text-gray-400 text-xs mb-1 block">Amount Received (SSP)</label>
                   <input
                     type="number"
                     placeholder={total.toFixed(0)}
@@ -1902,7 +1902,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                   />
                 </div>
                 <div>
-                  <label className="text-gray-400 text-xs mb-1 block">Tip Amount (₦)</label>
+                  <label className="text-gray-400 text-xs mb-1 block">Tip Amount (SSP)</label>
                   <input
                     type="number"
                     placeholder="0"
@@ -1916,7 +1916,7 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
                 <div className="flex items-center justify-between bg-green-500/10 rounded-lg px-3 py-2">
                   <p className="text-green-400 text-xs">Tip will be recorded against your name</p>
                   <p className="text-green-400 font-bold">
-                    ₦{parseFloat(tipAmount).toLocaleString()}
+                    SSP{parseFloat(tipAmount).toLocaleString()}
                   </p>
                 </div>
               )}
@@ -1933,8 +1933,8 @@ export default function PaymentModal({ order: orderProp, table, onSuccess, onClo
               : paymentMethod === 'run_tab'
                 ? 'Run Tab — Continue Ordering'
                 : paymentMethod === 'credit'
-                  ? `Record ₦${total.toLocaleString()} as Debt`
-                  : `Confirm ₦${total.toLocaleString()} Payment`}
+                  ? `Record SSP${total.toLocaleString()} as Debt`
+                  : `Confirm SSP${total.toLocaleString()} Payment`}
           </button>
         </div>
       </div>

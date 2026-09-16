@@ -219,7 +219,7 @@ export default function OrdersByWaitronTab({
                   >
                     <td className="px-3 py-2">{r.waitron}</td>
                     <td className="px-3 py-2 text-right">{r.count}</td>
-                    <td className="px-3 py-2 text-right">₦{r.total.toLocaleString()}</td>
+                    <td className="px-3 py-2 text-right">SSP{r.total.toLocaleString()}</td>
                   </tr>
                 </React.Fragment>
               ))}
@@ -256,7 +256,7 @@ export default function OrdersByWaitronTab({
                             ${items
                               .map(
                                 (it) =>
-                                  `<tr><td>${new Date(it.at).toLocaleString('en-NG', { timeZone: 'Africa/Lagos' })}</td><td>${it.name}</td><td>${it.qty}</td><td>₦${it.total.toLocaleString()}</td></tr>`
+                                  `<tr><td>${new Date(it.at).toLocaleString('en-SS', { timeZone: 'Africa/Lagos' })}</td><td>${it.name}</td><td>${it.qty}</td><td>SSP${it.total.toLocaleString()}</td></tr>`
                               )
                               .join('')}
                           </tbody>
@@ -313,7 +313,7 @@ export default function OrdersByWaitronTab({
                         .map(([name, v], idx) => (
                           <tr key={idx} className="border-t border-gray-800">
                             <td className="px-3 py-2 text-gray-300">
-                              {new Date(v.at).toLocaleTimeString('en-NG', {
+                              {new Date(v.at).toLocaleTimeString('en-SS', {
                                 timeZone: 'Africa/Lagos',
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -321,7 +321,7 @@ export default function OrdersByWaitronTab({
                             </td>
                             <td className="px-3 py-2">{name}</td>
                             <td className="px-3 py-2 text-right">{v.qty}</td>
-                            <td className="px-3 py-2 text-right">₦{v.total.toLocaleString()}</td>
+                            <td className="px-3 py-2 text-right">SSP{v.total.toLocaleString()}</td>
                           </tr>
                         ))
                     })()}

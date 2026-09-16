@@ -26,7 +26,7 @@ console.log(`Found ${expired.length} expired returns in May 1-23\n`)
 let totalValue = 0
 for (const r of expired) {
   totalValue += Number(r.item_total || 0)
-  const resolved = new Date(r.resolved_at).toLocaleDateString('en-NG')
+  const resolved = new Date(r.resolved_at).toLocaleDateString('en-SS')
   console.log(`${resolved} | ${r.quantity}x ${r.item_name} | N${Number(r.item_total).toLocaleString()} | Waitron: ${r.waitron_name || '?'} | Table: ${r.table_name || '?'}`)
 }
 

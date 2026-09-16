@@ -20,7 +20,6 @@ const MixologistKDS = lazy(() => import('./pages/kds/MixologistKDS'))
 const Management = lazy(() => import('./pages/management/Management'))
 // Executive — owner only
 const Executive = lazy(() => import('./pages/executive/Executive'))
-const CVDashboard = lazy(() => import('./pages/cv/CVDashboard'))
 // Accounting suite
 const Accounting = lazy(() => import('./pages/accounting/Accounting'))
 const Debtors = lazy(() => import('./pages/accounting/Debtors'))
@@ -30,11 +29,8 @@ const Analytics = lazy(() => import('./pages/analytics/Analytics'))
 // Back office
 const BackOffice = lazy(() => import('./pages/backoffice/BackOffice'))
 const QRTableCards = lazy(() => import('./pages/backoffice/QRTableCards'))
-// Rooms
-const RoomManagement = lazy(() => import('./pages/rooms/RoomManagement'))
 // Misc
 const SupervisorDashboard = lazy(() => import('./pages/supervisor/SupervisorDashboard'))
-const ApartmentDashboard = lazy(() => import('./pages/apartment/ApartmentDashboard'))
 const MonthEnd = lazy(() => import('./pages/monthend/MonthEnd'))
 const GamesMasterPage = lazy(() => import('./pages/games/GamesMasterPage'))
 const ShishaAttendantPage = lazy(() => import('./pages/shisha/ShishaAttendantPage'))
@@ -106,7 +102,6 @@ function RoleRoute() {
   if (profile.role === 'bar') return <Navigate to="/kds/bar" />
   if (profile.role === 'griller') return <Navigate to="/kds/griller" />
   if (profile.role === 'mixologist') return <Navigate to="/kds/mixologist" />
-  if (profile.role === 'apartment_manager') return <Navigate to="/apartment" />
   if (profile.role === 'auditor') return <Navigate to="/accounting" />
   if (profile.role === 'games_master') return <Navigate to="/games" />
   if (profile.role === 'shisha_attendant') return <Navigate to="/shisha" />
@@ -264,18 +259,6 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/rooms"
-            element={
-              <PrivateRoute>
-                <RoleGuard allowed={['owner', 'manager']}>
-                  <EB title="Room management error">
-                    <RoomManagement />
-                  </EB>
-                </RoleGuard>
-              </PrivateRoute>
-            }
-          />
-          <Route
             path="/debtors"
             element={
               <PrivateRoute>
@@ -312,18 +295,6 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/cv"
-            element={
-              <PrivateRoute>
-                <RoleGuard allowed={['owner', 'manager']}>
-                  <EB title="CV Dashboard error">
-                    <CVDashboard />
-                  </EB>
-                </RoleGuard>
-              </PrivateRoute>
-            }
-          />
-          <Route
             path="/supervisor"
             element={
               <PrivateRoute>
@@ -333,19 +304,6 @@ function AppRoutes() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/apartment"
-            element={
-              <PrivateRoute>
-                <RoleGuard allowed={['owner', 'apartment_manager']}>
-                  <EB title="Apartment dashboard error">
-                    <ApartmentDashboard />
-                  </EB>
-                </RoleGuard>
-              </PrivateRoute>
-            }
-          />
-
           <Route
             path="/month-end"
             element={

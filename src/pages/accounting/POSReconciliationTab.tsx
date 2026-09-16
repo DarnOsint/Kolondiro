@@ -36,10 +36,10 @@ interface WaitronEntry {
   credit: number
 }
 
-const fmt = (n: number) => `₦${n.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
+const fmt = (n: number) => `SSP${n.toLocaleString('en-SS', { minimumFractionDigits: 2 })}`
 const fmtTime = (ts?: string | null) =>
   ts
-    ? new Date(ts).toLocaleTimeString('en-NG', {
+    ? new Date(ts).toLocaleTimeString('en-SS', {
         timeZone: 'Africa/Lagos',
         hour: '2-digit',
         minute: '2-digit',

@@ -16,7 +16,7 @@ const sb = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 )
 
-const fmt = (n: number) => `₦${Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2})}`
+const fmt = (n: number) => `SSP${Number(n||0).toLocaleString('en-SS',{minimumFractionDigits:2})}`
 const pct = (p: number, w: number) => w === 0 ? '—' : `${Math.round(p/w*100)}%`
 
 function sessionWindow8to8() {
@@ -33,12 +33,12 @@ function sessionWindow8to8() {
 }
 
 function toWAT(iso: string) {
-  return new Date(iso).toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit',timeZone:'Africa/Lagos'})
+  return new Date(iso).toLocaleTimeString('en-SS',{hour:'2-digit',minute:'2-digit',timeZone:'Africa/Lagos'})
 }
 
 function dateLabel(startWAT: Date, endWAT: Date) {
-  const s = startWAT.toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric',timeZone:'Africa/Lagos'})
-  const e = endWAT.toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric',timeZone:'Africa/Lagos'})
+  const s = startWAT.toLocaleDateString('en-SS',{day:'2-digit',month:'short',year:'numeric',timeZone:'Africa/Lagos'})
+  const e = endWAT.toLocaleDateString('en-SS',{day:'2-digit',month:'short',year:'numeric',timeZone:'Africa/Lagos'})
   return `${s} → ${e} (8am–8am)`
 }
 
@@ -46,7 +46,7 @@ async function fetchAll(start: Date, end: Date) {
   const s = start.toISOString(), e = end.toISOString()
   const dateStr = start.toLocaleDateString('en-CA',{timeZone:'Africa/Lagos'})
 
-  const [ordRes,itmRes,voidRes,payRes,tillRes,attRes,roomRes,debtRes,invRes] = await Promise.all([
+  const [ordRes,itmRes,voidRes,payRes,tillRes,attRes,debtRes,invRes] = await Promise.all([
 
     // orders — profiles + tables join confirmed in codebase
     sb.from('orders')
@@ -78,11 +78,6 @@ async function fetchAll(start: Date, end: Date) {
       .select('clock_in,clock_out,pos_machine,date,profiles!attendance_staff_id_fkey(full_name,role)')
       .eq('date',dateStr),
 
-    // room_stays — columns confirmed
-    sb.from('room_stays')
-      .select('guest_name,total_amount,payment_method,nights,check_in_at,rooms(name)')
-      .gte('check_in_at',s).lte('check_in_at',e),
-
     // debt_payments — no debtors join (FK only, not a select join in codebase)
     sb.from('debt_payments')
       .select('amount,payment_method,recorded_by_name,created_at')
@@ -100,7 +95,6 @@ async function fetchAll(start: Date, end: Date) {
     payouts:      payRes.data  || [],
     till:         tillRes.data || [],
     attendance:   attRes.data  || [],
-    rooms:        roomRes.data || [],
     debtPayments: debtRes.data || [],
     lowStock:     inv.filter(i => (i.current_stock||0) <= (i.minimum_stock||0)),
   }
@@ -110,7 +104,6 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
   const total   = d.orders.reduce((s,o)=>s+(o.total_amount||0),0)
   const voided  = d.voids.reduce((s,v)=>s+(v.total_value||0),0)
   const payouts = d.payouts.reduce((s,p)=>s+(p.amount||0),0)
-  const rooms   = d.rooms.reduce((s,r)=>s+(r.total_amount||0),0)
   const debt    = d.debtPayments.reduce((s,p)=>s+(p.amount||0),0)
   const net     = total - payouts
   const n       = d.orders.length
@@ -199,7 +192,6 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
     i%2===0?'#f8fafc':'white')
   }).join('')
 
-  const roomRows = d.rooms.map((r,i)=>tr([(r.rooms as any)?.name||'—',r.guest_name||'—',`${r.nights||1}n`,fmt(r.total_amount||0),r.payment_method||'—'],i%2===0?'#f8fafc':'white')).join('')
   const debtRows = d.debtPayments.map((p,i)=>tr([p.recorded_by_name||'—',fmt(p.amount||0),p.payment_method||'—',toWAT(p.created_at)],i%2===0?'#f8fafc':'white')).join('')
   const lowRows  = d.lowStock.map((it,i)=>tr([it.item_name||'—',`<span style="color:#dc2626;font-weight:700">${it.current_stock}</span>`,String(it.minimum_stock)],i%2===0?'#fff7ed':'#fef3c7')).join('')
 
@@ -232,14 +224,12 @@ function buildEmail(dateStr: string, d: Awaited<ReturnType<typeof fetchAll>>) {
       ${box(tableOrds.length,'Table Orders',tableOrds.reduce((s,o)=>s+(o.total_amount||0),0),'#2563eb','#eff6ff','#bfdbfe')}
       ${box(cashOrds.length,'Cash Sales',cashOrds.reduce((s,o)=>s+(o.total_amount||0),0),'#16a34a','#f0fdf4','#bbf7d0')}
       ${box(takeOrds.length,'Takeaways',takeOrds.reduce((s,o)=>s+(o.total_amount||0),0),'#9333ea','#fdf4ff','#e9d5ff')}
-      ${rooms>0?box(d.rooms.length,'Room Check-ins',rooms,'#8b5cf6','#fdf4ff','#e9d5ff'):''}
       ${debt>0?box(d.debtPayments.length,'Debts Recovered',debt,'#16a34a','#f0fdf4','#bbf7d0'):''}
     </div>`)}
 
     ${wRows?sec('Waitron Performance','#6366f1',tbl(['Staff','Orders','Revenue','Avg Order'],wRows)):''}
     ${zRows?sec('Revenue by Zone','#0891b2',tbl(['Zone','Revenue','Share'],zRows)):''}
     ${topRows?sec('Top 10 Items','#10b981',tbl(['Item','Category','Qty','Revenue'],topRows)):''}
-    ${roomRows?sec('Room Check-ins','#8b5cf6',tbl(['Room','Guest','Nights','Amount','Payment'],roomRows)):''}
     ${debtRows?sec('Debt Payments Received','#16a34a',tbl(['Recorded By','Amount','Method','Time'],debtRows)):''}
     ${tillRows?sec('Till Sessions','#0369a1',tbl(['Opened','Closed','Float','Closing','Variance','Staff'],tillRows)):''}
     ${payRows?sec('Cash Payouts','#dc2626',tbl(['Reason','Category','Amount','By'],payRows)):''}
@@ -276,7 +266,7 @@ Deno.serve(async () => {
 
     const html  = buildEmail(label, data)
     const total = data.orders.reduce((s,o)=>s+(o.total_amount||0),0)
-    const subject = `📊 Daily Report — ${label} — ₦${Math.round(total).toLocaleString('en-NG')}`
+    const subject = `📊 Daily Report — ${label} — SSP${Math.round(total).toLocaleString('en-SS')}`
 
     const key = Deno.env.get('RESEND_API_KEY')
     if (!key) return new Response(JSON.stringify({ok:false,error:'RESEND_API_KEY not set'}),{status:500})

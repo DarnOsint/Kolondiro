@@ -26,7 +26,7 @@ export default function AttendanceTab() {
   const [loading, setLoading] = useState(false)
 
   const weekDates = getWeekDates(weekRef)
-  const weekLabel = `${new Date(weekDates[0]).toLocaleDateString('en-NG', { day: '2-digit', month: 'short' })} — ${new Date(weekDates[6]).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' })}`
+  const weekLabel = `${new Date(weekDates[0]).toLocaleDateString('en-SS', { day: '2-digit', month: 'short' })} — ${new Date(weekDates[6]).toLocaleDateString('en-SS', { day: '2-digit', month: 'short', year: 'numeric' })}`
 
   const fetchData = useCallback(async () => {
     setLoading(true)

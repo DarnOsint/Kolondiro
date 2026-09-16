@@ -331,7 +331,7 @@ export default function Inventory({ onBack }: Props) {
           <div>
             <h1 className="text-white font-bold">Drink Inventory & Restocking</h1>
             <p className="text-gray-400 text-xs">
-              {items.length} items · {lowStockCount} low stock · Stock value: ₦
+              {items.length} items · {lowStockCount} low stock · Stock value: SSP
               {totalStockValue.toLocaleString()}
             </p>
           </div>
@@ -398,7 +398,7 @@ export default function Inventory({ onBack }: Props) {
                 },
                 {
                   label: 'Stock Value',
-                  value: `₦${totalStockValue.toLocaleString()}`,
+                  value: `SSP${totalStockValue.toLocaleString()}`,
                   icon: DollarSign,
                   color: 'text-green-400',
                   bg: 'bg-green-400/10',
@@ -489,10 +489,10 @@ export default function Inventory({ onBack }: Props) {
                             </td>
                             <td className="px-4 py-3 text-gray-400 text-sm">{item.unit}</td>
                             <td className="px-4 py-3 text-gray-400 text-sm">
-                              ₦{(item.selling_price || item.cost_price || 0).toLocaleString()}
+                              SSP{(item.selling_price || item.cost_price || 0).toLocaleString()}
                             </td>
                             <td className="px-4 py-3 text-amber-400 text-sm font-medium">
-                              ₦
+                              SSP
                               {(
                                 (item.current_stock || 0) *
                                 (item.selling_price || item.cost_price || 0)
@@ -539,7 +539,7 @@ export default function Inventory({ onBack }: Props) {
             <div className="flex items-center justify-between mb-2">
               <p className="text-gray-400 text-sm">{restockLog.length} restock entries</p>
               <p className="text-gray-500 text-xs">
-                Total spent: ₦
+                Total spent: SSP
                 {restockLog.reduce((s, r) => s + (r.total_cost || 0), 0).toLocaleString()}
               </p>
             </div>
@@ -583,7 +583,7 @@ export default function Inventory({ onBack }: Props) {
                     <div>
                       <p className="text-white font-semibold">{log.item_name}</p>
                       <p className="text-gray-500 text-xs mt-0.5">
-                        {new Date(log.restocked_at).toLocaleString('en-NG', {
+                        {new Date(log.restocked_at).toLocaleString('en-SS', {
                           day: '2-digit',
                           month: 'short',
                           year: 'numeric',
@@ -595,7 +595,7 @@ export default function Inventory({ onBack }: Props) {
                     <div className="text-right">
                       <p className="text-green-400 font-bold">+{log.quantity_added} units</p>
                       <p className="text-gray-500 text-xs">
-                        ₦{log.total_cost?.toLocaleString()} total
+                        SSP{log.total_cost?.toLocaleString()} total
                       </p>
                     </div>
                   </div>
@@ -605,7 +605,7 @@ export default function Inventory({ onBack }: Props) {
                       { label: 'After', value: log.new_stock },
                       {
                         label: 'Cost/Unit',
-                        value: `₦${log.cost_price_per_unit?.toLocaleString()}`,
+                        value: `SSP${log.cost_price_per_unit?.toLocaleString()}`,
                       },
                       { label: 'Payment', value: log.payment_method },
                       { label: 'Supplier', value: log.supplier_name || '—' },
@@ -745,7 +745,7 @@ export default function Inventory({ onBack }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Cost Price (₦)
+                    Cost Price (SSP)
                   </label>
                   <input
                     type="number"
@@ -757,7 +757,7 @@ export default function Inventory({ onBack }: Props) {
                 </div>
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Selling Price (₦)
+                    Selling Price (SSP)
                   </label>
                   <input
                     type="number"
@@ -827,7 +827,7 @@ export default function Inventory({ onBack }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Cost/Unit (₦)
+                    Cost/Unit (SSP)
                   </label>
                   <input
                     type="number"
@@ -840,7 +840,7 @@ export default function Inventory({ onBack }: Props) {
                 <div className="bg-gray-800 rounded-xl px-4 py-3 flex flex-col justify-center">
                   <p className="text-gray-500 text-xs">Total Cost</p>
                   <p className="text-amber-400 font-bold text-lg">
-                    ₦
+                    SSP
                     {(
                       (parseFloat(restockForm.quantity_added) || 0) *
                       (parseFloat(restockForm.cost_price_per_unit) || 0)
@@ -945,7 +945,7 @@ export default function Inventory({ onBack }: Props) {
                 <p>
                   This restock will be logged under{' '}
                   <span className="font-bold text-white">{profile?.full_name}</span> at{' '}
-                  {new Date().toLocaleString('en-NG')}. This record cannot be deleted.
+                  {new Date().toLocaleString('en-SS')}. This record cannot be deleted.
                 </p>
               </div>
               <button

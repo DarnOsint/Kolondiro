@@ -39,7 +39,7 @@ function fmtAction(action: string) {
 }
 
 function fmtTime(ts: string) {
-  return new Date(ts).toLocaleString('en-NG', {
+  return new Date(ts).toLocaleString('en-SS', {
     timeZone: 'Africa/Lagos',
     day: '2-digit',
     month: 'short',
@@ -54,10 +54,10 @@ function EntryDetail({ entry }: { entry: LogEntry }) {
   if (entry.entity_name) parts.push(entry.entity_name)
   if (entry.new_value) {
     const nv = entry.new_value
-    if (typeof nv.total === 'number') parts.push(`₦${Number(nv.total).toLocaleString()}`)
+    if (typeof nv.total === 'number') parts.push(`SSP${Number(nv.total).toLocaleString()}`)
     if (typeof nv.payment_method === 'string') parts.push(String(nv.payment_method).toUpperCase())
     if (typeof nv.addedItems === 'number') parts.push(`+${nv.addedItems} items`)
-    if (typeof nv.amount === 'number') parts.push(`₦${Number(nv.amount).toLocaleString()}`)
+    if (typeof nv.amount === 'number') parts.push(`SSP${Number(nv.amount).toLocaleString()}`)
     if (typeof nv.device === 'string') parts.push(`via ${nv.device}`)
   }
   if (!parts.length) return null

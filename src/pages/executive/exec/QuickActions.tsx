@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, BarChart2, Settings, Users, BedDouble } from 'lucide-react'
+import { BookOpen, BarChart2, Settings, Users } from 'lucide-react'
 
 const ACTIONS = [
   { label: 'Accounting', icon: BookOpen, color: 'bg-green-600', path: '/accounting' },
   { label: 'Reports', icon: BarChart2, color: 'bg-indigo-500', path: '/reports' },
   { label: 'Back Office', icon: Settings, color: 'bg-amber-500', path: '/backoffice' },
   { label: 'Management', icon: Users, color: 'bg-blue-500', path: '/management' },
-  { label: 'View Rooms', icon: BedDouble, color: 'bg-purple-500', path: '/rooms' },
 ]
 
 export default function QuickActions() {
@@ -14,7 +13,7 @@ export default function QuickActions() {
   return (
     <div className="mb-8">
       <h3 className="text-white font-semibold text-sm md:text-base mb-4">Quick Actions</h3>
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {ACTIONS.map((a) => (
           <button
             key={a.label}

@@ -15,4 +15,5 @@ CREATE INDEX IF NOT EXISTS idx_attendance_pos_machine ON attendance(pos_machine)
   WHERE pos_machine IS NOT NULL;
 
 -- Fix 3: Add check_in_time column to room_stays for apartment reservations
-ALTER TABLE room_stays ADD COLUMN IF NOT EXISTS check_in_time text;
+-- OBSOLETE — rooms/room_stays feature removed (tables dropped from live DB).
+-- ALTER TABLE room_stays ADD COLUMN IF NOT EXISTS check_in_time text;

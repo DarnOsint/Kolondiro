@@ -20,7 +20,7 @@ export default function TillTab({ tillSessions }: Props) {
                   {session.profiles?.full_name || 'Unknown'}
                 </p>
                 <p className="text-gray-500 text-xs">
-                  {new Date(session.opened_at).toLocaleString('en-NG', {
+                  {new Date(session.opened_at).toLocaleString('en-SS', {
                     timeZone: 'Africa/Lagos',
                   })}
                 </p>
@@ -39,7 +39,7 @@ export default function TillTab({ tillSessions }: Props) {
               ].map((item) => (
                 <div key={item.label} className="bg-gray-800 rounded-lg p-3">
                   <p className="text-gray-500 text-xs">{item.label}</p>
-                  <p className="text-white font-bold">₦{(item.value || 0).toLocaleString()}</p>
+                  <p className="text-white font-bold">SSP{(item.value || 0).toLocaleString()}</p>
                 </div>
               ))}
             </div>

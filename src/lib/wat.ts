@@ -8,7 +8,7 @@ export function watDate(date?: string | Date): Date {
 }
 
 export function fmtWATTime(date: string | Date): string {
-  return new Date(date).toLocaleTimeString('en-NG', {
+  return new Date(date).toLocaleTimeString('en-SS', {
     timeZone: WAT,
     hour: '2-digit',
     minute: '2-digit',
@@ -17,7 +17,7 @@ export function fmtWATTime(date: string | Date): string {
 }
 
 export function fmtWATDate(date: string | Date): string {
-  return new Date(date).toLocaleDateString('en-NG', {
+  return new Date(date).toLocaleDateString('en-SS', {
     timeZone: WAT,
     day: '2-digit',
     month: 'short',
@@ -26,7 +26,7 @@ export function fmtWATDate(date: string | Date): string {
 }
 
 export function fmtWATDateTime(date: string | Date): string {
-  return new Date(date).toLocaleString('en-NG', {
+  return new Date(date).toLocaleString('en-SS', {
     timeZone: WAT,
     day: '2-digit',
     month: 'short',
@@ -37,7 +37,7 @@ export function fmtWATDateTime(date: string | Date): string {
 }
 
 export function fmtWATDateFull(date: string | Date): string {
-  return new Date(date).toLocaleDateString('en-NG', {
+  return new Date(date).toLocaleDateString('en-SS', {
     timeZone: WAT,
     weekday: 'short',
     day: 'numeric',

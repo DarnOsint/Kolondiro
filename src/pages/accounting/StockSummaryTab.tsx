@@ -165,7 +165,7 @@ export default function StockSummaryTab({ type }: Props) {
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(date).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(date).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -290,7 +290,7 @@ export default function StockSummaryTab({ type }: Props) {
                     {label} Sales Revenue
                   </p>
                   <p className="text-white text-2xl font-black mt-1">
-                    ₦{stationSales.revenue.toLocaleString()}
+                    SSP{stationSales.revenue.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-xs">{stationSales.qty} items sold</p>
                 </div>
@@ -301,7 +301,7 @@ export default function StockSummaryTab({ type }: Props) {
                     .sort((a, b) => b[1] - a[1])
                     .map(([zone, rev]) => (
                       <div key={zone} className="text-center">
-                        <p className="text-amber-400 font-bold text-sm">₦{rev.toLocaleString()}</p>
+                        <p className="text-amber-400 font-bold text-sm">SSP{rev.toLocaleString()}</p>
                         <p className="text-gray-500 text-[9px] uppercase tracking-wider">{zone}</p>
                       </div>
                     ))}

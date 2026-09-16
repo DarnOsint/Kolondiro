@@ -233,7 +233,7 @@ export default function SupervisorReconTab() {
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(`${reconDate}T12:00:00`).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(`${reconDate}T12:00:00`).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -365,17 +365,17 @@ export default function SupervisorReconTab() {
                   <div className="flex items-center justify-between">
                     <span className="text-white text-sm font-semibold">{w.name}</span>
                     <span className="text-gray-500 text-[11px]">
-                      {w.orders} order{w.orders === 1 ? '' : 's'} · ₦{w.revenue.toLocaleString()}
+                      {w.orders} order{w.orders === 1 ? '' : 's'} · SSP{w.revenue.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex-1">
                       <label className="text-gray-500 text-[10px] uppercase tracking-wide">
-                        Cash collected · expected ₦{w.cashExpected.toLocaleString()}
+                        Cash collected · expected SSP{w.cashExpected.toLocaleString()}
                       </label>
                       <input
                         type="number"
-                        placeholder="₦ cash"
+                        placeholder="SSP cash"
                         value={recon.cashCollected[w.name] || ''}
                         disabled={!canSaveThisDay}
                         onChange={(e) =>
@@ -392,11 +392,11 @@ export default function SupervisorReconTab() {
                     </div>
                     <div className="flex-1">
                       <label className="text-gray-500 text-[10px] uppercase tracking-wide">
-                        POS/transfer submitted · expected ₦{w.transferExpected.toLocaleString()}
+                        POS/transfer submitted · expected SSP{w.transferExpected.toLocaleString()}
                       </label>
                       <input
                         type="number"
-                        placeholder="₦ POS/transfer"
+                        placeholder="SSP POS/transfer"
                         value={recon.transferReceipts[w.name] || ''}
                         disabled={!canSaveThisDay}
                         onChange={(e) =>
@@ -414,22 +414,22 @@ export default function SupervisorReconTab() {
                   </div>
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="text-gray-500 text-xs">
-                      remitted ₦
+                      remitted SSP
                       {(
                         (recon.cashCollected[w.name] || 0) + (recon.transferReceipts[w.name] || 0)
                       ).toLocaleString()}
                     </span>
                     <span className="text-gray-500 text-xs">
-                      expected ₦{(w.cashExpected + w.transferExpected).toLocaleString()}
+                      expected SSP{(w.cashExpected + w.transferExpected).toLocaleString()}
                     </span>
                     {(autoShortage[w.name] || 0) > 0 && (
                       <span className="text-red-400 text-xs">
-                        shortage: ₦{autoShortage[w.name].toLocaleString()}
+                        shortage: SSP{autoShortage[w.name].toLocaleString()}
                       </span>
                     )}
                     {(autoExcess[w.name] || 0) > 0 && (
                       <span className="text-green-400 text-xs">
-                        excess: ₦{autoExcess[w.name].toLocaleString()}
+                        excess: SSP{autoExcess[w.name].toLocaleString()}
                       </span>
                     )}
                   </div>
@@ -438,13 +438,13 @@ export default function SupervisorReconTab() {
               <div className="flex flex-wrap justify-between pt-2 border-t border-gray-700 gap-2">
                 <span className="text-gray-400 text-sm font-medium">Total Cash Collected</span>
                 <span className="text-emerald-400 font-bold">
-                  ₦{totalCashCollected.toLocaleString()}
+                  SSP{totalCashCollected.toLocaleString()}
                 </span>
               </div>
               <div className="flex flex-wrap justify-between">
                 <span className="text-gray-400 text-sm font-medium">Total POS and Transfer</span>
                 <span className="text-purple-400 font-bold">
-                  ₦{totalTransferReceipts.toLocaleString()}
+                  SSP{totalTransferReceipts.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -469,13 +469,13 @@ export default function SupervisorReconTab() {
                     <span className="text-xs">
                       {shortage > 0 && (
                         <span className="text-red-400 font-medium">
-                          shortage: ₦{shortage.toLocaleString()}
+                          shortage: SSP{shortage.toLocaleString()}
                         </span>
                       )}
                       {shortage > 0 && excess > 0 && <span className="text-gray-600"> · </span>}
                       {excess > 0 && (
                         <span className="text-green-400 font-medium">
-                          excess: ₦{excess.toLocaleString()}
+                          excess: SSP{excess.toLocaleString()}
                         </span>
                       )}
                     </span>
@@ -491,7 +491,7 @@ export default function SupervisorReconTab() {
             <div className="flex justify-between mt-3 pt-2 border-t border-gray-700">
               <span className="text-gray-400 text-sm font-medium">Total Outstanding</span>
               <span className="text-red-400 font-semibold">
-                ₦{totalOutstanding.toLocaleString()}
+                SSP{totalOutstanding.toLocaleString()}
               </span>
             </div>
           </div>
@@ -509,24 +509,24 @@ export default function SupervisorReconTab() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">Total Sales (POS)</span>
-                <span className="text-white font-bold">₦{expectedRevenue.toLocaleString()}</span>
+                <span className="text-white font-bold">SSP{expectedRevenue.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Cash Collected</span>
-                <span className="text-emerald-400">₦{totalCashCollected.toLocaleString()}</span>
+                <span className="text-emerald-400">SSP{totalCashCollected.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">POS and Transfer Receipts</span>
-                <span className="text-purple-400">₦{totalTransferReceipts.toLocaleString()}</span>
+                <span className="text-purple-400">SSP{totalTransferReceipts.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Outstanding / Shortage (Waitrons)</span>
-                <span className="text-red-400">₦{totalOutstanding.toLocaleString()}</span>
+                <span className="text-red-400">SSP{totalOutstanding.toLocaleString()}</span>
               </div>
               <div className="border-t-2 border-gray-700 pt-2 mt-2">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Total Accounted For</span>
-                  <span className="text-white font-bold">₦{totalReceived.toLocaleString()}</span>
+                  <span className="text-white font-bold">SSP{totalReceived.toLocaleString()}</span>
                 </div>
               </div>
               <div className="border-t-2 border-gray-600 pt-2 flex items-center justify-between">
@@ -536,7 +536,7 @@ export default function SupervisorReconTab() {
                 <span
                   className={`text-xl font-bold ${gap > 0 ? 'text-red-400' : 'text-green-400'}`}
                 >
-                  ₦{Math.abs(gap).toLocaleString()}
+                  SSP{Math.abs(gap).toLocaleString()}
                 </span>
               </div>
             </div>

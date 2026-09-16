@@ -3,8 +3,6 @@ import { supabase } from '../../lib/supabase'
 import { sendPushToStaff } from '../../hooks/usePushNotifications'
 import { audit } from '../../lib/audit'
 import { HelpTooltip } from '../../components/HelpTooltip'
-import { useGeofence } from '../../hooks/useGeofence'
-import GeofenceBlock from '../../components/GeofenceBlock'
 import { useAuth } from '../../context/AuthContext'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import {
@@ -109,7 +107,6 @@ function getNextStatus(status: string): string | null {
 function BarKDSInner() {
   const { profile, signOut } = useAuth()
   const toast = useToast()
-  const { status: geoStatus, distance: geoDist, location: geoLocation } = useGeofence('main')
   const [orders, setOrders] = useState<KdsOrder[]>([])
   const [returnItems, setReturnItems] = useState<
     (KdsOrder['order_items'][0] & { tableName: string; orderId: string; staffId?: string | null })[]
@@ -645,8 +642,6 @@ function BarKDSInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchOrders, fetchReturnHistory])
 
-  if (geoStatus === 'outside')
-    return <GeofenceBlock status={geoStatus} distance={geoDist} location={geoLocation} />
   if (loading)
     return (
       <div className="min-h-full bg-gray-950 flex items-center justify-center">
@@ -868,7 +863,7 @@ function BarKDSInner() {
                   Returns — {returnHistory.length} total
                 </p>
                 <p className="text-gray-400 text-xs font-bold">
-                  ₦
+                  SSP
                   {returnHistory
                     .filter((r) => r.status === 'accepted')
                     .reduce((s, r) => s + (r.item_total || 0), 0)
@@ -909,7 +904,7 @@ function BarKDSInner() {
                         {r.status}
                       </span>
                       <p className="text-gray-400 text-xs mt-1">
-                        ₦{(r.item_total || 0).toLocaleString()}
+                        SSP{(r.item_total || 0).toLocaleString()}
                       </p>
                     </div>
                   </div>
@@ -917,7 +912,7 @@ function BarKDSInner() {
                     <p className="text-gray-500 text-xs italic">Reason: {r.return_reason}</p>
                   )}
                   <p className="text-gray-600 text-[10px] mt-1">
-                    {new Date(r.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(r.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,
@@ -926,7 +921,7 @@ function BarKDSInner() {
                       <>
                         {' '}
                         — resolved{' '}
-                        {new Date(r.resolved_at).toLocaleTimeString('en-NG', {
+                        {new Date(r.resolved_at).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true,
@@ -997,7 +992,7 @@ function BarKDSInner() {
                           {r.items.map((it) => `${it.qty}x ${it.item}`).join(', ')}
                         </p>
                         <p className="text-gray-500 text-xs">
-                          {new Date(r.at).toLocaleTimeString('en-NG', {
+                          {new Date(r.at).toLocaleTimeString('en-SS', {
                             hour: '2-digit',
                             minute: '2-digit',
                             hour12: true,

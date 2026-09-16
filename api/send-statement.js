@@ -22,7 +22,7 @@ const OWNER_EMAIL = process.env.REPORT_EMAIL || 'seventeenkay@proton.me'
 const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || process.env.VITE_INTERNAL_API_SECRET
 
 function fmt(n) {
-  return `₦${Number(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
+  return `SSP${Number(n || 0).toLocaleString('en-SS', { minimumFractionDigits: 2 })}`
 }
 
 function ageBucket(dateStr) {
@@ -119,7 +119,7 @@ export default async function handler(req, res) {
     const isOverLimit = debtor.current_balance > debtor.credit_limit
     const isOverdue = debtor.due_date && new Date(debtor.due_date) < new Date() && debtor.current_balance > 0
 
-    const statementDate = new Date().toLocaleDateString('en-NG', {
+    const statementDate = new Date().toLocaleDateString('en-SS', {
       day: 'numeric', month: 'long', year: 'numeric'
     })
 
@@ -203,7 +203,7 @@ export default async function handler(req, res) {
         </div>
         <div class="meta-block">
           <p class="label">Due Date</p>
-          <p class="value">${debtor.due_date ? new Date(debtor.due_date).toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' }) : 'On demand'}</p>
+          <p class="value">${debtor.due_date ? new Date(debtor.due_date).toLocaleDateString('en-SS', { day: 'numeric', month: 'long', year: 'numeric' }) : 'On demand'}</p>
         </div>
       </div>
 
@@ -267,13 +267,13 @@ export default async function handler(req, res) {
         <tr>
           <th>Date</th>
           <th>Description</th>
-          <th style="text-align:right">Charges (₦)</th>
-          <th style="text-align:right">Payments (₦)</th>
-          <th style="text-align:right">Balance (₦)</th>
+          <th style="text-align:right">Charges (SSP)</th>
+          <th style="text-align:right">Payments (SSP)</th>
+          <th style="text-align:right">Balance (SSP)</th>
         </tr>
         ${ledgerWithBalance.map(row => `
         <tr class="${row.type === 'payment' ? 'payment-row' : ''}">
-          <td style="white-space:nowrap;color:#6b7280">${new Date(row.date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+          <td style="white-space:nowrap;color:#6b7280">${new Date(row.date).toLocaleDateString('en-SS', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
           <td>${row.description}</td>
           <td style="text-align:right" class="${row.debit > 0 ? 'debit' : ''}">${row.debit > 0 ? fmt(row.debit) : '—'}</td>
           <td style="text-align:right" class="${row.credit > 0 ? 'credit' : ''}">${row.credit > 0 ? fmt(row.credit) : '—'}</td>

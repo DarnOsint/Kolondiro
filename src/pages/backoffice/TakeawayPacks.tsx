@@ -126,7 +126,7 @@ export default function TakeawayPacks({ onBack }: Props) {
                   className="flex-1 bg-gray-800 border border-gray-700 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500 placeholder-gray-600"
                 />
                 <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-gray-500 text-sm">₦</span>
+                  <span className="text-gray-500 text-sm">SSP</span>
                   <input
                     type="number"
                     min="0"

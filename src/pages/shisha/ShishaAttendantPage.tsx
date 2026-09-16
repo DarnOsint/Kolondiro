@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
-import { useGeofence } from '../../hooks/useGeofence'
-import GeofenceBlock from '../../components/GeofenceBlock'
 import { Wind, LogOut, RefreshCw, Banknote, CreditCard, Smartphone, Trash2 } from 'lucide-react'
 
 interface ShishaVariant {
@@ -36,7 +34,6 @@ const CATEGORIES = ['pot', 'session', 'refill', 'accessory'] as const
 export default function ShishaAttendantPage() {
   const { profile, signOut } = useAuth()
   const toast = useToast()
-  const { status: geoStatus, distance: geoDist, location: geoLocation } = useGeofence('main')
   const isManager = ['owner', 'manager'].includes(profile?.role || '')
 
   const [variants, setVariants] = useState<ShishaVariant[]>([])
@@ -120,7 +117,7 @@ export default function ShishaAttendantPage() {
     if (error) return toast.error('Error', error.message)
     toast.success(
       'Sale Recorded',
-      `${qty}x ${selectedVar.name}${flavour ? ` (${flavour})` : ''} — ₦${(selectedVar.price * qty).toLocaleString()}`
+      `${qty}x ${selectedVar.name}${flavour ? ` (${flavour})` : ''} — SSP${(selectedVar.price * qty).toLocaleString()}`
     )
     setQuantity('1')
     setFlavour('')
@@ -163,8 +160,6 @@ export default function ShishaAttendantPage() {
   const inp =
     'w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500'
 
-  if (geoStatus === 'outside')
-    return <GeofenceBlock status={geoStatus} distance={geoDist} location={geoLocation} />
   if (loading)
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
@@ -182,7 +177,7 @@ export default function ShishaAttendantPage() {
           <div>
             <h1 className="text-white font-bold">Shisha</h1>
             <p className="text-gray-400 text-xs">
-              ₦{todaySales.toLocaleString()} today · {todayCount} session
+              SSP{todaySales.toLocaleString()} today · {todayCount} session
               {todayCount !== 1 ? 's' : ''}
             </p>
           </div>
@@ -234,7 +229,7 @@ export default function ShishaAttendantPage() {
                     <optgroup key={cat} label={cat.charAt(0).toUpperCase() + cat.slice(1)}>
                       {items.map((v) => (
                         <option key={v.id} value={v.id}>
-                          {v.name} — ₦{v.price.toLocaleString()}
+                          {v.name} — SSP{v.price.toLocaleString()}
                         </option>
                       ))}
                     </optgroup>
@@ -319,7 +314,7 @@ export default function ShishaAttendantPage() {
             {selectedVar && (
               <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 text-center">
                 <p className="text-rose-400/70 text-[10px] uppercase tracking-wider mb-1">Total</p>
-                <p className="text-rose-400 text-3xl font-bold">₦{saleTotal.toLocaleString()}</p>
+                <p className="text-rose-400 text-3xl font-bold">SSP{saleTotal.toLocaleString()}</p>
                 {flavour && (
                   <p className="text-rose-300 text-xs mt-1">
                     {selectedVar.name} · {flavour}
@@ -355,12 +350,12 @@ export default function ShishaAttendantPage() {
                       {sale.flavour && <p className="text-rose-400 text-xs">{sale.flavour}</p>}
                     </div>
                     <p className="text-rose-400 font-bold text-sm">
-                      ₦{sale.total_price.toLocaleString()}
+                      SSP{sale.total_price.toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span>
-                      {new Date(sale.created_at).toLocaleTimeString('en-NG', {
+                      {new Date(sale.created_at).toLocaleTimeString('en-SS', {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true,
@@ -414,7 +409,7 @@ export default function ShishaAttendantPage() {
                   min="0"
                   value={configForm.price}
                   onChange={(e) => setConfigForm((p) => ({ ...p, price: e.target.value }))}
-                  placeholder="Price (₦)"
+                  placeholder="Price (SSP)"
                   className={inp}
                 />
               </div>
@@ -447,7 +442,7 @@ export default function ShishaAttendantPage() {
                         <div>
                           <p className="text-white text-sm font-semibold">{v.name}</p>
                           <p className="text-rose-400 text-xs font-bold">
-                            ₦{v.price.toLocaleString()}
+                            SSP{v.price.toLocaleString()}
                           </p>
                           {v.description && (
                             <p className="text-gray-500 text-xs">{v.description}</p>

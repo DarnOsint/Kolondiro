@@ -59,7 +59,7 @@ export default function PayoutsTab({ payouts, totalPayouts, onRefresh }: Props) 
         <div>
           <p className="text-gray-400 text-sm">Total expenses this period</p>
           <p className="text-red-400 font-bold text-xl break-all">
-            ₦{totalPayouts.toLocaleString()}
+            SSP{totalPayouts.toLocaleString()}
           </p>
         </div>
         <button
@@ -108,12 +108,12 @@ export default function PayoutsTab({ payouts, totalPayouts, onRefresh }: Props) 
                         <span className="text-gray-500 text-xs">→ {payout.paid_to}</span>
                       )}
                       <span className="text-gray-600 text-xs">
-                        {new Date(payout.created_at).toLocaleString('en-NG')}
+                        {new Date(payout.created_at).toLocaleString('en-SS')}
                       </span>
                     </div>
                   </div>
                   <p className="text-red-400 font-bold text-lg">
-                    ₦{payout.amount?.toLocaleString()}
+                    SSP{payout.amount?.toLocaleString()}
                   </p>
                 </div>
               ))}
@@ -156,7 +156,7 @@ export default function PayoutsTab({ payouts, totalPayouts, onRefresh }: Props) 
               </div>
               <div>
                 <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                  Amount (₦) *
+                  Amount (SSP) *
                 </label>
                 <input
                   type="number"

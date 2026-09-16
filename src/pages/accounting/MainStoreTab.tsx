@@ -80,7 +80,7 @@ export default function MainStoreTab() {
           },
           {
             label: 'Stock Value',
-            value: `₦${totalValue.toLocaleString()}`,
+            value: `SSP${totalValue.toLocaleString()}`,
             color: 'text-purple-400',
           },
         ].map((k) => (

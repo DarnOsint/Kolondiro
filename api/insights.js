@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       model: 'claude-3-5-haiku-20241022',
       max_tokens: 1024,
       system:
-        "You are a hospitality business analyst for Kolondiro, a Nigerian restaurant and bar. Analyze the performance data provided and give 5-6 sharp, actionable bullet-point insights. Be specific with numbers. Use Nigerian Naira symbol ₦. No headers, just bullet points starting with •.",
+        "You are a hospitality business analyst for Kolondiro, a Nigerian restaurant and bar. Analyze the performance data provided and give 5-6 sharp, actionable bullet-point insights. Be specific with numbers. Use Nigerian Naira symbol SSP. No headers, just bullet points starting with •.",
       messages: [{ role: 'user', content: prompt }],
     }),
   })

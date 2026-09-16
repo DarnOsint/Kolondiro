@@ -15,7 +15,6 @@ import {
   Banknote,
   CreditCard,
   BarChart2,
-  Home,
   AlertTriangle,
   RefreshCw,
   Printer,
@@ -128,7 +127,6 @@ interface Report {
   grossRevenue: number
   netRevenue: number
   totalExpenses: number
-  roomRevenue: number
   totalRevenue: number
   totalOrders: number
   totalCovers: number
@@ -149,7 +147,6 @@ interface Report {
   totalDebt: number
   totalDebtCreated: number
   debtorCount: number
-  roomStayCount: number
   totalOpeningFloat: number
   totalClosingFloat: number
   byOrderType: { table: number; cash_sale: number; takeaway: number }
@@ -250,7 +247,6 @@ export default function Reports() {
         payoutsRes,
         tillRes,
         debtorsRes,
-        roomStaysRes,
         voidsRes,
         attendanceRes,
         returnsRes,
@@ -276,7 +272,6 @@ export default function Reports() {
           .gte('opened_at', start)
           .lte('opened_at', end),
         supabase.from('debtors').select('*').gte('created_at', start).lte('created_at', end),
-        supabase.from('room_stays').select('*').gte('created_at', start).lte('created_at', end),
         supabase.from('void_log').select('*').gte('created_at', start).lte('created_at', end),
         supabase.from('attendance').select('*').gte('clock_in', start).lte('clock_in', end),
         supabase
@@ -314,7 +309,6 @@ export default function Reports() {
         current_balance?: number
         credit_limit?: number
       }[]
-      const roomStays = (roomStaysRes.data || []) as { status?: string; total_amount?: number }[]
       const voids = (voidsRes.data || []) as VoidEntry[]
       const attendance = (attendanceRes.data || []) as AttendanceEntry[]
       const returnsData = (returnsRes.data || []) as Array<{
@@ -353,9 +347,6 @@ export default function Reports() {
 
       const grossRevenue = Object.values(perOrderNet).reduce((s, v) => s + v, 0)
       const totalExpenses = payouts.reduce((s, p) => s + (p.amount || 0), 0)
-      const roomRevenue = roomStays
-        .filter((r) => r.status === 'checked_out')
-        .reduce((s, r) => s + (r.total_amount || 0), 0)
       // Payment aggregation
       const _paymentTotals: Record<string, number> = {}
       // Group payment methods properly (handles transfer:BankName, cash+transfer:X+Y, cash+card:X+Y)
@@ -424,7 +415,7 @@ export default function Reports() {
 
       const dayMap: Record<string, ChartPoint> = {}
       paidOrders.forEach((o) => {
-        const d = new Date(o.created_at).toLocaleDateString('en-NG', {
+        const d = new Date(o.created_at).toLocaleDateString('en-SS', {
           month: 'short',
           day: 'numeric',
         })
@@ -446,12 +437,11 @@ export default function Reports() {
       setReport({
         period: getPeriodLabel(),
         reportType,
-        generatedAt: new Date().toLocaleString('en-NG'),
+        generatedAt: new Date().toLocaleString('en-SS'),
         grossRevenue,
         netRevenue: grossRevenue - totalExpenses,
         totalExpenses,
-        roomRevenue,
-        totalRevenue: grossRevenue + roomRevenue,
+        totalRevenue: grossRevenue,
         totalOrders: orders.length,
         totalCovers: paidOrders.reduce((s, o) => s + (o.covers || 0), 0),
         revenuePerCover: (() => {
@@ -474,7 +464,6 @@ export default function Reports() {
         totalDebt: debtors.reduce((s, d) => s + (d.current_balance || 0), 0),
         totalDebtCreated: debtors.reduce((s, d) => s + (d.credit_limit || 0), 0),
         debtorCount: debtors.length,
-        roomStayCount: roomStays.length,
         totalOpeningFloat: tillSessions.reduce((s, t) => s + (t.opening_float || 0), 0),
         totalClosingFloat: tillSessions
           .filter((t) => t.status === 'closed')
@@ -512,24 +501,23 @@ export default function Reports() {
       ['Generated:', report.generatedAt],
       [],
       ['REVENUE SUMMARY'],
-      ['Gross Revenue (F&B)', '₦' + report.grossRevenue.toLocaleString()],
-      ['Room Revenue', '₦' + report.roomRevenue.toLocaleString()],
-      ['Total Revenue', '₦' + report.totalRevenue.toLocaleString()],
-      ['Total Expenses', '₦' + report.totalExpenses.toLocaleString()],
-      ['Net Revenue', '₦' + report.netRevenue.toLocaleString()],
+      ['Gross Revenue (F&B)', 'SSP' + report.grossRevenue.toLocaleString()],
+      ['Total Revenue', 'SSP' + report.totalRevenue.toLocaleString()],
+      ['Total Expenses', 'SSP' + report.totalExpenses.toLocaleString()],
+      ['Net Revenue', 'SSP' + report.netRevenue.toLocaleString()],
       [],
       ['ORDERS'],
       ['Total Orders', report.totalOrders],
       ['Paid Orders', report.paidOrdersCount],
       ['Cancelled Orders', report.cancelledOrders],
       ['Returned Items', report.returnedItems],
-      ['Return Value', '₦' + report.returnedValue.toLocaleString()],
-      ['Avg Order Value', '₦' + report.avgOrderValue.toLocaleString()],
+      ['Return Value', 'SSP' + report.returnedValue.toLocaleString()],
+      ['Avg Order Value', 'SSP' + report.avgOrderValue.toLocaleString()],
       [],
       ['PAYMENT METHODS'],
       ...Object.entries(report.byPayment)
         .filter(([, v]) => v > 0)
-        .map(([k, v]) => [k, '₦' + v.toLocaleString()]),
+        .map(([k, v]) => [k, 'SSP' + v.toLocaleString()]),
       [],
       ['ITEMS SOLD'],
       ['Item', 'Qty Sold', 'Returned', 'Return Rate', 'Revenue'],
@@ -540,13 +528,13 @@ export default function Reports() {
           i.quantity,
           i.returned,
           rate > 0 ? `${rate}%` : '–',
-          '₦' + i.revenue.toLocaleString(),
+          'SSP' + i.revenue.toLocaleString(),
         ]
       }),
       [],
       ['STAFF PERFORMANCE'],
       ['Staff', 'Orders', 'Revenue'],
-      ...report.staffPerformance.map((s) => [s.name, s.orders, '₦' + s.revenue.toLocaleString()]),
+      ...report.staffPerformance.map((s) => [s.name, s.orders, 'SSP' + s.revenue.toLocaleString()]),
     ]
     const csv = rows.map((r) => r.join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
@@ -567,7 +555,6 @@ export default function Reports() {
         [],
         ['Metric', 'Value'],
         ['Gross Revenue (F&B)', report.grossRevenue],
-        ['Room Revenue', report.roomRevenue],
         ['Total Revenue', report.totalRevenue],
         ['Total Expenses', report.totalExpenses],
         ['Net Revenue', report.netRevenue],
@@ -624,13 +611,12 @@ export default function Reports() {
       doc,
       ['Metric', 'Value'],
       [
-        ['Gross Revenue', '₦' + r.grossRevenue.toLocaleString()],
-        ['Room Revenue', '₦' + r.roomRevenue.toLocaleString()],
-        ['Total Expenses', '₦' + r.totalExpenses.toLocaleString()],
-        ['Net Revenue', '₦' + r.netRevenue.toLocaleString()],
+        ['Gross Revenue', 'SSP' + r.grossRevenue.toLocaleString()],
+        ['Total Expenses', 'SSP' + r.totalExpenses.toLocaleString()],
+        ['Net Revenue', 'SSP' + r.netRevenue.toLocaleString()],
         ['Total Orders', String(r.totalOrders)],
         ['Paid Orders', String(r.paidOrdersCount)],
-        ['Avg Order Value', '₦' + r.avgOrderValue.toLocaleString()],
+        ['Avg Order Value', 'SSP' + r.avgOrderValue.toLocaleString()],
       ],
       y + 2
     )
@@ -639,7 +625,7 @@ export default function Reports() {
       addTable(
         doc,
         ['Item', 'Qty', 'Revenue'],
-        r.topItems.map((i) => [i.name, String(i.quantity), '₦' + i.revenue.toLocaleString()]),
+        r.topItems.map((i) => [i.name, String(i.quantity), 'SSP' + i.revenue.toLocaleString()]),
         y + 2
       )
     }
@@ -663,7 +649,7 @@ export default function Reports() {
                   id: 'rep-daily',
                   title: 'Daily Report',
                   description:
-                    'Full trading summary for any selected day — total and net revenue, cash/POS/transfer breakdown, order count, top-selling items, per-waitron performance (including POS machine assigned), void log, room stay revenue, and payout deductions.',
+                    'Full trading summary for any selected day — total and net revenue, cash/POS/transfer breakdown, order count, top-selling items, per-waitron performance (including POS machine assigned), void log, and payout deductions.',
                 },
                 {
                   id: 'rep-monthly',
@@ -815,7 +801,7 @@ export default function Reports() {
                 </div>
                 <div className="text-right">
                   <p className="text-white font-bold text-3xl">
-                    ₦{report.totalRevenue.toLocaleString()}
+                    SSP{report.totalRevenue.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-sm">Total Revenue</p>
                   <button
@@ -839,25 +825,19 @@ export default function Reports() {
                 [
                   {
                     label: 'Gross F&B Revenue',
-                    value: '₦' + report.grossRevenue.toLocaleString(),
+                    value: 'SSP' + report.grossRevenue.toLocaleString(),
                     color: 'text-amber-400',
                     icon: TrendingUp,
                   },
                   {
-                    label: 'Room Revenue',
-                    value: '₦' + report.roomRevenue.toLocaleString(),
-                    color: 'text-blue-400',
-                    icon: Home,
-                  },
-                  {
                     label: 'Total Expenses',
-                    value: '₦' + report.totalExpenses.toLocaleString(),
+                    value: 'SSP' + report.totalExpenses.toLocaleString(),
                     color: 'text-red-400',
                     icon: Banknote,
                   },
                   {
                     label: 'Net Revenue',
-                    value: '₦' + report.netRevenue.toLocaleString(),
+                    value: 'SSP' + report.netRevenue.toLocaleString(),
                     color: 'text-green-400',
                     icon: TrendingUp,
                   },
@@ -881,13 +861,13 @@ export default function Reports() {
                   },
                   {
                     label: 'Returned Items',
-                    value: `${report.returnedItems} (₦${report.returnedValue.toLocaleString()})`,
+                    value: `${report.returnedItems} (SSP${report.returnedValue.toLocaleString()})`,
                     color: 'text-orange-400',
                     icon: ShoppingBag,
                   },
                   {
                     label: 'Avg Order Value',
-                    value: '₦' + report.avgOrderValue.toLocaleString(),
+                    value: 'SSP' + report.avgOrderValue.toLocaleString(),
                     color: 'text-purple-400',
                     icon: BarChart2,
                   },
@@ -901,7 +881,7 @@ export default function Reports() {
                     label: 'Revenue / Cover',
                     value:
                       report.revenuePerCover > 0
-                        ? '₦' + Math.round(report.revenuePerCover).toLocaleString()
+                        ? 'SSP' + Math.round(report.revenuePerCover).toLocaleString()
                         : '—',
                     color: 'text-amber-400',
                     icon: Users,
@@ -944,7 +924,7 @@ export default function Reports() {
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-gray-400">{item.label}</span>
                           <span className="text-white font-medium">
-                            ₦{item.value.toLocaleString()} (
+                            SSP{item.value.toLocaleString()} (
                             {report.grossRevenue
                               ? Math.round((item.value / report.grossRevenue) * 100)
                               : 0}
@@ -1026,7 +1006,7 @@ export default function Reports() {
                     <XAxis dataKey="label" tick={{ fill: '#6b7280', fontSize: 10 }} />
                     <YAxis
                       tick={{ fill: '#6b7280', fontSize: 10 }}
-                      tickFormatter={(v: number) => 'NGN' + (v / 1000).toFixed(0) + 'k'}
+                      tickFormatter={(v: number) => 'SSP' + (v / 1000).toFixed(0) + 'k'}
                     />
                     <Tooltip
                       contentStyle={{
@@ -1034,7 +1014,7 @@ export default function Reports() {
                         border: '1px solid #374151',
                         borderRadius: '8px',
                       }}
-                      formatter={(v: number) => ['₦' + v.toLocaleString(), 'Revenue']}
+                      formatter={(v: number) => ['SSP' + v.toLocaleString(), 'Revenue']}
                     />
                     <Bar dataKey="revenue" fill="#f59e0b" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -1064,7 +1044,7 @@ export default function Reports() {
                         ))}
                       </Pie>
                       <Tooltip
-                        formatter={(v: number) => ['₦' + v.toLocaleString(), 'Revenue']}
+                        formatter={(v: number) => ['SSP' + v.toLocaleString(), 'Revenue']}
                         contentStyle={{
                           background: '#111827',
                           border: '1px solid #374151',
@@ -1107,7 +1087,7 @@ export default function Reports() {
                           <span className="text-gray-600 text-xs">{cat.quantity} sold</span>
                         </div>
                         <span className="text-white font-medium text-sm">
-                          ₦{cat.revenue.toLocaleString()}
+                          SSP{cat.revenue.toLocaleString()}
                         </span>
                       </div>
                     ))}
@@ -1165,7 +1145,7 @@ export default function Reports() {
                               {returnRate}%
                             </td>
                             <td className="px-3 py-2.5 text-right text-white text-sm">
-                              ₦{item.revenue.toLocaleString()}
+                              SSP{item.revenue.toLocaleString()}
                             </td>
                           </tr>
                         )
@@ -1210,10 +1190,10 @@ export default function Reports() {
                             {s.orders}
                           </td>
                           <td className="px-3 py-2.5 text-right text-white font-bold text-sm whitespace-nowrap">
-                            ₦{s.revenue.toLocaleString()}
+                            SSP{s.revenue.toLocaleString()}
                           </td>
                           <td className="px-3 py-2.5 text-right text-gray-400 text-sm whitespace-nowrap hidden sm:table-cell">
-                            ₦{s.orders ? Math.round(s.revenue / s.orders).toLocaleString() : '0'}
+                            SSP{s.orders ? Math.round(s.revenue / s.orders).toLocaleString() : '0'}
                           </td>
                         </tr>
                       ))}
@@ -1249,7 +1229,7 @@ export default function Reports() {
                             {t.orders}
                           </td>
                           <td className="px-3 py-2.5 text-right text-amber-400 font-bold text-sm whitespace-nowrap">
-                            ₦{t.revenue.toLocaleString()}
+                            SSP{t.revenue.toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -1262,23 +1242,6 @@ export default function Reports() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
                 <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                  <Home size={16} className="text-amber-400" /> Room Revenue
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gray-800 rounded-xl p-4">
-                    <p className="text-gray-400 text-xs">Room Stays</p>
-                    <p className="text-white font-bold text-2xl">{report.roomStayCount}</p>
-                  </div>
-                  <div className="bg-gray-800 rounded-xl p-4">
-                    <p className="text-gray-400 text-xs">Revenue</p>
-                    <p className="text-amber-400 font-bold text-xl">
-                      ₦{report.roomRevenue.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
                   <AlertTriangle size={16} className="text-amber-400" /> Debtor Summary
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
@@ -1289,7 +1252,7 @@ export default function Reports() {
                   <div className="bg-gray-800 rounded-xl p-4">
                     <p className="text-gray-400 text-xs">Outstanding</p>
                     <p className="text-red-400 font-bold text-xl">
-                      ₦{report.totalDebt.toLocaleString()}
+                      SSP{report.totalDebt.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -1321,7 +1284,7 @@ export default function Reports() {
                       {report.payouts.map((p) => (
                         <tr key={p.id} className="border-b border-gray-800 last:border-0">
                           <td className="px-3 py-2.5 text-gray-500 text-xs">
-                            {new Date(p.created_at).toLocaleDateString('en-NG')}
+                            {new Date(p.created_at).toLocaleDateString('en-SS')}
                           </td>
                           <td className="px-3 py-2.5 text-white text-sm">{p.reason}</td>
                           <td className="px-3 py-2.5">
@@ -1330,7 +1293,7 @@ export default function Reports() {
                             </span>
                           </td>
                           <td className="px-3 py-2.5 text-right text-red-400 font-bold text-sm">
-                            ₦{p.amount?.toLocaleString()}
+                            SSP{p.amount?.toLocaleString()}
                           </td>
                         </tr>
                       ))}
@@ -1339,7 +1302,7 @@ export default function Reports() {
                           Total Expenses
                         </td>
                         <td className="px-3 py-2.5 text-right text-red-400 font-bold">
-                          ₦{report.totalExpenses.toLocaleString()}
+                          SSP{report.totalExpenses.toLocaleString()}
                         </td>
                       </tr>
                     </tbody>
@@ -1358,13 +1321,13 @@ export default function Reports() {
                 <div className="bg-gray-800 rounded-xl p-4">
                   <p className="text-gray-400 text-xs">Opening Float</p>
                   <p className="text-blue-400 font-bold text-xl">
-                    ₦{report.totalOpeningFloat.toLocaleString()}
+                    SSP{report.totalOpeningFloat.toLocaleString()}
                   </p>
                 </div>
                 <div className="bg-gray-800 rounded-xl p-4">
                   <p className="text-gray-400 text-xs">Closing Float</p>
                   <p className="text-green-400 font-bold text-xl">
-                    ₦{report.totalClosingFloat.toLocaleString()}
+                    SSP{report.totalClosingFloat.toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -1403,7 +1366,7 @@ export default function Reports() {
                             ctr('Z-REPORT — END OF DAY'),
                             div,
                             row('Period:', getPeriodLabel()),
-                            row('Printed:', new Date().toLocaleString('en-NG')),
+                            row('Printed:', new Date().toLocaleString('en-SS')),
                             div,
                             ctr('SALES SUMMARY'),
                             div,
@@ -1506,7 +1469,7 @@ export default function Reports() {
                         <div className="text-xs text-gray-500 mt-1">Z-REPORT — END OF DAY</div>
                         <div className="text-xs text-gray-500">{getPeriodLabel()}</div>
                         <div className="text-xs text-gray-400">
-                          Printed: {new Date().toLocaleString('en-NG')}
+                          Printed: {new Date().toLocaleString('en-SS')}
                         </div>
                       </div>
                       <div className="border-t border-dashed border-gray-400 my-3" />
@@ -1517,16 +1480,16 @@ export default function Reports() {
                           ['Cancelled Orders', report.cancelledOrders],
                           [
                             'Returned Items',
-                            `${report.returnedItems} (₦${report.returnedValue.toLocaleString()})`,
+                            `${report.returnedItems} (SSP${report.returnedValue.toLocaleString()})`,
                           ],
-                          ['Gross Revenue', '₦' + report.grossRevenue.toLocaleString()],
+                          ['Gross Revenue', 'SSP' + report.grossRevenue.toLocaleString()],
                           [
                             'VAT Collected (7.5%)',
-                            '₦' + vat.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                            'SSP' + vat.toLocaleString(undefined, { minimumFractionDigits: 2 }),
                           ],
                           [
                             'Total incl. VAT',
-                            '₦' +
+                            'SSP' +
                               totalWithVat.toLocaleString(undefined, { minimumFractionDigits: 2 }),
                           ],
                         ] as const
@@ -1540,11 +1503,11 @@ export default function Reports() {
                       <div className="font-bold text-xs uppercase mb-2">Payment Breakdown</div>
                       {(
                         [
-                          ['Cash', '₦' + cashTotal.toLocaleString()],
-                          ['Bank POS', '₦' + report.byPayment.bank_pos.toLocaleString()],
-                          ['Bank Transfer', '₦' + report.byPayment.transfer.toLocaleString()],
-                          ['Credit (Pay Later)', '₦' + creditTotal.toLocaleString()],
-                          ['Split Payment', '₦' + report.byPayment.split.toLocaleString()],
+                          ['Cash', 'SSP' + cashTotal.toLocaleString()],
+                          ['Bank POS', 'SSP' + report.byPayment.bank_pos.toLocaleString()],
+                          ['Bank Transfer', 'SSP' + report.byPayment.transfer.toLocaleString()],
+                          ['Credit (Pay Later)', 'SSP' + creditTotal.toLocaleString()],
+                          ['Split Payment', 'SSP' + report.byPayment.split.toLocaleString()],
                         ] as const
                       ).map(([label, value]) => (
                         <div key={label} className="flex justify-between my-1 text-sm">
@@ -1561,7 +1524,7 @@ export default function Reports() {
                       <div className="flex justify-between my-1 text-sm">
                         <span>Return Value</span>
                         <span className="text-orange-600 font-bold">
-                          ₦{report.returnedValue.toLocaleString()}
+                          SSP{report.returnedValue.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between my-1 text-sm">
@@ -1571,7 +1534,7 @@ export default function Reports() {
                       <div className="flex justify-between my-1 text-sm">
                         <span>Value Voided</span>
                         <span className="text-red-600 font-bold">
-                          ₦
+                          SSP
                           {(report.voids || [])
                             .reduce((s: number, v: VoidEntry) => s + (v.total_value || 0), 0)
                             .toLocaleString()}
@@ -1581,15 +1544,15 @@ export default function Reports() {
                       <div className="font-bold text-xs uppercase mb-2">Cash Reconciliation</div>
                       <div className="flex justify-between my-1 text-sm">
                         <span>Expected in Drawer</span>
-                        <span className="font-bold">₦{cashTotal.toLocaleString()}</span>
+                        <span className="font-bold">SSP{cashTotal.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between my-1 text-sm">
                         <span>Expenses/Payouts</span>
-                        <span>₦{report.totalExpenses.toLocaleString()}</span>
+                        <span>SSP{report.totalExpenses.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between my-1 text-sm font-bold border-t border-gray-300 pt-1 mt-1">
                         <span>Net Cash</span>
-                        <span>₦{(cashTotal - report.totalExpenses).toLocaleString()}</span>
+                        <span>SSP{(cashTotal - report.totalExpenses).toLocaleString()}</span>
                       </div>
                       <div className="border-t border-dashed border-gray-400 my-3" />
                       <div className="font-bold text-xs uppercase mb-2">Staff on Shift</div>

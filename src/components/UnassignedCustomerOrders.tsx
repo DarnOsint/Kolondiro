@@ -95,7 +95,7 @@ export default function UnassignedCustomerOrders() {
           </div>
           <p className="text-gray-500 text-xs mb-2">
             {(order.items as unknown[])?.length} item
-            {(order.items as unknown[])?.length !== 1 ? 's' : ''} · ₦
+            {(order.items as unknown[])?.length !== 1 ? 's' : ''} · SSP
             {(order.total_amount as number)?.toLocaleString()}
           </p>
           <div className="flex items-center gap-2">

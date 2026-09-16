@@ -406,11 +406,11 @@ export default function MenuManagement({ onBack }: Props) {
                       </div>
                       <h3 className="text-white font-medium text-sm truncate">{item.name}</h3>
                       <p className="text-amber-400 font-bold text-sm">
-                        ₦{item.price.toLocaleString()}
+                        SSP{item.price.toLocaleString()}
                       </p>
                       {item.rave_price != null && (
                         <p className="text-pink-400 font-bold text-xs">
-                          Rave: ₦{item.rave_price.toLocaleString()}
+                          Rave: SSP{item.rave_price.toLocaleString()}
                         </p>
                       )}
                     </div>
@@ -513,7 +513,7 @@ export default function MenuManagement({ onBack }: Props) {
                 </div>
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Base Price (₦) *
+                    Base Price (SSP) *
                   </label>
                   <input
                     type="number"
@@ -525,7 +525,7 @@ export default function MenuManagement({ onBack }: Props) {
                 </div>
                 <div>
                   <label className="text-gray-400 text-xs uppercase tracking-wide block mb-1">
-                    Rave Price (₦)
+                    Rave Price (SSP)
                   </label>
                   <input
                     type="number"

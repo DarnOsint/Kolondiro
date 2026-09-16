@@ -27,5 +27,6 @@ create policy "manager write benchmarks" on kitchen_stock_benchmarks
 
 -- Also add guest_id_number column to room_stays if not already present
 -- (added in apartment dashboard polish session)
-alter table room_stays
-  add column if not exists guest_id_number text;
+-- OBSOLETE — rooms/room_stays feature removed (tables dropped from live DB).
+-- alter table room_stays
+--   add column if not exists guest_id_number text;

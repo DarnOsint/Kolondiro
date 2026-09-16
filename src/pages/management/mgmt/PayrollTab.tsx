@@ -42,7 +42,7 @@ const getMonthStr = (offset = 0) => {
 
 const monthLabel = (m: string) => {
   const [y, mo] = m.split('-')
-  return new Date(parseInt(y), parseInt(mo) - 1).toLocaleDateString('en-NG', {
+  return new Date(parseInt(y), parseInt(mo) - 1).toLocaleDateString('en-SS', {
     month: 'long',
     year: 'numeric',
   })
@@ -159,7 +159,7 @@ export default function PayrollTab() {
       .from('debtors')
       .select('name, current_balance, recorded_by_name')
       .in('status', ['outstanding', 'partial'])
-      .in('debt_type', ['credit_order', 'table_order', 'fridge', 'bar_tab', 'room_stay'])
+      .in('debt_type', ['credit_order', 'table_order', 'fridge', 'bar_tab'])
     const creditByStaff: Record<string, number> = {}
     for (const d of (unpaidDebts || []) as any[]) {
       // "recorded_by_name" is the waitron/staff who recorded the pay-later debt.
@@ -500,7 +500,6 @@ export default function PayrollTab() {
     'hypeman',
     'games_master',
     'shisha_attendant',
-    'apartment_manager',
     'social_media_manager',
   ]
 
@@ -568,18 +567,18 @@ export default function PayrollTab() {
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
-          { label: 'Gross Pay', value: `₦${totalGross.toLocaleString()}`, color: 'text-white' },
+          { label: 'Gross Pay', value: `SSP${totalGross.toLocaleString()}`, color: 'text-white' },
           {
             label: 'Outstanding',
-            value: `₦${totalOutstanding.toLocaleString()}`,
+            value: `SSP${totalOutstanding.toLocaleString()}`,
             color: totalOutstanding > 0 ? 'text-red-400' : 'text-gray-400',
           },
           {
             label: 'Docking',
-            value: `₦${totalDocking.toLocaleString()}`,
+            value: `SSP${totalDocking.toLocaleString()}`,
             color: totalDocking > 0 ? 'text-amber-400' : 'text-gray-400',
           },
-          { label: 'Net Payable', value: `₦${totalNet.toLocaleString()}`, color: 'text-green-400' },
+          { label: 'Net Payable', value: `SSP${totalNet.toLocaleString()}`, color: 'text-green-400' },
         ].map((k) => (
           <div
             key={k.label}
@@ -717,7 +716,7 @@ export default function PayrollTab() {
                             className="text-[10px] text-gray-500 text-right"
                             title="Cash shortage from daily reconciliation"
                           >
-                            shortage ₦{(m.shortages_outstanding || 0).toLocaleString()}
+                            shortage SSP{(m.shortages_outstanding || 0).toLocaleString()}
                           </span>
                         )}
                         {(m.debts_outstanding || 0) > 0 && (
@@ -725,12 +724,12 @@ export default function PayrollTab() {
                             className="text-[10px] text-amber-400 text-right"
                             title="Unpaid credit debts owed"
                           >
-                            debts ₦{(m.debts_outstanding || 0).toLocaleString()}
+                            debts SSP{(m.debts_outstanding || 0).toLocaleString()}
                           </span>
                         )}
                         {totalOutstandingFor(m) > 0 && (
                           <span className="text-[10px] text-red-400 font-semibold text-right">
-                            total ₦{totalOutstandingFor(m).toLocaleString()}
+                            total SSP{totalOutstandingFor(m).toLocaleString()}
                           </span>
                         )}
                       </div>
@@ -749,7 +748,7 @@ export default function PayrollTab() {
                     <td
                       className={`text-right px-3 py-2 font-bold ${net > 0 ? 'text-green-400' : 'text-gray-500'}`}
                     >
-                      ₦{net.toLocaleString()}
+                      SSP{net.toLocaleString()}
                     </td>
                   </tr>
                 )
@@ -760,15 +759,15 @@ export default function PayrollTab() {
                 <td className="text-white px-3 py-2" colSpan={5}>
                   TOTAL ({rows.length} staff)
                 </td>
-                <td className="text-white text-right px-2 py-2">₦{totalGross.toLocaleString()}</td>
+                <td className="text-white text-right px-2 py-2">SSP{totalGross.toLocaleString()}</td>
                 <td className="text-red-400 text-right px-2 py-2">
-                  ₦{totalOutstanding.toLocaleString()}
+                  SSP{totalOutstanding.toLocaleString()}
                 </td>
                 <td className="text-amber-400 text-right px-2 py-2">
-                  ₦{totalDocking.toLocaleString()}
+                  SSP{totalDocking.toLocaleString()}
                 </td>
                 <td className="text-green-400 text-right px-3 py-2">
-                  ₦{totalNet.toLocaleString()}
+                  SSP{totalNet.toLocaleString()}
                 </td>
               </tr>
             </tfoot>
@@ -822,7 +821,7 @@ export default function PayrollTab() {
               />
               <input
                 type="number"
-                placeholder="Daily Rate (₦)"
+                placeholder="Daily Rate (SSP)"
                 value={newStaff.salary}
                 onChange={(e) => setNewStaff((p) => ({ ...p, salary: e.target.value }))}
                 className="w-full bg-gray-900 border border-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-amber-500"

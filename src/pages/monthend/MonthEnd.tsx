@@ -75,9 +75,9 @@ interface DebtorPreview {
   recovered: number
 }
 
-const fmt = (n: number) => `₦${(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
+const fmt = (n: number) => `SSP${(n || 0).toLocaleString('en-SS', { minimumFractionDigits: 2 })}`
 const fmtDate = (d: string) =>
-  new Date(d).toLocaleDateString('en-NG', {
+  new Date(d).toLocaleDateString('en-SS', {
     timeZone: 'Africa/Lagos',
     day: '2-digit',
     month: 'short',

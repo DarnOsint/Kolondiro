@@ -550,83 +550,10 @@ CREATE INDEX IF NOT EXISTS idx_service_log_order ON service_log(order_id);
 CREATE INDEX IF NOT EXISTS idx_service_log_served_at ON service_log(served_at DESC);
 
 -- ============================================================================
--- 3. ROOMS / APARTMENTS / PUSH
+-- 3. PUSH
 -- ============================================================================
 
--- 3.1 rooms ──────────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS rooms (
-  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name          text NOT NULL,
-  room_number   text,
-  room_type     text NOT NULL DEFAULT 'standard',
-  floor         integer NOT NULL DEFAULT 0,
-  capacity      integer NOT NULL DEFAULT 2,
-  rate_per_night numeric(12,2) NOT NULL DEFAULT 0,
-  status        text NOT NULL DEFAULT 'available'
-                CHECK (status IN ('available','occupied','cleaning','maintenance')),
-  amenities     text,
-  notes         text,
-  created_at    timestamptz DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS idx_rooms_status ON rooms(status);
-
--- 3.2 room_stays ─────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS room_stays (
-  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  room_id          uuid REFERENCES rooms(id) ON DELETE CASCADE,
-  room_name        text,
-  guest_name       text NOT NULL,
-  guest_phone      text,
-  guest_email      text,
-  id_type          text,
-  id_number        text,
-  guest_id_number  text,
-  num_guests       integer NOT NULL DEFAULT 1,
-  adults           integer,
-  children         integer,
-  check_in_at      timestamptz,
-  check_out_at     timestamptz,
-  check_in_date    date,
-  check_out_date   date,
-  check_in_time    text,
-  nights           integer NOT NULL DEFAULT 1,
-  rate_per_night   numeric(12,2) NOT NULL DEFAULT 0,
-  total_amount     numeric(12,2) NOT NULL DEFAULT 0,
-  amount_paid      numeric(12,2) NOT NULL DEFAULT 0,
-  payment_method   text,
-  payment_reference text,
-  notes            text,
-  status           text NOT NULL DEFAULT 'active'
-                   CHECK (status IN ('active','checked_out','overstay')),
-  checked_in_by    uuid,
-  checked_in_by_name text,
-  actual_checkout_at timestamptz,
-  actual_check_out timestamptz,
-  created_at       timestamptz NOT NULL DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS idx_room_stays_active ON room_stays(status) WHERE status = 'active';
-CREATE INDEX IF NOT EXISTS idx_room_stays_room ON room_stays(room_id, created_at DESC);
-
--- 3.3 room_service_orders ────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS room_service_orders (
-  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  room_id          uuid REFERENCES rooms(id) ON DELETE SET NULL,
-  room_name        text,
-  stay_id          uuid,
-  items            jsonb NOT NULL DEFAULT '[]',
-  service_type     text,
-  total_amount     numeric(12,2) NOT NULL DEFAULT 0,
-  status           text NOT NULL DEFAULT 'pending'
-                   CHECK (status IN ('pending','preparing','delivered')),
-  requested_by     uuid,
-  requested_by_name text,
-  notes            text,
-  created_at       timestamptz NOT NULL DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS idx_rso_status ON room_service_orders(status, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_rso_room ON room_service_orders(room_id, created_at DESC);
-
--- 3.4 push_subscriptions ─────────────────────────────────────────────────────
+-- 3.1 push_subscriptions ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS push_subscriptions (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   staff_id     uuid REFERENCES profiles(id) ON DELETE CASCADE,
@@ -840,53 +767,6 @@ CREATE INDEX IF NOT EXISTS service_ratings_created_at_idx ON public.service_rati
 CREATE INDEX IF NOT EXISTS service_ratings_zone_id_idx ON public.service_ratings (zone_id);
 
 -- ============================================================================
--- 5. CV / CCTV TABLES
--- ============================================================================
-CREATE TABLE IF NOT EXISTS cv_people_counts (
-  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  occupancy     integer NOT NULL DEFAULT 0,
-  created_at    timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS cv_alerts (
-  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  camera_id     text NOT NULL,
-  alert_type    text NOT NULL,
-  severity      text NOT NULL CHECK (severity IN ('low','medium','high','critical')),
-  description   text,
-  resolved      boolean NOT NULL DEFAULT false,
-  created_at    timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS cv_zone_heatmaps (
-  id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  zone_label          text NOT NULL,
-  person_count        integer NOT NULL DEFAULT 0,
-  avg_dwell_seconds   integer NOT NULL DEFAULT 0,
-  created_at          timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS cv_till_events (
-  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  alert_type    text NOT NULL,
-  created_at    timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS cv_shelf_events (
-  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  drink_name    text,
-  alert_level   text NOT NULL CHECK (alert_level IN ('normal','low','critical','missing')),
-  created_at    timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE INDEX IF NOT EXISTS idx_cv_people_counts_created   ON cv_people_counts (created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_cv_alerts_created          ON cv_alerts (created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_cv_alerts_resolved         ON cv_alerts (resolved, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_cv_zone_heatmaps_created   ON cv_zone_heatmaps (created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_cv_till_events_created     ON cv_till_events (created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_cv_shelf_events_created    ON cv_shelf_events (created_at DESC);
-
--- ============================================================================
 -- 6. RLS — permissive app-wide access (anon + authenticated)
 --    Mirrors the original DB where the PIN-session app operates as anon.
 --    The REAL control is the owner-escalation trigger (section 7).
@@ -901,11 +781,10 @@ DECLARE
     'inventory','suppliers','purchase_orders','restock_log','kitchen_stock',
     'kitchen_stock_entries','returns_log','debtors','debt_payments','debtor_payments',
     'bank_accounts','till_sessions','payouts','attendance','period_closes',
-    'period_stock_counts','service_log','rooms','room_stays','room_service_orders',
+    'period_stock_counts','service_log',
     'push_subscriptions','store_requests','void_requests','bar_chiller_stock',
     'bar_issue_log','kitchen_fridge_log','kitchen_stock_benchmarks','game_types',
-    'game_sales','shisha_variants','shisha_sales','payroll','service_ratings',
-    'cv_people_counts','cv_alerts','cv_zone_heatmaps','cv_till_events','cv_shelf_events'
+    'game_sales','shisha_variants','shisha_sales','payroll','service_ratings'
   ];
 BEGIN
   FOREACH t IN ARRAY tables_to_open LOOP
@@ -1076,7 +955,7 @@ CREATE TRIGGER rate_limit_customer_orders
   BEFORE INSERT ON customer_orders
   FOR EACH ROW EXECUTE FUNCTION check_customer_order_rate_limit();
 
--- 7.7 Enforce ₦50,000/day payout limit per staff
+-- 7.7 Enforce SSP50,000/day payout limit per staff
 CREATE OR REPLACE FUNCTION check_daily_payout_limit()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -1087,7 +966,7 @@ BEGIN
     FROM payouts
    WHERE DATE(created_at AT TIME ZONE 'Africa/Lagos') = DATE(NOW() AT TIME ZONE 'Africa/Lagos');
   IF daily_total + NEW.amount > payout_limit THEN
-    RAISE EXCEPTION 'Daily payout limit of ₦% exceeded. Total so far: ₦%. Requested: ₦%',
+    RAISE EXCEPTION 'Daily payout limit of SSP% exceeded. Total so far: SSP%. Requested: SSP%',
       payout_limit, daily_total, NEW.amount;
   END IF;
   RETURN NEW;
@@ -1231,11 +1110,10 @@ DECLARE
     'purchase_orders','restock_log','kitchen_stock','kitchen_stock_entries',
     'returns_log','debtors','debt_payments','debtor_payments','bank_accounts',
     'till_sessions','payouts','attendance','period_closes','period_stock_counts',
-    'service_log','rooms','room_stays','room_service_orders','push_subscriptions',
+    'service_log','push_subscriptions',
     'store_requests','void_requests','bar_chiller_stock','bar_issue_log',
     'kitchen_fridge_log','kitchen_stock_benchmarks','game_types','game_sales',
-    'shisha_variants','shisha_sales','payroll','service_ratings',
-    'cv_people_counts','cv_alerts','cv_zone_heatmaps','cv_till_events','cv_shelf_events'
+    'shisha_variants','shisha_sales','payroll','service_ratings'
   ];
 BEGIN
   FOREACH t IN ARRAY rt_tables LOOP

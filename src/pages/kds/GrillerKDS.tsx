@@ -3,8 +3,6 @@ import { supabase } from '../../lib/supabase'
 import { sendPushToStaff } from '../../hooks/usePushNotifications'
 import { audit } from '../../lib/audit'
 import { HelpTooltip } from '../../components/HelpTooltip'
-import { useGeofence } from '../../hooks/useGeofence'
-import GeofenceBlock from '../../components/GeofenceBlock'
 import { useAuth } from '../../context/AuthContext'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import {
@@ -168,7 +166,7 @@ function GrillerKDSInner() {
       fmtRow('Table:', ticket.tableName ?? 'N/A'),
       fmtRow(
         'Time:',
-        new Date(ticket.createdAt).toLocaleTimeString('en-NG', {
+        new Date(ticket.createdAt).toLocaleTimeString('en-SS', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: true,
@@ -241,7 +239,7 @@ function GrillerKDSInner() {
       fmtRow('Table:', ticket.tableName ?? 'N/A'),
       fmtRow(
         'Time:',
-        new Date(getItemTime(pending[0], ticket.createdAt)).toLocaleTimeString('en-NG', {
+        new Date(getItemTime(pending[0], ticket.createdAt)).toLocaleTimeString('en-SS', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: true,
@@ -274,7 +272,6 @@ function GrillerKDSInner() {
     }
   }
   const toast = useToast()
-  const { status: geoStatus, distance: geoDist, location: geoLocation } = useGeofence('main')
   const [tickets, setTickets] = useState<GrillerTicket[]>([])
   const [loading, setLoading] = useState(true)
   const [completing, setCompleting] = useState<Record<string, boolean>>({})
@@ -647,8 +644,6 @@ function GrillerKDSInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (geoStatus === 'outside')
-    return <GeofenceBlock status={geoStatus} distance={geoDist} location={geoLocation} />
   if (loading)
     return (
       <div className="min-h-full bg-gray-950 flex items-center justify-center">
@@ -851,7 +846,7 @@ function GrillerKDSInner() {
                   Grill Returns — {returnHistory.length} total
                 </p>
                 <p className="text-gray-400 text-xs font-bold">
-                  ₦
+                  SSP
                   {returnHistory
                     .filter((r) => r.status === 'accepted' || r.status === 'bar_accepted')
                     .reduce((s, r) => s + (r.item_total || 0), 0)
@@ -892,7 +887,7 @@ function GrillerKDSInner() {
                         {r.status === 'bar_accepted' ? 'grill accepted' : r.status}
                       </span>
                       <p className="text-gray-400 text-xs mt-1">
-                        ₦{(r.item_total || 0).toLocaleString()}
+                        SSP{(r.item_total || 0).toLocaleString()}
                       </p>
                     </div>
                   </div>
@@ -900,7 +895,7 @@ function GrillerKDSInner() {
                     <p className="text-gray-500 text-xs italic">Reason: {r.return_reason}</p>
                   )}
                   <p className="text-gray-600 text-[10px] mt-1">
-                    {new Date(r.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(r.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,
@@ -909,7 +904,7 @@ function GrillerKDSInner() {
                       <>
                         {' '}
                         — resolved{' '}
-                        {new Date(r.resolved_at).toLocaleTimeString('en-NG', {
+                        {new Date(r.resolved_at).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true,

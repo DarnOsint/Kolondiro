@@ -117,12 +117,12 @@ export default function TipsTab({ dateRange }: Props) {
   const totalDisbursed = summaries.reduce((s, w) => s + w.disbursed, 0)
 
   const handlePrint = () => {
-    const date = new Date().toLocaleDateString('en-NG', {
+    const date = new Date().toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
-    const time = new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' })
+    const time = new Date().toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit' })
 
     const summaryRows = summaries
       .map(
@@ -131,9 +131,9 @@ export default function TipsTab({ dateRange }: Props) {
         <td style="padding:6px 8px;border-bottom:1px solid #eee;">${i + 1}</td>
         <td style="padding:6px 8px;border-bottom:1px solid #eee;font-weight:600;">${w.waitron_name}</td>
         <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:center;">${w.tip_count}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">₦${w.pending.toLocaleString()}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">₦${w.disbursed.toLocaleString()}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">₦${w.total_tips.toLocaleString()}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">SSP${w.pending.toLocaleString()}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">SSP${w.disbursed.toLocaleString()}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">SSP${w.total_tips.toLocaleString()}</td>
       </tr>
     `
       )
@@ -143,12 +143,12 @@ export default function TipsTab({ dateRange }: Props) {
       .map(
         (t) => `
       <tr>
-        <td style="padding:5px 8px;border-bottom:1px solid #eee;font-size:11px;">${new Date(t.created_at).toLocaleString('en-NG')}</td>
+        <td style="padding:5px 8px;border-bottom:1px solid #eee;font-size:11px;">${new Date(t.created_at).toLocaleString('en-SS')}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #eee;">${t.waitron_name}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #eee;">${t.table_name || '—'}</td>
-        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;">₦${t.order_total.toLocaleString()}</td>
-        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;">₦${t.amount_received.toLocaleString()}</td>
-        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:bold;color:green;">₦${t.tip_amount.toLocaleString()}</td>
+        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;">SSP${t.order_total.toLocaleString()}</td>
+        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;">SSP${t.amount_received.toLocaleString()}</td>
+        <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:bold;color:green;">SSP${t.tip_amount.toLocaleString()}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #eee;text-align:center;">
           <span style="background:${t.status === 'disbursed' ? '#d1fae5' : '#fef3c7'};color:${t.status === 'disbursed' ? '#065f46' : '#92400e'};padding:2px 8px;border-radius:99px;font-size:11px;">
             ${t.status}
@@ -176,9 +176,9 @@ export default function TipsTab({ dateRange }: Props) {
         <h1>Kolondiro — Tips Report</h1>
         <p>${dateRange.from} to ${dateRange.to} &nbsp;|&nbsp; Printed at ${time} on ${date}</p>
         <div class="totals">
-          Total Tips: ₦${totalTips.toLocaleString()} &nbsp;|&nbsp;
-          Pending Disbursement: ₦${totalPending.toLocaleString()} &nbsp;|&nbsp;
-          Disbursed: ₦${totalDisbursed.toLocaleString()}
+          Total Tips: SSP${totalTips.toLocaleString()} &nbsp;|&nbsp;
+          Pending Disbursement: SSP${totalPending.toLocaleString()} &nbsp;|&nbsp;
+          Disbursed: SSP${totalDisbursed.toLocaleString()}
         </div>
         <h2>Summary by Waitron</h2>
         <table><thead><tr>
@@ -202,7 +202,7 @@ export default function TipsTab({ dateRange }: Props) {
     }, 300)
   }
 
-  const fmt = (n: number) => `₦${n.toLocaleString()}`
+  const fmt = (n: number) => `SSP${n.toLocaleString()}`
 
   return (
     <div className="p-4 space-y-4">
@@ -329,7 +329,7 @@ export default function TipsTab({ dateRange }: Props) {
                     <p className="text-gray-500 text-xs">Order: {fmt(tip.order_total)}</p>
                     <p className="text-gray-500 text-xs">Received: {fmt(tip.amount_received)}</p>
                     <p className="text-xs text-gray-500">
-                      {new Date(tip.created_at).toLocaleString('en-NG', {
+                      {new Date(tip.created_at).toLocaleString('en-SS', {
                         day: '2-digit',
                         month: 'short',
                         hour: '2-digit',

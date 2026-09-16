@@ -74,12 +74,12 @@ const fmtRangeLabel = (period: Period, anchorDate: string) => {
   if (period === 'day') return anchorDate
 
   const { start, end } = periodWindow(period, anchorDate)
-  const s = new Date(start).toLocaleDateString('en-NG', {
+  const s = new Date(start).toLocaleDateString('en-SS', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   })
-  const e = new Date(new Date(end).getTime() - 1).toLocaleDateString('en-NG', {
+  const e = new Date(new Date(end).getTime() - 1).toLocaleDateString('en-SS', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

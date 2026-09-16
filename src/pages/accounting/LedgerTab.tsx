@@ -26,7 +26,7 @@ type LedgerPayoutEntry = LedgerEntry & {
 
 type LedgerRecord = LedgerOrderEntry | LedgerPayoutEntry
 
-const formatMoney = (amount: number) => `₦${Number(amount || 0).toLocaleString()}`
+const formatMoney = (amount: number) => `SSP${Number(amount || 0).toLocaleString()}`
 const toDateInput = (value: Date) => value.toISOString().slice(0, 10)
 const sessionStart = (value: string) => {
   const date = new Date(`${value}T08:00:00`)
@@ -194,8 +194,8 @@ export default function LedgerTab({ dateRange }: Props) {
   const exportPDF = () => {
     const doc = createPDF('General Ledger', activePeriod.label)
     const body = filteredRecords.map((entry) => [
-      new Date(entry.date).toLocaleDateString('en-NG'),
-      new Date(entry.date).toLocaleTimeString('en-NG', {
+      new Date(entry.date).toLocaleDateString('en-SS'),
+      new Date(entry.date).toLocaleTimeString('en-SS', {
         hour: '2-digit',
         minute: '2-digit',
       }),
@@ -384,10 +384,10 @@ export default function LedgerTab({ dateRange }: Props) {
                       className={`border-b border-gray-800 last:border-0 ${index % 2 === 0 ? '' : 'bg-gray-800/20'}`}
                     >
                       <td className="px-4 py-3 text-gray-300 text-sm whitespace-nowrap">
-                        {new Date(entry.date).toLocaleDateString('en-NG')}
+                        {new Date(entry.date).toLocaleDateString('en-SS')}
                       </td>
                       <td className="px-4 py-3 text-gray-400 text-sm whitespace-nowrap">
-                        {new Date(entry.date).toLocaleTimeString('en-NG', {
+                        {new Date(entry.date).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           second: '2-digit',
@@ -472,11 +472,11 @@ export default function LedgerTab({ dateRange }: Props) {
                 {[
                   {
                     label: 'Date',
-                    value: new Date(selectedEntry.date).toLocaleDateString('en-NG'),
+                    value: new Date(selectedEntry.date).toLocaleDateString('en-SS'),
                   },
                   {
                     label: 'Time',
-                    value: new Date(selectedEntry.date).toLocaleTimeString('en-NG', {
+                    value: new Date(selectedEntry.date).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       second: '2-digit',

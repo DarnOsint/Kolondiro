@@ -78,9 +78,9 @@ export function buildReceipt(data: ReceiptData): Uint8Array {
   }
 
   const fmtDate = (d: string) =>
-    new Date(d).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' })
+    new Date(d).toLocaleDateString('en-SS', { day: '2-digit', month: 'short', year: 'numeric' })
   const fmtTime = (d: string) =>
-    new Date(d).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })
+    new Date(d).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })
 
   const pmRaw = (order.payment_method ?? '').toLowerCase()
   const pmLabel = pmRaw.startsWith('transfer:')
@@ -121,7 +121,7 @@ export function buildReceipt(data: ReceiptData): Uint8Array {
     )
     .forEach((item) => {
       const name = `${item.quantity}x ${(item.menu_items?.name ?? item.name ?? '').substring(0, 22)}`
-      const price = `N${(item.total_price ?? 0).toLocaleString()}`
+      const price = `SSP${(item.total_price ?? 0).toLocaleString()}`
       push(row(name, price))
       if (item.modifier_notes) push(text(`  > ${item.modifier_notes.substring(0, 36)}\n`))
     })
@@ -132,7 +132,7 @@ export function buildReceipt(data: ReceiptData): Uint8Array {
     cmd.bold,
     ...row(
       'TOTAL:',
-      `N${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      `SSP${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     ),
     cmd.boldOff
   )
@@ -143,13 +143,13 @@ export function buildReceipt(data: ReceiptData): Uint8Array {
     push(
       row(
         'Amt Received:',
-        `N${received.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        `SSP${received.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       )
     )
     push(
       row(
         'Tip (Thank you!):',
-        `N${tipAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        `SSP${tipAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       )
     )
   }

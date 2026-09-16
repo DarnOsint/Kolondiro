@@ -42,7 +42,7 @@ export default function RecentOrders({ orders: rawOrders }: Props) {
                 </p>
                 <p className="text-gray-500 text-xs truncate">
                   {order.profiles?.full_name} ·{' '}
-                  {new Date(order.created_at).toLocaleTimeString('en-NG', {
+                  {new Date(order.created_at).toLocaleTimeString('en-SS', {
                     timeZone: 'Africa/Lagos',
                     hour: '2-digit',
                     minute: '2-digit',
@@ -52,7 +52,7 @@ export default function RecentOrders({ orders: rawOrders }: Props) {
               </div>
               <div className="text-right flex-shrink-0">
                 <p className="text-white text-sm font-bold">
-                  ₦{order.total_amount?.toLocaleString()}
+                  SSP{order.total_amount?.toLocaleString()}
                 </p>
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full ${

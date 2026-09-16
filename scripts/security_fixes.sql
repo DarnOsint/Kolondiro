@@ -28,7 +28,7 @@ CREATE INDEX IF NOT EXISTS idx_orders_depleted_at ON orders(depleted_at) WHERE d
 
 
 -- ── Fix 3: Enforce petty cash limit in DB ──
--- Reject payout inserts that would exceed ₦50,000 daily total per staff
+-- Reject payout inserts that would exceed SSP50,000 daily total per staff
 CREATE OR REPLACE FUNCTION check_daily_payout_limit()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -41,7 +41,7 @@ BEGIN
    WHERE DATE(created_at AT TIME ZONE 'Africa/Lagos') = DATE(NOW() AT TIME ZONE 'Africa/Lagos');
 
   IF daily_total + NEW.amount > payout_limit THEN
-    RAISE EXCEPTION 'Daily payout limit of ₦% exceeded. Total so far: ₦%. Requested: ₦%',
+    RAISE EXCEPTION 'Daily payout limit of SSP% exceeded. Total so far: SSP%. Requested: SSP%',
       payout_limit, daily_total, NEW.amount;
   END IF;
   RETURN NEW;
@@ -95,7 +95,7 @@ BEGIN
      WHERE order_id = NEW.id
        AND void_qty IS NULL OR void_qty = 0;
 
-    -- Only override if client total differs by more than ₦1 (floating point tolerance)
+    -- Only override if client total differs by more than SSP1 (floating point tolerance)
     IF ABS(real_total - NEW.total_amount) > 1 THEN
       NEW.total_amount := real_total;
     END IF;

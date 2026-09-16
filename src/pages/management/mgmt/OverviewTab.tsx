@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import {
   ShoppingBag,
   LayoutDashboard,
-  BedDouble,
   Users,
   TrendingUp,
   Clock,
@@ -20,7 +19,6 @@ import UnassignedCustomerOrders from '../../../components/UnassignedCustomerOrde
 interface Stats {
   openOrders: number
   occupiedTables: number
-  occupiedRooms: number
   staffOnShift: number
   todayRevenue: number
 }
@@ -34,16 +32,14 @@ interface Props {
 export default function OverviewTab({ stats, pendingCount, onTabChange }: Props) {
   const navigate = useNavigate()
   const [totalTables, setTotalTables] = useState(0)
-  const [totalRooms, setTotalRooms] = useState(0)
 
   useEffect(() => {
-    Promise.all([
-      supabase.from('tables').select('id', { count: 'exact', head: true }),
-      supabase.from('rooms').select('id', { count: 'exact', head: true }),
-    ]).then(([t, r]) => {
-      setTotalTables(t.count || 0)
-      setTotalRooms(r.count || 0)
-    })
+    supabase
+      .from('tables')
+      .select('id', { count: 'exact', head: true })
+      .then((t) => {
+        setTotalTables(t.count || 0)
+      })
   }, [])
 
   const kpis = [
@@ -64,14 +60,6 @@ export default function OverviewTab({ stats, pendingCount, onTabChange }: Props)
       onClick: () => onTabChange('orders'),
     },
     {
-      label: 'Occupied Rooms',
-      value: `${stats.occupiedRooms}/${totalRooms || '—'}`,
-      icon: BedDouble,
-      color: 'text-purple-400',
-      bg: 'bg-purple-400/10',
-      onClick: () => navigate('/rooms'),
-    },
-    {
       label: 'Staff On Shift',
       value: stats.staffOnShift,
       icon: Users,
@@ -81,7 +69,7 @@ export default function OverviewTab({ stats, pendingCount, onTabChange }: Props)
     },
     {
       label: 'Revenue Today',
-      value: `₦${stats.todayRevenue.toLocaleString()}`,
+      value: `SSP${stats.todayRevenue.toLocaleString()}`,
       icon: TrendingUp,
       color: 'text-pink-400',
       bg: 'bg-pink-400/10',
@@ -119,12 +107,6 @@ export default function OverviewTab({ stats, pendingCount, onTabChange }: Props)
       sub: 'Reconcile food input, yield & benchmarks',
       action: () => onTabChange('kitchen'),
       icon: UtensilsCrossed,
-    },
-    {
-      label: 'Room Management',
-      sub: 'Check-in, check-out and room status',
-      action: () => navigate('/rooms'),
-      icon: BedDouble,
     },
     {
       label: 'Accounting',

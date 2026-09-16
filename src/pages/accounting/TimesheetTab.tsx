@@ -17,7 +17,7 @@ interface TimesheetEntry {
 }
 
 function fmtTime(d: string) {
-  return new Date(d).toLocaleTimeString('en-NG', {
+  return new Date(d).toLocaleTimeString('en-SS', {
     timeZone: 'Africa/Lagos',
     hour: '2-digit',
     minute: '2-digit',

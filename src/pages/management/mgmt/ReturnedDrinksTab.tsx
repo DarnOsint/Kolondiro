@@ -329,13 +329,13 @@ export default function ReturnedDrinksTab() {
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(date).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(date).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
     const fmtTime = (d: string) =>
-      new Date(d).toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', hour12: true })
+      new Date(d).toLocaleTimeString('en-SS', { hour: '2-digit', minute: '2-digit', hour12: true })
     const lines = [
       '',
       ctr("KOLONDIRO"),
@@ -523,7 +523,7 @@ export default function ReturnedDrinksTab() {
                   </span>
                   <span>·</span>
                   <span>
-                    {new Date(r.requested_at).toLocaleTimeString('en-NG', {
+                    {new Date(r.requested_at).toLocaleTimeString('en-SS', {
                       hour: '2-digit',
                       minute: '2-digit',
                       hour12: true,

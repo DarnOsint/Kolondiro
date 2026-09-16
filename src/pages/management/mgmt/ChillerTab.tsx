@@ -370,7 +370,7 @@ export default function ChillerTab() {
       return left + ' '.repeat(Math.max(1, W - left.length - rv.length)) + rv
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(date).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(date).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -569,7 +569,7 @@ export default function ChillerTab() {
                     Bar Sales Revenue
                   </p>
                   <p className="text-white text-2xl font-black mt-1">
-                    ₦{salesStats.revenue.toLocaleString()}
+                    SSP{salesStats.revenue.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-xs">{salesStats.qty} drinks sold</p>
                 </div>
@@ -580,7 +580,7 @@ export default function ChillerTab() {
                     .sort((a, b) => b[1] - a[1])
                     .map(([zone, rev]) => (
                       <div key={zone} className="text-center">
-                        <p className="text-amber-400 font-bold text-sm">₦{rev.toLocaleString()}</p>
+                        <p className="text-amber-400 font-bold text-sm">SSP{rev.toLocaleString()}</p>
                         <p className="text-gray-500 text-[9px] uppercase tracking-wider">{zone}</p>
                       </div>
                     ))}

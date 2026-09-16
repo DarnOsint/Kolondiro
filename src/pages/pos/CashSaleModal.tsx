@@ -468,12 +468,12 @@ export default function CashSaleModal({ type, menuItems, staffId, onSuccess, onC
       const pad = Math.max(0, Math.floor((W - str.length) / 2))
       return ' '.repeat(pad) + str
     }
-    const fmtDate = new Date().toLocaleDateString('en-NG', {
+    const fmtDate = new Date().toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
-    const fmtTime = new Date().toLocaleTimeString('en-NG', {
+    const fmtTime = new Date().toLocaleTimeString('en-SS', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
@@ -614,7 +614,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                 </div>
               ))}
           </div>
-          <p className="text-gray-600 text-xs">Total: ₦{total.toLocaleString()}</p>
+          <p className="text-gray-600 text-xs">Total: SSP{total.toLocaleString()}</p>
         </div>
       </div>
     )
@@ -635,7 +635,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
           {paymentMethod === 'cash' && change > 0 && (
             <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
               <p className="text-amber-400 text-xs mb-1">Change to return</p>
-              <p className="text-white text-2xl font-bold break-all">₦{change.toLocaleString()}</p>
+              <p className="text-white text-2xl font-bold break-all">SSP{change.toLocaleString()}</p>
             </div>
           )}
           <div className="flex gap-2">
@@ -734,7 +734,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                   onClick={() => setActiveTab('order')}
                   className="w-full bg-amber-500 text-black font-bold rounded-xl py-2.5 text-sm"
                 >
-                  View Order ({orderItems.length} items) — ₦{total.toLocaleString()} →
+                  View Order ({orderItems.length} items) — SSP{total.toLocaleString()} →
                 </button>
               </div>
             )}
@@ -748,7 +748,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                   >
                     <p className="text-white text-sm font-medium leading-tight">{item.name}</p>
                     <p className="text-amber-400 text-sm font-bold mt-1">
-                      ₦{item.price.toLocaleString()}
+                      SSP{item.price.toLocaleString()}
                     </p>
                     <p className="text-gray-500 text-xs mt-0.5">
                       {
@@ -823,7 +823,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                           </button>
                         </div>
                         <span className="text-amber-400 text-sm font-bold">
-                          ₦{item.total.toLocaleString()}
+                          SSP{item.total.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -889,8 +889,8 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                           <span
                             className={`text-xs shrink-0 ${qty > 0 ? 'text-amber-400 font-bold' : 'text-gray-600'}`}
                           >
-                            ₦{pack.price.toLocaleString()}
-                            {qty > 1 ? ` × ${qty} = ₦${(pack.price * qty).toLocaleString()}` : ''}
+                            SSP{pack.price.toLocaleString()}
+                            {qty > 1 ? ` × ${qty} = SSP${(pack.price * qty).toLocaleString()}` : ''}
                           </span>
                         </div>
                       )
@@ -906,7 +906,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                 {packFee > 0 && (
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-gray-500">Items subtotal</span>
-                    <span className="text-gray-400">₦{itemsTotal.toLocaleString()}</span>
+                    <span className="text-gray-400">SSP{itemsTotal.toLocaleString()}</span>
                   </div>
                 )}
                 {packItems.map((p) => (
@@ -914,13 +914,13 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     <span className="text-gray-500">
                       {p.qty}x {p.name}
                     </span>
-                    <span className="text-gray-400">₦{(p.qty * p.price).toLocaleString()}</span>
+                    <span className="text-gray-400">SSP{(p.qty * p.price).toLocaleString()}</span>
                   </div>
                 ))}
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Total</span>
                   <span className="text-amber-400 font-bold text-xl">
-                    ₦{total.toLocaleString()}
+                    SSP{total.toLocaleString()}
                   </span>
                 </div>
                 <div className="grid grid-cols-4 gap-1">
@@ -958,14 +958,14 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                           onClick={() => setCashTendered(a.toString())}
                           className="bg-gray-800 border border-gray-700 text-gray-400 text-xs rounded-lg py-1.5 hover:text-white transition-colors"
                         >
-                          ₦{(a / 1000).toFixed(0)}k
+                          SSP{(a / 1000).toFixed(0)}k
                         </button>
                       ))}
                     </div>
                     {cashTendered && parseFloat(cashTendered) >= total && (
                       <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-2 text-center">
                         <p className="text-green-400 text-xs">Change</p>
-                        <p className="text-white font-bold">₦{change.toLocaleString()}</p>
+                        <p className="text-white font-bold">SSP{change.toLocaleString()}</p>
                       </div>
                     )}
                   </div>
@@ -994,7 +994,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                 {paymentMethod === 'credit' && isTakeaway && (
                   <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2">
                     <p className="text-amber-400 text-xs text-center">
-                      ₦{total.toLocaleString()} will be added to {customerName || 'customer'}'s tab
+                      SSP{total.toLocaleString()} will be added to {customerName || 'customer'}'s tab
                     </p>
                   </div>
                 )}
@@ -1010,12 +1010,12 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                       }
                       const ctr = (s: string) =>
                         ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-                      const fmtDate = new Date().toLocaleDateString('en-NG', {
+                      const fmtDate = new Date().toLocaleDateString('en-SS', {
                         day: '2-digit',
                         month: 'short',
                         year: 'numeric',
                       })
-                      const fmtTime = new Date().toLocaleTimeString('en-NG', {
+                      const fmtTime = new Date().toLocaleTimeString('en-SS', {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true,
@@ -1086,7 +1086,7 @@ body { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-wei
                     disabled={!canPay()}
                     className="flex-1 bg-amber-500 hover:bg-amber-400 disabled:bg-gray-700 disabled:text-gray-500 text-black font-bold rounded-xl py-3 text-sm transition-colors"
                   >
-                    {processing ? 'Processing...' : `Confirm ₦${total.toLocaleString()}`}
+                    {processing ? 'Processing...' : `Confirm SSP${total.toLocaleString()}`}
                   </button>
                 </div>
               </div>

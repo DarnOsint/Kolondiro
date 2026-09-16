@@ -70,7 +70,7 @@ export function addFooter(doc: jsPDF): void {
     doc.setPage(i)
     doc.setFontSize(7)
     doc.setTextColor(150, 150, 150)
-    doc.text('Generated: ' + new Date().toLocaleString('en-NG'), 14, 290)
+    doc.text('Generated: ' + new Date().toLocaleString('en-SS'), 14, 290)
     doc.text('Page ' + i + ' of ' + pageCount, 196, 290, { align: 'right' })
   }
 }

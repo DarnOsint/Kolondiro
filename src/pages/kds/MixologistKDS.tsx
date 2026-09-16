@@ -6,8 +6,6 @@ import DailySummaryTab from './DailySummaryTab'
 import { useToast } from '../../context/ToastContext'
 import { RefreshCw, CheckCircle, X, BarChart2, History, LogOut, Plus, Send } from 'lucide-react'
 import ErrorBoundary from '../../components/ErrorBoundary'
-import { useGeofence } from '../../hooks/useGeofence'
-import GeofenceBlock from '../../components/GeofenceBlock'
 import type { KdsOrder } from './types'
 import { sendPushToStaff } from '../../hooks/usePushNotifications'
 
@@ -77,7 +75,6 @@ const currentBusinessDateWAT = () => {
 function MixologistKDSInner() {
   const { profile, signOut } = useAuth()
   const toast = useToast()
-  const { status: geoStatus, distance: geoDist, location: geoLocation } = useGeofence('main')
   const [orders, setOrders] = useState<KdsOrder[]>([])
   const [promptOrder, setPromptOrder] = useState<KdsOrder | null>(null)
   const [promptQueue, setPromptQueue] = useState<KdsOrder[]>([])
@@ -580,8 +577,6 @@ function MixologistKDSInner() {
     }
   }, [autoAcceptTodayPending, fetchOrders, fetchReturnHistory, loadRequests])
 
-  if (geoStatus === 'outside')
-    return <GeofenceBlock status={geoStatus} distance={geoDist} location={geoLocation} />
 
   if (loading) return <div className="p-6 text-amber-500">Loading...</div>
 
@@ -598,7 +593,7 @@ function MixologistKDSInner() {
                 </p>
                 <p className="text-gray-500 text-xs">
                   by {promptOrder.profiles?.full_name || 'Unknown'} ·{' '}
-                  {new Date(promptOrder.created_at).toLocaleTimeString('en-NG', {
+                  {new Date(promptOrder.created_at).toLocaleTimeString('en-SS', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true,
@@ -709,7 +704,7 @@ function MixologistKDSInner() {
                       {order.tables?.name || order.customer_name || 'Takeaway'}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(order.created_at).toLocaleTimeString('en-NG', {
+                      {new Date(order.created_at).toLocaleTimeString('en-SS', {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true,
@@ -855,7 +850,7 @@ function MixologistKDSInner() {
                 </p>
                 <p className="text-gray-500 text-xs">
                   Accepted at{' '}
-                  {new Date(r.resolved_at || r.requested_at).toLocaleTimeString('en-NG', {
+                  {new Date(r.resolved_at || r.requested_at).toLocaleTimeString('en-SS', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true,
@@ -986,7 +981,7 @@ function MixologistKDSInner() {
                           {r.items.map((it) => `${it.qty}x ${it.item}`).join(', ')}
                         </p>
                         <p className="text-gray-500 text-xs">
-                          {new Date(r.at).toLocaleTimeString('en-NG', {
+                          {new Date(r.at).toLocaleTimeString('en-SS', {
                             hour: '2-digit',
                             minute: '2-digit',
                             hour12: true,

@@ -327,7 +327,7 @@ export default function OverviewTab({
       return left + ' '.repeat(Math.max(1, W - left.length - r.length)) + r
     }
     const ctr = (s: string) => ' '.repeat(Math.max(0, Math.floor((W - s.length) / 2))) + s
-    const fmtDate = new Date(reconDate).toLocaleDateString('en-NG', {
+    const fmtDate = new Date(reconDate).toLocaleDateString('en-SS', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -338,7 +338,7 @@ export default function OverviewTab({
       ctr('DAILY RECONCILIATION'),
       div,
       row('Date:', fmtDate),
-      row('Printed:', new Date().toLocaleString('en-NG')),
+      row('Printed:', new Date().toLocaleString('en-SS')),
       div,
       ctr('SALES SUMMARY'),
       div,
@@ -427,42 +427,42 @@ export default function OverviewTab({
   const cards = [
     {
       label: 'Gross Revenue',
-      value: `₦${summary.total.toLocaleString()}`,
+      value: `SSP${summary.total.toLocaleString()}`,
       icon: TrendingUp,
       color: 'text-amber-400',
       bg: 'bg-amber-400/10',
     },
     {
       label: 'Net Revenue',
-      value: `₦${netRevenue.toLocaleString()}`,
+      value: `SSP${netRevenue.toLocaleString()}`,
       icon: DollarSign,
       color: 'text-green-400',
       bg: 'bg-green-400/10',
     },
     {
       label: 'Cash',
-      value: `₦${(summary.byMethod?.['Cash'] || 0).toLocaleString()}`,
+      value: `SSP${(summary.byMethod?.['Cash'] || 0).toLocaleString()}`,
       icon: Banknote,
       color: 'text-emerald-400',
       bg: 'bg-emerald-400/10',
     },
     {
       label: 'Bank POS',
-      value: `₦${(summary.byMethod?.['Bank POS'] || 0).toLocaleString()}`,
+      value: `SSP${(summary.byMethod?.['Bank POS'] || 0).toLocaleString()}`,
       icon: CreditCard,
       color: 'text-blue-400',
       bg: 'bg-blue-400/10',
     },
     {
       label: 'Transfer',
-      value: `₦${(summary.byMethod?.['Transfer'] || 0).toLocaleString()}`,
+      value: `SSP${(summary.byMethod?.['Transfer'] || 0).toLocaleString()}`,
       icon: Smartphone,
       color: 'text-purple-400',
       bg: 'bg-purple-400/10',
     },
     {
       label: 'Avg Order',
-      value: `₦${summary.avgOrder.toLocaleString()}`,
+      value: `SSP${summary.avgOrder.toLocaleString()}`,
       icon: Receipt,
       color: 'text-pink-400',
       bg: 'bg-pink-400/10',
@@ -514,7 +514,7 @@ export default function OverviewTab({
                   <span className="text-white text-sm font-medium">{w.name}</span>
                   <span className="text-gray-500 text-xs ml-2">{w.orders} orders</span>
                 </div>
-                <span className="text-amber-400 font-bold">₦{w.revenue.toLocaleString()}</span>
+                <span className="text-amber-400 font-bold">SSP{w.revenue.toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -530,7 +530,7 @@ export default function OverviewTab({
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-400">{item.label}</span>
                 <span className="text-white font-medium">
-                  ₦{item.value.toLocaleString()} (
+                  SSP{item.value.toLocaleString()} (
                   {summary.total ? Math.round((item.value / summary.total) * 100) : 0}%)
                 </span>
               </div>
@@ -555,7 +555,7 @@ export default function OverviewTab({
           <div className="flex items-center gap-2">
             <span className="text-gray-400 text-xs">
               {isSingleDay
-                ? new Date(reconDate).toLocaleDateString('en-NG', {
+                ? new Date(reconDate).toLocaleDateString('en-SS', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric',
@@ -632,11 +632,11 @@ export default function OverviewTab({
                 <div key={w.name} className="flex items-center gap-2">
                   <span className="text-gray-400 text-sm w-32 truncate">{w.name}</span>
                   <span className="text-gray-600 text-xs w-32">
-                    exp cash ₦{(w.cashExpected || 0).toLocaleString()}
+                    exp cash SSP{(w.cashExpected || 0).toLocaleString()}
                   </span>
                   <input
                     type="number"
-                    placeholder="₦ cash"
+                    placeholder="SSP cash"
                     value={recon.cashCollected[w.name] || ''}
                     onChange={(e) =>
                       setRecon((prev) => ({
@@ -651,11 +651,11 @@ export default function OverviewTab({
                     className="flex-1 bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500"
                   />
                   <span className="text-gray-600 text-xs w-36">
-                    exp POS+transfer ₦{(w.transferExpected || 0).toLocaleString()}
+                    exp POS+transfer SSP{(w.transferExpected || 0).toLocaleString()}
                   </span>
                   <input
                     type="number"
-                    placeholder="₦ POS/transfer"
+                    placeholder="SSP POS/transfer"
                     value={recon.transferReceipts[w.name] || ''}
                     onChange={(e) =>
                       setRecon((prev) => ({
@@ -674,7 +674,7 @@ export default function OverviewTab({
               <div className="flex justify-between pt-1 border-t border-gray-700">
                 <span className="text-gray-400 text-sm font-medium">Total Cash Collected</span>
                 <span className="text-emerald-400 font-bold">
-                  ₦{totalCashCollected.toLocaleString()}
+                  SSP{totalCashCollected.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -682,7 +682,7 @@ export default function OverviewTab({
                   Total POS and Transfer Receipts
                 </span>
                 <span className="text-purple-400 font-bold">
-                  ₦{totalTransferReceipts.toLocaleString()}
+                  SSP{totalTransferReceipts.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -707,25 +707,25 @@ export default function OverviewTab({
                 <div key={w.name} className="flex items-center gap-2">
                   <span className="text-gray-400 text-sm w-32 truncate">{w.name}</span>
                   <span className="text-gray-500 text-xs shrink-0">
-                    remitted ₦
+                    remitted SSP
                     {(
                       (recon.cashCollected[w.name] || 0) + (recon.transferReceipts[w.name] || 0)
                     ).toLocaleString()}
                   </span>
                   <span className="text-gray-500 text-xs shrink-0">
-                    expected ₦{((w.cashExpected || 0) + (w.transferExpected || 0)).toLocaleString()}
+                    expected SSP{((w.cashExpected || 0) + (w.transferExpected || 0)).toLocaleString()}
                   </span>
                   <span className="text-red-400 text-xs shrink-0">
-                    shortage: ₦{shortage.toLocaleString()}
+                    shortage: SSP{shortage.toLocaleString()}
                   </span>
                   {isSingleDay && excess > 0 && (
                     <span className="text-green-400 text-xs shrink-0">
-                      excess: ₦{excess.toLocaleString()}
+                      excess: SSP{excess.toLocaleString()}
                     </span>
                   )}
                   {credit > 0 && (
                     <span className="text-amber-400 text-xs shrink-0">
-                      Credit: ₦{credit.toLocaleString()}
+                      Credit: SSP{credit.toLocaleString()}
                     </span>
                   )}
                 </div>
@@ -747,13 +747,13 @@ export default function OverviewTab({
                     <div>
                       <p className="text-white text-xs font-medium">{d.name}</p>
                       <p className="text-gray-500 text-[10px]">
-                        {new Date(d.date).toLocaleDateString('en-NG', {
+                        {new Date(d.date).toLocaleDateString('en-SS', {
                           day: '2-digit',
                           month: 'short',
                           timeZone: 'Africa/Lagos',
                         })}
                         {' · '}
-                        {new Date(d.date).toLocaleTimeString('en-NG', {
+                        {new Date(d.date).toLocaleTimeString('en-SS', {
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true,
@@ -764,7 +764,7 @@ export default function OverviewTab({
                       {d.items && <p className="text-gray-400 text-[10px] mt-0.5">{d.items}</p>}
                     </div>
                     <span className="text-red-400 text-xs font-bold">
-                      ₦{d.amount.toLocaleString()}
+                      SSP{d.amount.toLocaleString()}
                     </span>
                   </div>
                 ))}
@@ -773,7 +773,7 @@ export default function OverviewTab({
           )}
           <div className="text-right text-sm text-gray-300 mt-2">
             Total Outstanding:{' '}
-            <span className="text-red-400 font-semibold">₦{totalOutstanding.toLocaleString()}</span>
+            <span className="text-red-400 font-semibold">SSP{totalOutstanding.toLocaleString()}</span>
           </div>
         </div>
 
@@ -782,28 +782,28 @@ export default function OverviewTab({
           <h4 className="text-white font-bold text-sm mb-3">End of Day Summary</h4>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Total Sales (POS)</span>
-            <span className="text-white font-bold">₦{expectedRevenue.toLocaleString()}</span>
+            <span className="text-white font-bold">SSP{expectedRevenue.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Cash Collected</span>
-            <span className="text-emerald-400">₦{totalCashCollected.toLocaleString()}</span>
+            <span className="text-emerald-400">SSP{totalCashCollected.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">POS and Transfer Receipts</span>
-            <span className="text-purple-400">₦{totalTransferReceipts.toLocaleString()}</span>
+            <span className="text-purple-400">SSP{totalTransferReceipts.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Expenses/Payouts</span>
-            <span className="text-red-400">₦{totalPayouts.toLocaleString()}</span>
+            <span className="text-red-400">SSP{totalPayouts.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Outstanding / Shortage (Waitrons)</span>
-            <span className="text-red-400">₦{totalOutstanding.toLocaleString()}</span>
+            <span className="text-red-400">SSP{totalOutstanding.toLocaleString()}</span>
           </div>
           <div className="border-t-2 border-gray-700 pt-2 mt-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Total Accounted For</span>
-              <span className="text-white font-bold">₦{totalReceived.toLocaleString()}</span>
+              <span className="text-white font-bold">SSP{totalReceived.toLocaleString()}</span>
             </div>
           </div>
           <div className="border-t-2 border-gray-600 pt-2">
@@ -825,7 +825,7 @@ export default function OverviewTab({
                 <span
                   className={`text-xl font-bold ${shortfall > 0 ? 'text-red-400' : shortfall < 0 ? 'text-green-400' : 'text-green-400'}`}
                 >
-                  ₦{Math.abs(shortfall).toLocaleString()}
+                  SSP{Math.abs(shortfall).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -843,7 +843,7 @@ export default function OverviewTab({
               <XAxis dataKey="day" tick={{ fill: '#6b7280', fontSize: 10 }} />
               <YAxis
                 tick={{ fill: '#6b7280', fontSize: 10 }}
-                tickFormatter={(v) => `₦${(v / 1000).toFixed(0)}k`}
+                tickFormatter={(v) => `SSP${(v / 1000).toFixed(0)}k`}
               />
               <Tooltip
                 contentStyle={{
@@ -852,7 +852,7 @@ export default function OverviewTab({
                   borderRadius: '8px',
                 }}
                 labelStyle={{ color: '#fff' }}
-                formatter={(v: number) => [`₦${v.toLocaleString()}`, 'Revenue']}
+                formatter={(v: number) => [`SSP${v.toLocaleString()}`, 'Revenue']}
               />
               <Line
                 type="monotone"
@@ -879,11 +879,11 @@ export default function OverviewTab({
         </div>
         <div className="flex items-center justify-between">
           <span className="text-gray-400">Total expenses this period</span>
-          <span className="text-red-400 font-bold text-xl">₦{totalPayouts.toLocaleString()}</span>
+          <span className="text-red-400 font-bold text-xl">SSP{totalPayouts.toLocaleString()}</span>
         </div>
         <div className="flex items-center justify-between mt-2">
           <span className="text-gray-400">Net after expenses</span>
-          <span className="text-green-400 font-bold text-xl">₦{netRevenue.toLocaleString()}</span>
+          <span className="text-green-400 font-bold text-xl">SSP{netRevenue.toLocaleString()}</span>
         </div>
       </div>
     </div>
