@@ -449,21 +449,13 @@ export default function Login() {
       </div>
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white/70 to-blue-50/70 backdrop-blur-sm ring-1 ring-white/70 shadow-lg shadow-blue-900/5 mb-6">
+          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white/70 to-blue-50/70 backdrop-blur-sm ring-1 ring-white/70 shadow-lg shadow-blue-900/5">
             <img
               src="/cyberville-logo.jpeg"
               alt="Cyberville"
               className="h-24 w-24 object-contain pointer-events-none select-none"
             />
           </div>
-          <h1 className="text-5xl font-extrabold tracking-tight">
-            <span className="bg-gradient-to-r from-[#2f6fd6] via-[#2563eb] to-[#0ea5e9] bg-clip-text text-transparent">
-              Cyberville
-            </span>
-          </h1>
-          <p className="text-gray-500 mt-3 text-sm font-medium tracking-wide">
-            Software Development Company
-          </p>
         </div>
 
         {sessionExpired && (
