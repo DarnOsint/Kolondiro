@@ -423,21 +423,21 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fcfaf5] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
       {/* ── animated aurora mesh ── */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-1/4 -left-1/4 w-[75rem] h-[75rem] rounded-full opacity-60 bg-[conic-gradient(from_0deg,#f5efe6,#efe6d8,#fdf6ec,#f5efe6)] blur-[110px] animate-[spin_45s_linear_infinite]" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-[75rem] h-[75rem] rounded-full opacity-50 bg-[conic-gradient(from_180deg,#f7f1e9,#eee4d4,#fffaf2,#f7f1e9)] blur-[110px] animate-[spin-rev_55s_linear_infinite]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full opacity-40 bg-gradient-to-br from-[#fffdf8] to-[#f3ecdf] blur-[90px] animate-[float-3_14s_ease-in-out_infinite]" />
+        <div className="absolute -top-1/4 -left-1/4 w-[75rem] h-[75rem] rounded-full opacity-60 bg-[conic-gradient(from_0deg,#ddeeff,#c8e4fb,#eef7ff,#ddeeff)] blur-[110px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute -bottom-1/4 -right-1/4 w-[75rem] h-[75rem] rounded-full opacity-50 bg-[conic-gradient(from_180deg,#d8ecfc,#c2dcf7,#f2faff,#d8ecfc)] blur-[110px] animate-[spin-rev_55s_linear_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full opacity-40 bg-gradient-to-br from-[#ffffff] to-[#dceeff] blur-[90px] animate-[float-3_14s_ease-in-out_infinite]" />
       </div>
       {/* ── fine dot grid ── */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(120,100,60,0.08)_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(47,111,214,0.08)_1px,transparent_1px)] [background-size:24px_24px]" />
       {/* ── rising glowing particles ── */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
         {PARTICLES.map((p, i) => (
           <div
             key={i}
-            className="absolute bottom-0 rounded-full bg-[#e8dfcf] shadow-[0_0_10px_rgba(200,180,140,0.8)]"
+            className="absolute bottom-0 rounded-full bg-[#35c8f5] shadow-[0_0_10px_rgba(53,200,245,0.7)]"
             style={{
               left: p.left,
               width: p.size,
@@ -449,7 +449,7 @@ export default function Login() {
       </div>
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white to-[#f7f2e9]/70 backdrop-blur-sm ring-1 ring-white/80 shadow-lg shadow-black/5">
+          <div className="inline-flex items-center justify-center p-4 rounded-[2rem] bg-gradient-to-br from-white to-blue-50/70 backdrop-blur-sm ring-1 ring-white/80 shadow-lg shadow-black/5">
             <img
               src="/cyberville-logo.jpeg"
               alt="Cyberville"
@@ -471,7 +471,7 @@ export default function Login() {
         )}
 
         {mode === 'pin' ? (
-          <p className="text-center text-xs text-purple-600/80 mb-4">
+          <p className="text-center text-xs text-[#2f6fd6]/80 mb-4">
             Manager or Owner?{' '}
             <button
               onClick={() => {
@@ -479,19 +479,19 @@ export default function Login() {
                 setError(null)
                 setPin('')
               }}
-              className="text-purple-600 hover:text-purple-700 underline font-semibold"
+              className="text-[#2f6fd6] hover:text-[#2a62bd] underline font-semibold"
             >
               Sign in with email
             </button>
           </p>
         ) : (
-          <p className="text-center text-xs text-purple-600/80 mb-4">
+          <p className="text-center text-xs text-[#2f6fd6]/80 mb-4">
             <button
               onClick={() => {
                 setMode('pin')
                 setError(null)
               }}
-              className="text-purple-600 hover:text-purple-700 underline font-semibold"
+              className="text-[#2f6fd6] hover:text-[#2a62bd] underline font-semibold"
             >
               ← Use PIN instead
             </button>
@@ -500,8 +500,8 @@ export default function Login() {
 
         <div className="relative bg-white rounded-[2rem] p-8 shadow-2xl shadow-black/10 ring-1 ring-black/5">
           {/* top gradient accent strip */}
-          <div className="absolute -top-px left-10 right-10 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[#a855f7] to-transparent pointer-events-none" />
-          <div className="absolute -top-px left-1/2 -translate-x-1/2 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] blur-[1px] pointer-events-none" />
+          <div className="absolute -top-px left-10 right-10 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[#35c8f5] to-transparent pointer-events-none" />
+          <div className="absolute -top-px left-1/2 -translate-x-1/2 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#2f6fd6] to-[#35c8f5] blur-[1px] pointer-events-none" />
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 mb-6 text-sm">
               {error}
@@ -510,14 +510,14 @@ export default function Login() {
 
           {mode === 'email' && (
             <>
-              <h2 className="text-xl font-bold text-purple-600 mb-1">Sign in</h2>
-              <p className="text-purple-500/80 text-sm mb-6">For managers, owners and accountants</p>
+              <h2 className="text-xl font-bold text-[#2f6fd6] mb-1">Sign in</h2>
+              <p className="text-[#2f6fd6]/80 text-sm mb-6">For managers, owners and accountants</p>
               {emailLocked ? (
                 <LockedOut mode="email" time={emailRem} />
               ) : (
                 <form onSubmit={handleEmailLogin} className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-purple-600 mb-2">
+                    <label className="block text-sm font-medium text-[#2f6fd6] mb-2">
                       Email Address
                     </label>
                     <input
@@ -526,11 +526,11 @@ export default function Login() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@kolondiro.com"
                       required
-                      className="w-full bg-white border border-purple-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#a855f7] focus:border-transparent transition-all"
+                      className="w-full bg-white border border-blue-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#35c8f5] focus:border-transparent transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-purple-600 mb-2">Password</label>
+                    <label className="block text-sm font-medium text-[#2f6fd6] mb-2">Password</label>
                     <div className="relative">
                       <input
                         type={showPw ? 'text' : 'password'}
@@ -538,12 +538,12 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full bg-white border border-purple-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#a855f7] focus:border-transparent transition-all"
+                        className="w-full bg-white border border-blue-200 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#35c8f5] focus:border-transparent transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPw(!showPw)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-600"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#35c8f5] hover:text-[#2f6fd6]"
                       >
                         {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -552,7 +552,7 @@ export default function Login() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#7c3aed] hover:bg-[#6d28d9] disabled:opacity-50 text-white font-semibold rounded-xl px-4 py-3 shadow-sm shadow-purple-200 transition-colors"
+                    className="w-full bg-[#2f6fd6] hover:bg-[#2a62bd] disabled:opacity-50 text-white font-semibold rounded-xl px-4 py-3 shadow-sm shadow-blue-200 transition-colors"
                   >
                     {loading ? 'Signing in…' : 'Sign In'}
                   </button>
@@ -563,8 +563,8 @@ export default function Login() {
 
           {mode === 'pin' && (
             <>
-              <h2 className="text-xl font-bold text-purple-600 mb-1">Enter PIN</h2>
-              <p className="text-purple-500/80 text-sm mb-6">
+              <h2 className="text-xl font-bold text-[#2f6fd6] mb-1">Enter PIN</h2>
+              <p className="text-[#2f6fd6]/80 text-sm mb-6">
                 For waitrons, kitchen, bar and grill staff
               </p>
               {pinLocked ? (
@@ -577,8 +577,8 @@ export default function Login() {
                         key={i}
                         className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-200 ${
                           pin.length > i
-                            ? 'border-[#7c3aed] bg-gradient-to-br from-[#a855f7] to-[#7c3aed] shadow-lg shadow-purple-500/40 scale-105'
-                            : 'border-purple-200 bg-purple-50/70'
+                            ? 'border-[#2f6fd6] bg-gradient-to-br from-[#35c8f5] to-[#2f6fd6] shadow-lg shadow-blue-500/40 scale-105'
+                            : 'border-blue-200 bg-blue-50/70'
                         }`}
                       >
                         {pin.length > i && (
@@ -605,8 +605,8 @@ export default function Login() {
                               digit === ''
                                 ? 'opacity-0 pointer-events-none'
                                 : digit === 'del'
-                                  ? 'bg-gradient-to-b from-purple-50 to-purple-100 border border-purple-200 text-purple-400 hover:text-[#7c3aed] hover:border-purple-300 hover:shadow-md active:scale-95'
-                                  : 'bg-gradient-to-b from-[#a855f7] to-[#7c3aed] text-white shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 active:translate-y-0 border-t border-purple-400/60'
+                                  ? 'bg-gradient-to-b from-blue-50 to-blue-100 border border-blue-200 text-[#35c8f5] hover:text-[#2f6fd6] hover:border-blue-300 hover:shadow-md active:scale-95'
+                                  : 'bg-gradient-to-b from-[#35c8f5] to-[#2f6fd6] text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 active:translate-y-0 border-t border-blue-400/60'
                             }`}
                           >
                             {digit === 'del' ? <Delete size={20} className="mx-auto" /> : digit}
@@ -616,7 +616,7 @@ export default function Login() {
                     ))}
                   </div>
                   {loading && (
-                    <div className="text-center mt-6 text-[#7c3aed] text-sm font-medium">
+                    <div className="text-center mt-6 text-[#2f6fd6] text-sm font-medium">
                       Verifying PIN...
                     </div>
                   )}
@@ -625,7 +625,7 @@ export default function Login() {
                       setPin('')
                       setError(null)
                     }}
-                    className="w-full mt-4 text-purple-600 hover:text-purple-700 text-sm transition-colors font-medium"
+                    className="w-full mt-4 text-[#2f6fd6] hover:text-[#2a62bd] text-sm transition-colors font-medium"
                   >
                     Clear
                   </button>
@@ -634,7 +634,7 @@ export default function Login() {
             </>
           )}
         </div>
-        <p className="text-center text-purple-600/70 text-sm mt-6">
+        <p className="text-center text-[#2f6fd6]/70 text-sm mt-6">
           Cyberville RestaurantOS v1.0 — Kolondiro
         </p>
       </div>
