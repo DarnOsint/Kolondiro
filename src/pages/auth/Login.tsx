@@ -408,10 +408,18 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* soft decorative blue washes */}
-      <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-gradient-to-br from-[#35c8f5]/15 to-[#2f6fd6]/10 blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-36 -left-32 w-96 h-96 rounded-full bg-gradient-to-tr from-[#2f6fd6]/15 to-[#35c8f5]/10 blur-2xl pointer-events-none" />
+    <div className="min-h-screen bg-gradient-to-br from-[#eaf3ff] via-white to-[#e4f8ff] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* dot-grid circuit pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(47,111,214,0.10)_1px,transparent_1px)] [background-size:26px_26px] pointer-events-none" />
+      {/* floating color blobs */}
+      <div className="absolute -top-24 -left-24 w-[30rem] h-[30rem] rounded-full bg-gradient-to-br from-[#35c8f5]/30 to-[#2f6fd6]/15 blur-3xl pointer-events-none animate-[float-1_16s_ease-in-out_infinite]" />
+      <div className="absolute -bottom-28 -right-24 w-[34rem] h-[34rem] rounded-full bg-gradient-to-tr from-[#2f6fd6]/25 to-[#35c8f5]/20 blur-3xl pointer-events-none animate-[float-2_18s_ease-in-out_infinite]" />
+      <div className="absolute top-1/3 left-1/2 w-72 h-72 rounded-full bg-gradient-to-br from-indigo-300/25 to-transparent blur-3xl pointer-events-none animate-[float-3_20s_ease-in-out_infinite]" />
+      {/* accent pulse dots */}
+      <div className="absolute top-24 right-[15%] w-2.5 h-2.5 rounded-full bg-[#35c8f5]/60 animate-pulse" />
+      <div className="absolute bottom-28 left-[10%] w-3 h-3 rounded-full bg-[#2f6fd6]/50 animate-pulse [animation-delay:1.5s]" />
+      <div className="absolute top-[12%] left-[22%] w-2 h-2 rounded-full bg-[#2f6fd6]/40 animate-pulse [animation-delay:0.6s]" />
+      <div className="absolute bottom-[18%] right-[24%] w-2 h-2 rounded-full bg-[#35c8f5]/50 animate-pulse [animation-delay:2.2s]" />
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
           <div className="mb-6">
