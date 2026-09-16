@@ -408,14 +408,17 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
+      {/* soft decorative blue washes */}
+      <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-gradient-to-br from-[#35c8f5]/15 to-[#2f6fd6]/10 blur-2xl pointer-events-none" />
+      <div className="absolute -bottom-36 -left-32 w-96 h-96 rounded-full bg-gradient-to-tr from-[#2f6fd6]/15 to-[#35c8f5]/10 blur-2xl pointer-events-none" />
+      <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-5">
+          <div className="inline-flex items-center justify-center mb-6">
             <img
-              src="/cyberville-logo.jpeg"
+              src="/cyberville-login-badge.svg"
               alt="Cyberville"
-              className="w-22 h-22 object-contain drop-shadow-sm"
+              className="w-44 h-44 object-contain drop-shadow-xl rounded-full"
             />
           </div>
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Cyberville</h1>
@@ -536,9 +539,15 @@ export default function Login() {
                     {[0, 1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${pin.length > i ? 'border-[#2f6fd6] bg-blue-50' : 'border-gray-200 bg-gray-50'}`}
+                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-200 ${
+                          pin.length > i
+                            ? 'border-[#2563eb] bg-gradient-to-br from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/40 scale-105'
+                            : 'border-blue-100 bg-blue-50/70'
+                        }`}
                       >
-                        {pin.length > i && <div className="w-4 h-4 rounded-full bg-[#2f6fd6]" />}
+                        {pin.length > i && (
+                          <div className="w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -556,12 +565,12 @@ export default function Login() {
                                   : undefined
                             }
                             disabled={loading || digit === ''}
-                            className={`h-16 rounded-2xl text-xl font-bold transition-all ${
+                            className={`h-16 rounded-2xl text-xl font-bold transition-all duration-150 ${
                               digit === ''
                                 ? 'opacity-0 pointer-events-none'
                                 : digit === 'del'
-                                  ? 'bg-gray-100 border border-gray-200 text-gray-500 hover:bg-gray-200 hover:text-gray-700 active:scale-95'
-                                  : 'bg-white border border-gray-200 text-gray-900 font-bold hover:bg-blue-50 hover:border-[#2f6fd6] active:scale-95 shadow-sm'
+                                  ? 'bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 text-gray-400 hover:text-[#2563eb] hover:border-blue-200 hover:shadow-md active:scale-95'
+                                  : 'bg-gradient-to-b from-[#3b82f6] to-[#2563eb] text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 active:translate-y-0 border-t border-blue-400/60'
                             }`}
                           >
                             {digit === 'del' ? <Delete size={20} className="mx-auto" /> : digit}
@@ -571,7 +580,7 @@ export default function Login() {
                     ))}
                   </div>
                   {loading && (
-                    <div className="text-center mt-6 text-[#2f6fd6] text-sm font-medium">
+                    <div className="text-center mt-6 text-[#2563eb] text-sm font-medium">
                       Verifying PIN...
                     </div>
                   )}
@@ -580,7 +589,7 @@ export default function Login() {
                       setPin('')
                       setError(null)
                     }}
-                    className="w-full mt-4 text-gray-400 hover:text-gray-700 text-sm transition-colors"
+                    className="w-full mt-4 text-gray-400 hover:text-[#2563eb] text-sm transition-colors"
                   >
                     Clear
                   </button>

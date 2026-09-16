@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="176" viewBox="0 0 176 176" fill="none">
+  <defs>
+    <linearGradient id="cvBg" x1="0" y1="0" x2="176" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#35c8f5"/>
+      <stop offset="100%" stop-color="#2f6fd6"/>
+    </linearGradient>
+    <linearGradient id="cvRing" x1="0" y1="0" x2="176" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#35c8f5" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#2f6fd6" stop-opacity="0.55"/>
+    </linearGradient>
+    <clipPath id="cvClip">
+      <rect x="40" y="40" width="96" height="96" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <!-- soft halo behind everything -->
+  <circle cx="88" cy="88" r="86" fill="#2f6fd6" opacity="0.08"/>
+
+  <!-- outer rotating circuit ring + node dots -->
+  <g>
+    <circle cx="88" cy="88" r="72" fill="none" stroke="url(#cvRing)" stroke-width="1.6" stroke-dasharray="3 7" stroke-linecap="round"/>
+    <circle cx="88" cy="16" r="4.5" fill="#35c8f5"/>
+    <circle cx="88" cy="160" r="4.5" fill="#35c8f5" opacity="0.5"/>
+    <circle cx="16" cy="88" r="4.5" fill="#35c8f5" opacity="0.5"/>
+    <circle cx="160" cy="88" r="4.5" fill="#35c8f5"/>
+    <circle cx="37" cy="37" r="3.5" fill="#2f6fd6" opacity="0.7"/>
+    <circle cx="139" cy="37" r="3.5" fill="#2f6fd6" opacity="0.7"/>
+    <circle cx="37" cy="139" r="3.5" fill="#2f6fd6" opacity="0.7"/>
+    <circle cx="139" cy="139" r="3.5" fill="#2f6fd6" opacity="0.7"/>
+  </g>
+
+  <!-- subtle radial tick marks -->
+  <g stroke="#35c8f5" stroke-width="2" stroke-linecap="round" opacity="0.35">
+    <path d="M88 10v6"/>
+    <path d="M88 160v6"/>
+    <path d="M10 88h6"/>
+    <path d="M160 88h6"/>
+    <path d="M32.9 32.9l4.2 4.2"/>
+    <path d="M138.9 138.9l4.2 4.2"/>
+    <path d="M138.9 32.9l-4.2 4.2"/>
+    <path d="M32.9 138.9l-4.2 4.2"/>
+  </g>
+
+  <!-- main rounded badge -->
+  <rect x="26" y="26" width="124" height="124" rx="30" fill="url(#cvBg)"/>
+  <rect x="26" y="26" width="124" height="124" rx="30" fill="#000" opacity="0.08"/>
+
+  <!-- inner circuit-style border (the "circling" detail) -->
+  <rect x="34" y="34" width="108" height="108" rx="22" fill="none" stroke="#fff" stroke-width="1.4" stroke-dasharray="5 5" opacity="0.6"/>
+  <rect x="34" y="34" width="108" height="108" rx="22" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.22" transform="translate(6 6)"/>
+  <!-- corner nodes on the inner ring -->
+  <circle cx="47" cy="47" r="3" fill="#fff" opacity="0.9"/>
+  <circle cx="129" cy="47" r="3" fill="#fff" opacity="0.9"/>
+  <circle cx="47" cy="129" r="3" fill="#fff" opacity="0.9"/>
+  <circle cx="129" cy="129" r="3" fill="#fff" opacity="0.9"/>
+
+  <!-- logo -->
+  <image href="/cyberville-logo.jpeg" x="40" y="40" width="96" height="96" clip-path="url(#cvClip)" preserveAspectRatio="xMidYMid slice"/>
+</svg>
