@@ -96,14 +96,14 @@ const PIN_PAD = [
 function LockedOut({ mode, time }: { mode: 'email' | 'pin'; time: number }) {
   return (
     <div className="text-center py-8">
-      <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center mx-auto mb-4">
         <span className="text-2xl">🔒</span>
       </div>
-      <p className="text-red-400 font-semibold mb-1">
+      <p className="text-red-600 font-semibold mb-1">
         {mode === 'email' ? 'Account' : 'PIN Entry'} Locked
       </p>
       <p className="text-gray-500 text-sm">
-        Try again in <span className="text-white font-mono">{fmtTime(time)}</span>
+        Try again in <span className="text-gray-900 font-mono">{fmtTime(time)}</span>
       </p>
     </div>
   )
@@ -408,23 +408,26 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#05070f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-[#35c8f5] to-[#2f6fd6] mb-4">
-            <span className="text-3xl font-bold text-[#05070f] font-mono tracking-tighter">&lt;/&gt;</span>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center mb-5">
+            <img
+              src="/cyberville-logo.jpeg"
+              alt="Cyberville"
+              className="w-22 h-22 object-contain drop-shadow-sm"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-[#35c8f5]">Cyberville</h1>
-          <p className="text-gray-400 mt-1 text-sm">Software Development Company</p>
-          <p className="text-[#94a3b8] mt-2 text-xs tracking-wide uppercase">Juba, South Sudan</p>
+          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Cyberville</h1>
+          <p className="text-gray-500 mt-2 text-sm">Software Development Company</p>
         </div>
 
         {sessionExpired && (
-          <div className="bg-[#35c8f5]/10 border border-[#35c8f5]/30 rounded-2xl px-4 py-3 mb-6 flex items-center gap-3">
-            <span className="text-[#35c8f5] text-lg">⏱</span>
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 mb-6 flex items-center gap-3">
+            <span className="text-amber-600 text-lg">⏱</span>
             <div>
-              <p className="text-[#35c8f5] text-sm font-medium">Session expired</p>
-              <p className="text-[#35c8f5]/70 text-xs">
+              <p className="text-amber-700 text-sm font-medium">Session expired</p>
+              <p className="text-amber-600/80 text-xs">
                 You were signed out after 60 minutes of inactivity.
               </p>
             </div>
@@ -432,7 +435,7 @@ export default function Login() {
         )}
 
         {mode === 'pin' ? (
-          <p className="text-center text-xs text-gray-600 mb-4">
+          <p className="text-center text-xs text-gray-400 mb-4">
             Manager or Owner?{' '}
             <button
               onClick={() => {
@@ -440,53 +443,55 @@ export default function Login() {
                 setError(null)
                 setPin('')
               }}
-              className="text-[#35c8f5] hover:text-[#22b7ef] underline"
+              className="text-[#2563eb] hover:text-[#2f6fd6] underline font-medium"
             >
               Sign in with email
             </button>
           </p>
         ) : (
-          <p className="text-center text-xs text-gray-600 mb-4">
+          <p className="text-center text-xs text-gray-400 mb-4">
             <button
               onClick={() => {
                 setMode('pin')
                 setError(null)
               }}
-              className="text-[#35c8f5] hover:text-[#22b7ef] underline"
+              className="text-[#2563eb] hover:text-[#2f6fd6] underline font-medium"
             >
               ← Use PIN instead
             </button>
           </p>
         )}
 
-        <div className="bg-[#0c1322] backdrop-blur rounded-2xl p-8 shadow-2xl border border-[#94a3b8]/14">
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg p-3 mb-6 text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 mb-6 text-sm">
               {error}
             </div>
           )}
 
           {mode === 'email' && (
             <>
-              <h2 className="text-xl font-semibold text-white mb-2">Sign in</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-1">Sign in</h2>
               <p className="text-gray-500 text-sm mb-6">For managers, owners and accountants</p>
               {emailLocked ? (
                 <LockedOut mode="email" time={emailRem} />
               ) : (
                 <form onSubmit={handleEmailLogin} className="space-y-5">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Email Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@kolondiro.com"
                       required
-                      className="w-full bg-[#101a30] border border-[#94a3b8]/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#35c8f5]"
+                      className="w-full bg-white border border-gray-300 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2f6fd6] focus:border-transparent transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Password</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <div className="relative">
                       <input
                         type={showPw ? 'text' : 'password'}
@@ -494,12 +499,12 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full bg-[#101a30] border border-[#94a3b8]/20 text-white rounded-xl px-4 py-3 pr-11 focus:outline-none focus:border-[#35c8f5]"
+                        className="w-full bg-white border border-gray-300 text-gray-900 placeholder-gray-400 rounded-xl px-4 py-3 pr-11 focus:outline-none focus:ring-2 focus:ring-[#2f6fd6] focus:border-transparent transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPw(!showPw)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
                       >
                         {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -508,7 +513,7 @@ export default function Login() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-[#35c8f5] to-[#2f6fd6] hover:from-[#22b7ef] hover:to-[#2a60c2] disabled:opacity-50 text-[#05070f] font-semibold rounded-xl px-4 py-3 transition-colors"
+                    className="w-full bg-[#2f6fd6] hover:bg-[#2a60c2] disabled:opacity-50 text-white font-semibold rounded-xl px-4 py-3 shadow-sm shadow-blue-200 transition-colors"
                   >
                     {loading ? 'Signing in…' : 'Sign In'}
                   </button>
@@ -519,7 +524,7 @@ export default function Login() {
 
           {mode === 'pin' && (
             <>
-              <h2 className="text-xl font-semibold text-white mb-2">Enter PIN</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-1">Enter PIN</h2>
               <p className="text-gray-500 text-sm mb-6">
                 For waitrons, kitchen, bar and grill staff
               </p>
@@ -531,9 +536,9 @@ export default function Login() {
                     {[0, 1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${pin.length > i ? 'border-[#35c8f5] bg-[#35c8f5]/10' : 'border-[#94a3b8]/30 bg-[#101a30]'}`}
+                        className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${pin.length > i ? 'border-[#2f6fd6] bg-blue-50' : 'border-gray-200 bg-gray-50'}`}
                       >
-                        {pin.length > i && <div className="w-4 h-4 rounded-full bg-[#35c8f5]" />}
+                        {pin.length > i && <div className="w-4 h-4 rounded-full bg-[#2f6fd6]" />}
                       </div>
                     ))}
                   </div>
@@ -555,8 +560,8 @@ export default function Login() {
                               digit === ''
                                 ? 'opacity-0 pointer-events-none'
                                 : digit === 'del'
-                                  ? 'bg-[#101a30] border border-[#94a3b8]/20 text-gray-300 hover:bg-[#0c1322] hover:text-white active:scale-95'
-                                  : 'bg-[#101a30] border border-[#94a3b8]/20 text-white font-bold hover:bg-[#35c8f5]/20 hover:border-[#35c8f5] active:scale-95'
+                                  ? 'bg-gray-100 border border-gray-200 text-gray-500 hover:bg-gray-200 hover:text-gray-700 active:scale-95'
+                                  : 'bg-white border border-gray-200 text-gray-900 font-bold hover:bg-blue-50 hover:border-[#2f6fd6] active:scale-95 shadow-sm'
                             }`}
                           >
                             {digit === 'del' ? <Delete size={20} className="mx-auto" /> : digit}
@@ -566,14 +571,16 @@ export default function Login() {
                     ))}
                   </div>
                   {loading && (
-                    <div className="text-center mt-6 text-[#35c8f5] text-sm">Verifying PIN...</div>
+                    <div className="text-center mt-6 text-[#2f6fd6] text-sm font-medium">
+                      Verifying PIN...
+                    </div>
                   )}
                   <button
                     onClick={() => {
                       setPin('')
                       setError(null)
                     }}
-                    className="w-full mt-4 text-gray-500 hover:text-gray-300 text-sm transition-colors"
+                    className="w-full mt-4 text-gray-400 hover:text-gray-700 text-sm transition-colors"
                   >
                     Clear
                   </button>
@@ -582,7 +589,7 @@ export default function Login() {
             </>
           )}
         </div>
-        <p className="text-center text-gray-600 text-sm mt-6">
+        <p className="text-center text-gray-400 text-sm mt-6">
           Cyberville RestaurantOS v1.0 — Kolondiro
         </p>
       </div>

@@ -22,11 +22,11 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw-custom.ts',
       manifest: {
-        name: 'Kolondiro RestaurantOS',
-        short_name: 'KolondiroOS',
-        description: 'Restaurant management system for Kolondiro',
-        theme_color: '#0F172A',
-        background_color: '#0F172A',
+        name: 'Cyberville RestaurantOS',
+        short_name: 'Cyberville',
+        description: 'Restaurant management system powered by Cyberville',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'any',
         scope: '/',
@@ -34,9 +34,7 @@ export default defineConfig({
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
-          { src: '/icons/icon-192.svg', sizes: '192x192', type: 'image/svg+xml' },
-          { src: '/icons/icon-512.svg', sizes: '512x512', type: 'image/svg+xml' }
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
         ]
       }
     })
