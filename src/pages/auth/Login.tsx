@@ -414,12 +414,35 @@ export default function Login() {
       <div className="absolute -bottom-36 -left-32 w-96 h-96 rounded-full bg-gradient-to-tr from-[#2f6fd6]/15 to-[#35c8f5]/10 blur-2xl pointer-events-none" />
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-6">
-            <img
-              src="/cyberville-login-badge.svg"
-              alt="Cyberville"
-              className="w-44 h-44 object-contain drop-shadow-xl rounded-full"
-            />
+          <div className="relative h-44 w-44 mx-auto mb-6">
+            {/* soft halo */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#35c8f5]/25 to-[#2f6fd6]/20 blur-xl" />
+            {/* rotating outer circuit ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#2f6fd6]/30 animate-[spin_24s_linear_infinite]" />
+            {/* outer ring node dots */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#35c8f5] shadow-[0_0_8px_rgba(53,200,245,0.9)]" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-[#2f6fd6]/60" />
+            <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#2f6fd6]/60" />
+            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#35c8f5] shadow-[0_0_8px_rgba(53,200,245,0.9)]" />
+            {/* main rounded badge */}
+            <div className="absolute inset-4 rounded-[2rem] bg-gradient-to-br from-[#35c8f5] to-[#2f6fd6] shadow-xl shadow-blue-600/40 ring-1 ring-white/20 overflow-hidden">
+              {/* subtle inner shading */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/15 to-transparent" />
+              {/* inner circuit ring (the "circling" detail) */}
+              <div className="absolute inset-2 rounded-[1.7rem] border-2 border-dashed border-white/60" />
+              <div className="absolute inset-2 rounded-[1.7rem] border border-white/30 translate-x-1 translate-y-1" />
+              {/* inner corner nodes */}
+              <div className="absolute top-3.5 left-3.5 w-1.5 h-1.5 rounded-full bg-white/90" />
+              <div className="absolute top-3.5 right-3.5 w-1.5 h-1.5 rounded-full bg-white/90" />
+              <div className="absolute bottom-3.5 left-3.5 w-1.5 h-1.5 rounded-full bg-white/90" />
+              <div className="absolute bottom-3.5 right-3.5 w-1.5 h-1.5 rounded-full bg-white/90" />
+              {/* logo */}
+              <img
+                src="/cyberville-logo.jpeg"
+                alt="Cyberville"
+                className="absolute inset-3.5 rounded-2xl object-cover pointer-events-none select-none"
+              />
+            </div>
           </div>
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Cyberville</h1>
           <p className="text-gray-500 mt-2 text-sm">Software Development Company</p>
